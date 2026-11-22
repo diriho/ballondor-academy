@@ -2558,8 +2558,8 @@ async function loadStats() {
     <ol>
       <li data-l="en">Delete the temporary data: <code>git rm public/js/data.js</code></li>
       <li data-l="fr">Supprime les données temporaires : <code>git rm public/js/data.js</code></li>
-      <li data-l="en">Replace <code>public/index.html</code> with the final version. New: the stats list, the second panel, empty selects (JavaScript fills them so they can be translated), the <code>&lt;dialog&gt;</code> and the EN/FR switch for step 12.</li>
-      <li data-l="fr">Remplace <code>public/index.html</code> par la version finale. Nouveau : la liste des stats, le second panneau, des selects vides (JavaScript les remplit pour pouvoir les traduire), le <code>&lt;dialog&gt;</code> et le sélecteur EN/FR de l'étape 12.</li>
+      <li data-l="en">Replace <code>public/index.html</code> with the final version. New: the stats list, the second panel, both panels are now <code>&lt;details&gt;</code> (on phones they fold into two small buttons so search results come first; the code is in <code>app.js</code> section 6 and CSS section 8), empty selects (JavaScript fills them so they can be translated), the <code>&lt;dialog&gt;</code> and the EN/FR switch for step 12.</li>
+      <li data-l="fr">Remplace <code>public/index.html</code> par la version finale. Nouveau : la liste des stats, le second panneau, les deux panneaux deviennent des <code>&lt;details&gt;</code> (sur téléphone ils se replient en deux petits boutons pour que les résultats passent devant ; le code est dans la section 6 de <code>app.js</code> et la section 8 du CSS), des selects vides (JavaScript les remplit pour pouvoir les traduire), le <code>&lt;dialog&gt;</code> et le sélecteur EN/FR de l'étape 12.</li>
     </ol>
   </div>
   <script type="text/x-code" data-lang="html" data-file="public/index.html" data-note="final version" data-collapse><!doctype html>
@@ -2616,16 +2616,17 @@ async function loadStats() {
   </section>
 
   <!-- ========== PANELS: sidebar + main grid ========== -->
+  <!-- <details> = a panel that can fold. Open on big screens; on phones app.js folds it. -->
   <div class="layout">
     <aside class="sidebar">
-      <section class="panel">
-        <h2 data-i18n="mostWins">Most wins</h2>
+      <details class="panel" open>
+        <summary><h2 data-i18n="mostWins">Most wins</h2></summary>
         <ol id="leaderboard" class="leaderboard"></ol>
-      </section>
-      <section class="panel">
-        <h2 data-i18n="topNations">Top nations</h2>
+      </details>
+      <details class="panel" open>
+        <summary><h2 data-i18n="topNations">Top nations</h2></summary>
         <ul id="nations" class="bars"></ul>
-      </section>
+      </details>
     </aside>
 
     <main>
@@ -2942,6 +2943,21 @@ document.addEventListener('error', (event) => {
 }, true);
 
 /* ---------- 6. Start ---------- */
+// Phones: the two side panels start folded, so search results come first.
+// Bigger screens: they always stay open (clicking a title does nothing).
+const phone = window.matchMedia('(max-width: 520px)'); // same width as in style.css
+function foldPanels() {
+  for (const panel of document.querySelectorAll('.sidebar details')) {
+    panel.open = !phone.matches;
+    panel.querySelector('summary').tabIndex = phone.matches ? 0 : -1;
+  }
+}
+phone.addEventListener('change', foldPanels); // e.g. a window resized across 520px
+$('.sidebar').addEventListener('click', (event) => {
+  if (event.target.closest('summary') && !phone.matches) event.preventDefault();
+});
+
+foldPanels();
 applyLanguage();
 loadStats();
 loadWinners();</script>
@@ -2977,6 +2993,10 @@ loadWinners();</script>
 
 .site-footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 24px 16px 40px; }
 /* ---------- 8. Responsive ---------- */
+/* The two panels are <details>: on big screens they look and act like plain panels (no ▸ marker, not clickable) */
+.panel > summary { display: block; list-style: none; pointer-events: none; }
+.panel > summary::-webkit-details-marker { display: none; }
+
 @media (max-width: 860px) {
   .layout { grid-template-columns: 1fr; }        /* stack the panels */
   .sidebar { position: static; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
@@ -2987,6 +3007,17 @@ loadWinners();</script>
   .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
   .card-year { font-size: 2.3rem; }
   .card-desc { display: none; }
+
+  /* Phones: the panels become two small drop-down buttons, so search results come first */
+  .layout { gap: 18px; }
+  .sidebar { display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px; }
+  .panel { flex: 1 1 auto; min-width: 0; padding: 0; } /* side by side when both fit */
+  .panel[open] { flex-basis: 100%; }             /* an open panel takes the whole row */
+  .panel > summary { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 11px 14px; cursor: pointer; pointer-events: auto; }
+  .panel > summary h2 { margin: 0; font-size: 1.25rem; white-space: nowrap; }
+  .panel > summary::after { content: '▾'; color: var(--gold); transition: transform 0.2s; }
+  .panel[open] > summary::after { transform: rotate(180deg); }
+  .panel > ol, .panel > ul { margin: 0 14px 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
