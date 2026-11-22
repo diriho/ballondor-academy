@@ -52,16 +52,17 @@
   </section>
 
   <!-- ========== PANELS: sidebar + main grid ========== -->
+  <!-- <details> = a panel that can fold. Open on big screens; on phones app.js folds it. -->
   <div class="layout">
     <aside class="sidebar">
-      <section class="panel">
-        <h2 data-i18n="mostWins">Most wins</h2>
+      <details class="panel" open>
+        <summary><h2 data-i18n="mostWins">Most wins</h2></summary>
         <ol id="leaderboard" class="leaderboard"></ol>
-      </section>
-      <section class="panel">
-        <h2 data-i18n="topNations">Top nations</h2>
+      </details>
+      <details class="panel" open>
+        <summary><h2 data-i18n="topNations">Top nations</h2></summary>
         <ul id="nations" class="bars"></ul>
-      </section>
+      </details>
     </aside>
 
     <main>
@@ -81,5 +82,6 @@
   </footer>
 
   <script type="module" src="js/app.js"></script>
+  <script defer src="https://cdn.vercel-insights.com/v1/script.js"></script>
 </body>
 </html>

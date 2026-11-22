@@ -294,7 +294,21 @@ document.addEventListener('error', (event) => {
 /* ---------- 6. Start ---------- */
 // Initialize Vercel Speed Insights
 injectSpeedInsights();
-
+// Phones: the two side panels start folded, so search results come first.
+// Bigger screens: they always stay open (clicking a title does nothing).
+const phone = window.matchMedia('(max-width: 520px)'); // same width as in style.css
+function foldPanels() {
+  for (const panel of document.querySelectorAll('.sidebar details')) {
+    panel.open = !phone.matches;
+    panel.querySelector('summary').tabIndex = phone.matches ? 0 : -1;
+  }
+}
+phone.addEventListener('change', foldPanels); // e.g. a window resized across 520px
+$('.sidebar').addEventListener('click', (event) => {
+  if (event.target.closest('summary') && !phone.matches) event.preventDefault();
+});
+foldPanels();
+foldPanels();
 applyLanguage();
 loadStats();
 loadWinners();

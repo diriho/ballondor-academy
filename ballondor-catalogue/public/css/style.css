@@ -244,6 +244,10 @@ button, input, select { font: inherit; color: inherit; }
 .site-footer { text-align: center; color: var(--muted); font-size: 0.8rem; padding: 24px 16px 40px; }
 
 /* ---------- 8. Responsive ---------- */
+/* The two panels are <details>: on big screens they look and act like plain panels (no ▸ marker, not clickable) */
+.panel > summary { display: block; list-style: none; pointer-events: none; }
+.panel > summary::-webkit-details-marker { display: none; }
+
 @media (max-width: 860px) {
   .layout { grid-template-columns: 1fr; }        /* stack the panels */
   .sidebar { position: static; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
@@ -254,6 +258,17 @@ button, input, select { font: inherit; color: inherit; }
   .grid { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
   .card-year { font-size: 2.3rem; }
   .card-desc { display: none; }
+
+  /* Phones: the panels become two small drop-down buttons, so search results come first */
+  .layout { gap: 18px; }
+  .sidebar { display: flex; flex-direction: row; flex-wrap: wrap; gap: 10px; }
+  .panel { flex: 1 1 auto; min-width: 0; padding: 0; } /* side by side when both fit */
+  .panel[open] { flex-basis: 100%; }             /* an open panel takes the whole row */
+  .panel > summary { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 11px 14px; cursor: pointer; pointer-events: auto; }
+  .panel > summary h2 { margin: 0; font-size: 1.25rem; white-space: nowrap; }
+  .panel > summary::after { content: '▾'; color: var(--gold); transition: transform 0.2s; }
+  .panel[open] > summary::after { transform: rotate(180deg); }
+  .panel > ol, .panel > ul { margin: 0 14px 14px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
