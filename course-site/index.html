@@ -110,6 +110,14 @@ button { font: inherit; color: inherit; }
 .progress { margin-left: auto; display: flex; align-items: center; gap: 10px; font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
 .progress-track { width: 120px; height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
 .progress-track span { display: block; height: 100%; width: 0; background: var(--gold-fill); transition: width 0.4s ease; }
+/* "See the final app": the finished catalogue, live on Vercel */
+.final-link { flex: none; display: inline-flex; align-items: center; gap: 7px; padding: 6px 13px 6px 8px; border-radius: 99px;
+  border: 1px solid var(--gold-fill); background: var(--gold-wash); color: var(--ink);
+  font-size: 0.82rem; font-weight: 700; line-height: 1.3; text-decoration: none; white-space: nowrap; }
+.final-link:hover { background: var(--gold-fill); color: #241903; }
+.final-link .ball { width: 16px; height: 16px; }
+.final-link .fl-short { display: none; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .lang { display: flex; padding: 3px; border: 1px solid var(--line); border-radius: 99px; }
 .lang button { border: 0; background: none; padding: 4px 11px; border-radius: 99px; font-size: 0.8rem; font-weight: 700; cursor: pointer; color: var(--muted); }
 .lang button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
@@ -342,7 +350,7 @@ tr:last-child td { border-bottom: 0; }
 /* ---------- responsive ---------- */
 @media (max-width: 900px) {
   .shell { grid-template-columns: minmax(0, 1fr); }
-  .rail { position: sticky; top: calc(53px + env(safe-area-inset-top, 0px)); z-index: 10; max-height: none; overflow-x: auto; overflow-y: hidden; border-right: 0; border-bottom: 1px solid var(--line); background: var(--paper); padding: 8px max(16px, env(safe-area-inset-right, 0px)) 8px max(16px, env(safe-area-inset-left, 0px)); }
+  .rail { position: sticky; top: calc(57px + env(safe-area-inset-top, 0px)); z-index: 10; max-height: none; overflow-x: auto; overflow-y: hidden; border-right: 0; border-bottom: 1px solid var(--line); background: var(--paper); padding: 8px max(16px, env(safe-area-inset-right, 0px)) 8px max(16px, env(safe-area-inset-left, 0px)); }
   .rail h2 { display: none; }
   .rail nav { display: flex; gap: 4px; width: max-content; }
   .rail ol { display: flex; margin: 0; gap: 4px; }
@@ -354,9 +362,23 @@ tr:last-child td { border-bottom: 0; }
   .play iframe { min-height: 300px; }
   .git-zones { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
-@media (max-width: 520px) {
-  .brand { font-size: 1.05rem; }
+/* top bar on narrower screens: brand · progress · "final app" button · EN/FR must fit on one line */
+@media (max-width: 760px) {
+  .topbar { gap: 12px; }
   .progress-label, .progress-track { display: none; }
+}
+@media (max-width: 640px) {
+  .final-link { padding: 6px 12px; }
+  .final-link .ball, .final-link .fl-long { display: none; }
+  .final-link .fl-short { display: inline; }
+}
+@media (max-width: 560px) {
+  .brand { font-size: 1.05rem; }
+}
+@media (max-width: 460px) {
+  .topbar { gap: 10px; }
+  .brand-text { display: none; }
+  .brand .ball { width: 28px; height: 28px; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
@@ -368,12 +390,19 @@ tr:last-child td { border-bottom: 0; }
 <noscript><p class="noscript">This course needs JavaScript turned on. · Ce cours a besoin de JavaScript.</p></noscript>
 
 <header class="topbar">
-  <a class="brand display" href="#welcome"><span class="ball" aria-hidden="true"></span><span>Ballon d'Or <b>Academy</b></span></a>
+  <a class="brand display" href="#welcome" aria-label="Ballon d'Or Academy"><span class="ball" aria-hidden="true"></span><span class="brand-text">Ballon d'Or <b>Academy</b></span></a>
   <div class="progress" aria-live="polite">
     <span class="progress-label"><span data-l="en">Progress</span><span data-l="fr">Progression</span></span>
     <span class="progress-track"><span id="progress-bar"></span></span>
     <span id="progress-text">0/12</span>
   </div>
+  <a class="final-link" href="https://ballondor-six.vercel.app/" target="_blank" rel="noopener">
+    <span class="ball" aria-hidden="true"></span>
+    <span class="fl-long" data-l="en">See the final app</span><span class="fl-long" data-l="fr">Voir l'app finale</span>
+    <span class="fl-short" data-l="en">Final app</span><span class="fl-short" data-l="fr">App finale</span>
+    <span class="visually-hidden" data-l="en">(opens in a new tab)</span><span class="visually-hidden" data-l="fr">(s'ouvre dans un nouvel onglet)</span>
+    <span aria-hidden="true">↗</span>
+  </a>
   <div class="lang" role="group" aria-label="Language / Langue">
     <button type="button" id="lang-en" data-set-lang="en">EN</button>
     <button type="button" id="lang-fr" data-set-lang="fr">FR</button>
