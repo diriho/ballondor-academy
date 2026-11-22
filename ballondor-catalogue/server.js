@@ -24,6 +24,9 @@ db.function('fold', fold);
 // 2) Serve the front end (everything inside /public) as static files.
 app.use(express.static(path.join(here, 'public')));
 
+// Serve @vercel/speed-insights for client-side imports
+app.use('/@vercel/speed-insights', express.static(path.join(here, 'node_modules', '@vercel', 'speed-insights', 'dist')));
+
 // 3) API routes ------------------------------------------------------------
 
 const POSITIONS = ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'];

@@ -2,6 +2,9 @@
 // 1. Translations   2. State + helpers   3. Talking to the API
 // 4. Rendering      5. Events            6. Start
 
+// Import Vercel Speed Insights
+import { injectSpeedInsights } from '/@vercel/speed-insights/index.mjs';
+
 const PLACEHOLDER = 'assets/ballor.jpg';
 
 /* ---------- 1. Translations / Traductions ---------- */
@@ -289,6 +292,9 @@ document.addEventListener('error', (event) => {
 }, true);
 
 /* ---------- 6. Start ---------- */
+// Initialize Vercel Speed Insights
+injectSpeedInsights();
+
 applyLanguage();
 loadStats();
 loadWinners();
