@@ -17,6 +17,16 @@ You can also run it by hand from the *Actions* tab. (Pages must stay set to *Set
 
 Preview locally: `cd course-site && python3 -m http.server` → http://localhost:8000
 
+## Deploying the finished app on Vercel
+
+`ballondor-catalogue/` deploys to Vercel as-is (Vercel runs Express apps with zero configuration):
+
+1. On [vercel.com](https://vercel.com): **Add New… → Project** → import the `ballondor-academy` GitHub repo.
+2. **Root Directory** → *Edit* → choose `ballondor-catalogue`. Framework Preset is detected as **Express**; leave the build and install settings empty.
+3. **Deploy.** You get a `https://….vercel.app` link; every push to `main` redeploys it.
+
+How it runs there: `public/` is served by Vercel's CDN, and `server.js` becomes one serverless function that answers `/api/...`. Vercel bundles `db/ballondor.db` and better-sqlite3's prebuilt Linux binary with it automatically. `ballondor-catalogue/.npmrc` stops npm from trying to recompile better-sqlite3, which would need build tools on Vercel's servers. The build log warns that `"engines": ">=22"` picks the newest Node.js; that's fine.
+
 Learners' progress (ticked steps, solved SQL challenges, last step visited) is saved in their own browser, so no accounts or backend are needed.
 
 Rebuild the course page after changing the project or the lessons:
