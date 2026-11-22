@@ -2,6 +2,9 @@
 // 1. Translations   2. State + helpers   3. Talking to the API
 // 4. Rendering      5. Events            6. Start
 
+// Import Vercel Speed Insights
+import { injectSpeedInsights } from '/@vercel/speed-insights/index.mjs';
+
 const PLACEHOLDER = 'assets/ballor.jpg';
 
 /* ---------- 1. Translations / Traductions ---------- */
@@ -289,6 +292,8 @@ document.addEventListener('error', (event) => {
 }, true);
 
 /* ---------- 6. Start ---------- */
+// Initialize Vercel Speed Insights
+injectSpeedInsights();
 // Phones: the two side panels start folded, so search results come first.
 // Bigger screens: they always stay open (clicking a title does nothing).
 const phone = window.matchMedia('(max-width: 520px)'); // same width as in style.css
@@ -302,7 +307,7 @@ phone.addEventListener('change', foldPanels); // e.g. a window resized across 52
 $('.sidebar').addEventListener('click', (event) => {
   if (event.target.closest('summary') && !phone.matches) event.preventDefault();
 });
-
+foldPanels();
 foldPanels();
 applyLanguage();
 loadStats();

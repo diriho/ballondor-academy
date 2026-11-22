@@ -1,0 +1,61 @@
+# Vercel Speed Insights Installation Report
+
+## Summary
+Successfully installed and configured Vercel Speed Insights for the Ballon d'Or Catalogue project.
+
+## Changes Made
+
+### 1. Package Installation
+- Installed `@vercel/speed-insights` version 2.1.0 using npm
+- Updated `package.json` with the new dependency
+- Updated `package-lock.json` with dependency resolution
+
+### 2. Server Configuration (server.js)
+- Added Express static route to serve the Speed Insights library from node_modules
+- Route: `/@vercel/speed-insights` → serves from `node_modules/@vercel/speed-insights/dist`
+- This allows the client-side JavaScript to import the library using ES modules
+
+### 3. Client-Side Integration (public/js/app.js)
+- Added import statement: `import { injectSpeedInsights } from '/@vercel/speed-insights/index.mjs'`
+- Initialized Speed Insights by calling `injectSpeedInsights()` in the application start section
+- Placed initialization before other app initialization calls to ensure metrics are captured from the beginning
+
+## Implementation Approach
+
+Since this is a vanilla JavaScript project using ES modules (not a framework like Next.js, React, etc.), I followed these steps:
+
+1. **Fetched latest documentation** from https://vercel.com/docs/speed-insights/quickstart to ensure up-to-date instructions
+2. **Analyzed project structure** to determine it uses Express + vanilla JavaScript with ES modules
+3. **Configured server** to serve the Speed Insights library as a static resource
+4. **Imported and initialized** the library in the main app.js file using ES module syntax
+
+## Technical Details
+
+- Framework: Vanilla JavaScript + Express
+- Module System: ES Modules
+- Package Manager: npm
+- Speed Insights Package: @vercel/speed-insights v2.1.0
+- Integration Method: Generic `injectSpeedInsights()` function
+
+## Verification
+
+Tested the following:
+- ✅ Server starts successfully
+- ✅ Speed Insights module is served correctly at `/@vercel/speed-insights/index.mjs`
+- ✅ Main JavaScript file loads without errors
+- ✅ API endpoints still work correctly
+- ✅ No linting errors (no linter configured in this project)
+
+## Next Steps
+
+After deployment to Vercel:
+1. The Speed Insights will automatically start collecting performance metrics
+2. Metrics can be viewed in the Vercel Dashboard under the project's Speed Insights section
+3. The library will only track in production mode (not during local development)
+
+## Notes
+
+- The implementation preserves all existing code structure
+- No breaking changes were introduced
+- The Speed Insights runs in production mode only and does not collect data during development
+- Lock files were properly updated to ensure dependency consistency
