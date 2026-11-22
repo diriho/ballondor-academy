@@ -1,0 +1,50 @@
+# Publishes course-site/ to GitHub Pages: https://diriho.github.io/ballondor-academy/
+#
+# One-time setup on GitHub: Settings → Pages → Build and deployment → Source: "GitHub Actions".
+# After that, every push to main that touches the course or the project redeploys the site.
+name: Deploy course site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "course-site/**"
+      - "ballondor-catalogue/**"
+      - ".github/workflows/deploy-course-site.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # Rebuild so the lessons always match the code in ballondor-catalogue/
+      - name: Build index.html
+        run: python3 course-site/build.py
+
+      # Publish only what the browser needs (not build.py or src/)
+      - name: Collect site files
+        run: |
+          mkdir _site
+          cp course-site/index.html _site/
+          cp -R course-site/assets _site/
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4

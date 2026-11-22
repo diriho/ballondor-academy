@@ -1,6 +1,21 @@
-<title>Ballon d'Or Academy</title>
-<meta name="claude:viewport-fit-sides" content="cover">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ballon d'Or Academy · Learn web development</title>
 <meta name="description" content="Learn web development by building a Ballon d'Or catalogue: HTML, CSS, JavaScript, SQL, Node.js and GitHub, in English and French.">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#141c18" media="(prefers-color-scheme: dark)">
+<link rel="icon" type="image/svg+xml" href="assets/icon.svg">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<!-- link previews (WhatsApp, iMessage, Discord, Slack…) -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ballon d'Or Academy">
+<meta property="og:title" content="Ballon d'Or Academy · Learn web development">
+<meta property="og:description" content="12 steps, one real project: build a full-stack Ballon d'Or catalogue with HTML, CSS, JavaScript, SQL and Node.js. In English and French.">
+<meta property="og:image" content="https://diriho.github.io/ballondor-academy/assets/ballor.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Inter:wght@400..700&family=JetBrains+Mono:wght@400;600&display=swap">
@@ -64,7 +79,8 @@ html[lang="en"] [data-l="fr"], html[lang="fr"] [data-l="en"] { display: none !im
 
 /* ---------- base ---------- */
 *, *::before, *::after { box-sizing: border-box; }
-body { background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 16px; line-height: 1.6; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--card); }
 a { color: var(--pitch); text-underline-offset: 3px; }
 :focus-visible { outline: 2px solid var(--gold-fill); outline-offset: 2px; border-radius: 4px; }
@@ -119,7 +135,7 @@ button { font: inherit; color: inherit; }
 .jersey.ref { background: transparent; clip-path: none; padding-top: 0; }
 
 main { min-width: 0; padding-block: 36px 80px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-.view { max-width: 860px; margin: 0 auto; display: grid; gap: 28px; }
+.view { max-width: 860px; margin: 0 auto; display: grid; gap: 28px; scroll-margin-top: 240px; } /* opening a shared #step-N link lands on the title, not under the sticky bars */
 .view[hidden] { display: none; }
 .view > *, .prose > * { min-width: 0; }
 .prose { display: grid; gap: 14px; max-width: 70ch; }
@@ -136,6 +152,7 @@ main { min-width: 0; padding-block: 36px 80px; padding-left: max(16px, env(safe-
 .btn.small { padding: 6px 12px; font-size: 0.82rem; }
 .btn.gold { background: var(--gold-fill); border-color: var(--gold-fill); color: #241903; }
 .btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn[hidden] { display: none; }
 
 .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
 .fact { border-top: 3px solid var(--gold-fill); padding-top: 10px; display: grid; gap: 4px; }
@@ -344,7 +361,11 @@ tr:last-child td { border-bottom: 0; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+.noscript { margin: 0; padding: 12px 16px; background: var(--danger-wash); color: var(--danger); font-weight: 600; text-align: center; }
 </style>
+</head>
+<body>
+<noscript><p class="noscript">This course needs JavaScript turned on. · Ce cours a besoin de JavaScript.</p></noscript>
 
 <header class="topbar">
   <a class="brand display" href="#welcome"><span class="ball" aria-hidden="true"></span><span>Ballon d'Or <b>Academy</b></span></a>
@@ -374,7 +395,8 @@ tr:last-child td { border-bottom: 0; }
     <p class="lede" data-l="en">Twelve steps, one real project. You start with an empty folder and finish with a full-stack app (HTML, CSS, JavaScript, a SQL database and a Node.js server), published on your own GitHub.</p>
     <p class="lede" data-l="fr">Douze étapes, un vrai projet. Tu pars d'un dossier vide et tu termines avec une application complète (HTML, CSS, JavaScript, une base SQL et un serveur Node.js), publiée sur ton propre GitHub.</p>
     <div class="cta">
-      <a class="btn gold" href="#step-1"><span data-l="en">Start step 1</span><span data-l="fr">Commencer l'étape 1</span> →</a>
+      <a class="btn gold" id="resume" href="#step-1" hidden></a>
+      <a class="btn gold" id="start" href="#step-1"><span data-l="en">Start step 1</span><span data-l="fr">Commencer l'étape 1</span> →</a>
       <a class="btn ghost" href="#step-9"><span data-l="en">Jump to the SQL lab</span><span data-l="fr">Aller au labo SQL</span></a>
     </div>
   </div>
@@ -4901,7 +4923,22 @@ export const winners = [
     $$('.play[data-play]', view).forEach(function (el) { var p = plays[el.dataset.play]; if (p && !p.ready) { p.ready = true; p.run(); } });
     if (id === 'step-9' && !$('#sql-result').innerHTML) { getDB().then(function () { runSQL(); }, function () {}); }
     if (id === 'step-10' && !$('#api-out').textContent) { getDB().then(function () { sendAPI(); }, function () {}); }
-    store.set('bda-last', id);
+    if (id !== 'welcome') store.set('bda-last', id);
+    renderResume();
+  }
+
+  /* "Continue where you left off" on the welcome page */
+  function renderResume() {
+    var last = store.get('bda-last', null), btn = $('#resume'), start = $('#start');
+    var m = /^step-(\d+)$/.exec(last || ''), s = m ? STEPS[Number(m[1]) - 1] : null;
+    var show = (!!s && s.n > 1) || last === 'reference';
+    btn.hidden = !show;
+    start.classList.toggle('gold', !show);
+    start.classList.toggle('ghost', show);
+    if (!show) return;
+    btn.href = '#' + last;
+    btn.innerHTML = (s ? L('Continue: step ' + s.n + ' · ' + s.en, 'Reprendre : étape ' + s.n + ' · ' + s.fr)
+                       : L('Continue: reference', 'Reprendre : référence')) + ' →';
   }
   window.addEventListener('hashchange', function () { route(); window.scrollTo(0, 0); });
 
@@ -4914,3 +4951,5 @@ export const winners = [
   route();
 })();
 </script>
+</body>
+</html>

@@ -498,7 +498,22 @@
     $$('.play[data-play]', view).forEach(function (el) { var p = plays[el.dataset.play]; if (p && !p.ready) { p.ready = true; p.run(); } });
     if (id === 'step-9' && !$('#sql-result').innerHTML) { getDB().then(function () { runSQL(); }, function () {}); }
     if (id === 'step-10' && !$('#api-out').textContent) { getDB().then(function () { sendAPI(); }, function () {}); }
-    store.set('bda-last', id);
+    if (id !== 'welcome') store.set('bda-last', id);
+    renderResume();
+  }
+
+  /* "Continue where you left off" on the welcome page */
+  function renderResume() {
+    var last = store.get('bda-last', null), btn = $('#resume'), start = $('#start');
+    var m = /^step-(\d+)$/.exec(last || ''), s = m ? STEPS[Number(m[1]) - 1] : null;
+    var show = (!!s && s.n > 1) || last === 'reference';
+    btn.hidden = !show;
+    start.classList.toggle('gold', !show);
+    start.classList.toggle('ghost', show);
+    if (!show) return;
+    btn.href = '#' + last;
+    btn.innerHTML = (s ? L('Continue: step ' + s.n + ' · ' + s.en, 'Reprendre : étape ' + s.n + ' · ' + s.fr)
+                       : L('Continue: reference', 'Reprendre : référence')) + ' →';
   }
   window.addEventListener('hashchange', function () { route(); window.scrollTo(0, 0); });
 
@@ -511,3 +526,5 @@
   route();
 })();
 </script>
+</body>
+</html>
