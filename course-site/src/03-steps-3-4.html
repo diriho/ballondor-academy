@@ -1,0 +1,354 @@
+
+<!-- ======================= STEP 3 ======================= -->
+<section class="view" id="step-3" data-view data-step="3" hidden>
+  <header class="lesson-head" data-head="3"></header>
+
+  <div class="callout goal">
+    <span class="label"><span data-l="en">Goal</span><span data-l="fr">Objectif</span></span>
+    <p data-l="en">Write <code>public/index.html</code>: the skeleton of the catalogue with a header, a title, the search bar, the filter buttons, a sidebar and an empty grid for the cards.</p>
+    <p data-l="fr">Écrire <code>public/index.html</code> : le squelette du catalogue avec un en-tête, un titre, la barre de recherche, les filtres, une barre latérale et une grille vide pour les cartes.</p>
+  </div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">HTML, CSS, JS: three jobs</span><span data-l="fr">HTML, CSS, JS : trois rôles</span></h2>
+    <p data-l="en"><strong>HTML</strong> says what things <em>are</em> (a title, a button, a list). <strong>CSS</strong> says how they <em>look</em>. <strong>JavaScript</strong> says what they <em>do</em>. Today is pure structure, so the page will look plain. That's expected.</p>
+    <p data-l="fr">Le <strong>HTML</strong> dit ce que sont les choses (un titre, un bouton, une liste). Le <strong>CSS</strong> dit à quoi elles <em>ressemblent</em>. Le <strong>JavaScript</strong> dit ce qu'elles <em>font</em>. Aujourd'hui c'est de la structure pure : la page sera brute, c'est normal.</p>
+    <h3 class="sub"><span data-l="en">Anatomy of an element</span><span data-l="fr">Anatomie d'un élément</span></h3>
+  </div>
+  <div class="diagram" role="img" aria-label="An HTML element: opening tag with attributes, content, closing tag">
+    <svg viewBox="0 0 760 150" xmlns="http://www.w3.org/2000/svg">
+      <text x="20" y="70" class="mono" font-size="22"><tspan fill="var(--tok-tag)" style="fill:var(--pitch)">&lt;button</tspan> <tspan class="gold">type</tspan>="button" <tspan class="gold">data-value</tspan>="men"<tspan style="fill:var(--pitch)">&gt;</tspan>Men<tspan style="fill:var(--pitch)">&lt;/button&gt;</tspan></text>
+      <path class="arrow" d="M20 86 v12 h96 v-12"/><text x="22" y="122" font-size="13" class="muted" data-l="en">tag name</text><text x="22" y="122" font-size="13" class="muted" data-l="fr">nom de balise</text>
+      <path class="arrow" d="M132 86 v12 h420 v-12"/><text x="250" y="122" font-size="13" class="muted" data-l="en">attributes: name="value"</text><text x="250" y="122" font-size="13" class="muted" data-l="fr">attributs : nom="valeur"</text>
+      <path class="arrow" d="M572 86 v12 h40 v-12"/><text x="566" y="122" font-size="13" class="muted" data-l="en">content</text><text x="566" y="122" font-size="13" class="muted" data-l="fr">contenu</text>
+      <path class="arrow" d="M618 86 v12 h118 v-12"/><text x="640" y="122" font-size="13" class="muted" data-l="en">closing tag</text><text x="634" y="122" font-size="13" class="muted" data-l="fr">balise fermante</text>
+      <text x="20" y="30" font-size="13" class="muted" data-l="en">Elements nest inside each other like folders. The browser turns that tree into the DOM.</text>
+      <text x="20" y="30" font-size="13" class="muted" data-l="fr">Les éléments s'imbriquent comme des dossiers. Le navigateur transforme cet arbre en DOM.</text>
+    </svg>
+  </div>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>Tag</th><th><span data-l="en">Use it for</span><span data-l="fr">Sert à</span></th><th><span data-l="en">In our catalogue</span><span data-l="fr">Dans notre catalogue</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>&lt;header&gt;</code> <code>&lt;footer&gt;</code></td><td><span data-l="en">Top and bottom of the page</span><span data-l="fr">Haut et bas de page</span></td><td><span data-l="en">logo bar, photo credits</span><span data-l="fr">barre du logo, crédits photo</span></td></tr>
+      <tr><td><code>&lt;main&gt;</code> <code>&lt;aside&gt;</code></td><td><span data-l="en">Main content / side content</span><span data-l="fr">Contenu principal / secondaire</span></td><td><span data-l="en">card grid / leaderboard</span><span data-l="fr">grille / classement</span></td></tr>
+      <tr><td><code>&lt;section&gt;</code> <code>&lt;div&gt;</code></td><td><span data-l="en">A themed block / a generic box</span><span data-l="fr">Un bloc thématique / une boîte générique</span></td><td><span data-l="en">hero, toolbar, panels</span><span data-l="fr">hero, barre d'outils, panneaux</span></td></tr>
+      <tr><td><code>&lt;h1&gt;</code>…<code>&lt;h6&gt;</code> <code>&lt;p&gt;</code></td><td><span data-l="en">Headings, paragraphs</span><span data-l="fr">Titres, paragraphes</span></td><td><span data-l="en">page title, intro text</span><span data-l="fr">titre, texte d'intro</span></td></tr>
+      <tr><td><code>&lt;input&gt;</code> <code>&lt;select&gt;</code> <code>&lt;button&gt;</code></td><td><span data-l="en">Things users type in or click</span><span data-l="fr">Ce que l'on tape ou clique</span></td><td><span data-l="en">search bar, decade filter</span><span data-l="fr">recherche, filtre décennie</span></td></tr>
+      <tr><td><code>&lt;ul&gt;</code> <code>&lt;ol&gt;</code> <code>&lt;li&gt;</code></td><td><span data-l="en">Lists (unordered / ordered)</span><span data-l="fr">Listes (à puces / numérotées)</span></td><td><span data-l="en">most wins ranking</span><span data-l="fr">classement des sacres</span></td></tr>
+      <tr><td><code>&lt;img&gt;</code> <code>&lt;a&gt;</code></td><td><span data-l="en">Picture, link</span><span data-l="fr">Image, lien</span></td><td><span data-l="en">logo, player photos</span><span data-l="fr">logo, photos</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="prose">
+    <p data-l="en">Two attributes matter a lot later: <code>id</code> names one unique element (JavaScript finds <code>#search</code> with it), <code>class</code> labels many elements (CSS styles every <code>.card</code> with it). Attributes starting with <code>data-</code> are free for you to invent.</p>
+    <p data-l="fr">Deux attributs comptent beaucoup ensuite : <code>id</code> nomme un élément unique (JavaScript trouve <code>#search</code> grâce à lui), <code>class</code> étiquette plusieurs éléments (le CSS stylise toutes les <code>.card</code>). Les attributs qui commencent par <code>data-</code> sont libres : tu les inventes.</p>
+    <h2 class="sec"><span data-l="en">Build: the skeleton</span><span data-l="fr">Construire : le squelette</span></h2>
+    <p data-l="en">Create <code>public/index.html</code>. In VS Code, typing <code>!</code> then <kbd>Tab</kbd> generates the first lines for you. Then type the rest:</p>
+    <p data-l="fr">Crée <code>public/index.html</code>. Dans VS Code, taper <code>!</code> puis <kbd>Tab</kbd> génère les premières lignes. Tape ensuite le reste :</p>
+  </div>
+  <script type="text/x-code" data-lang="html" data-file="public/index.html" data-note="step 3 version"><!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ballon d'Or Catalogue</title>
+  <link rel="icon" href="assets/ballon-dor-logo.png">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- ========== HEADER ========== -->
+  <header class="site-header">
+    <a class="brand" href="/">
+      <img class="brand-logo" src="assets/ballon-dor-logo.png" alt="">
+      <span>Ballon d'Or <em>Catalogue</em></span>
+    </a>
+  </header>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero">
+    <p class="eyebrow">Every winner since 1956</p>
+    <h1>The Golden Ball Hall of Fame</h1>
+    <p class="lede">Search seven decades of football's most famous individual award.</p>
+  </section>
+
+  <!-- ========== SEARCH + FILTERS ========== -->
+  <section class="toolbar" aria-label="Search and filters">
+    <label class="search">
+      <span class="visually-hidden">Search</span>
+      <input id="search" type="search" autocomplete="off" placeholder="Player, club or country…">
+    </label>
+
+    <div class="segmented" id="category" role="group" aria-label="Category">
+      <button type="button" data-value="all" aria-pressed="true">All</button>
+      <button type="button" data-value="men" aria-pressed="false">Men</button>
+      <button type="button" data-value="women" aria-pressed="false">Women</button>
+    </div>
+
+    <select id="decade" aria-label="Decade">
+      <option value="all">Any decade</option>
+      <option value="2020">2020s</option>
+      <option value="2010">2010s</option>
+      <option value="2000">2000s</option>
+      <option value="1990">1990s</option>
+      <option value="1980">1980s</option>
+      <option value="1970">1970s</option>
+      <option value="1960">1960s</option>
+      <option value="1950">1950s</option>
+    </select>
+  </section>
+
+  <!-- ========== PANELS: sidebar + main grid ========== -->
+  <div class="layout">
+    <aside class="sidebar">
+      <section class="panel">
+        <h2>Most wins</h2>
+        <ol id="leaderboard" class="leaderboard">
+          <li>Lionel Messi — 8</li>
+          <li>Cristiano Ronaldo — 5</li>
+          <li>Johan Cruyff — 3</li>
+        </ol>
+      </section>
+    </aside>
+
+    <main>
+      <p id="status" class="status">78 awards</p>
+      <div id="grid" class="grid">
+        <!-- the cards arrive in step 6 -->
+      </div>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <p>Photos: Wikimedia Commons.</p>
+  </footer>
+</body>
+</html></script>
+
+  <div class="prose">
+    <p data-l="en">Right-click <code>index.html</code> in the Explorer → <strong>Open with Live Server</strong>. Your browser shows the page and reloads on every save. Then right-click anything on the page → <strong>Inspect</strong> to see the element tree (the DOM).</p>
+    <p data-l="fr">Clic droit sur <code>index.html</code> dans l'explorateur → <strong>Open with Live Server</strong>. Le navigateur affiche la page et la recharge à chaque sauvegarde. Puis clic droit sur un élément → <strong>Inspecter</strong> pour voir l'arbre des éléments (le DOM).</p>
+    <h3 class="sub"><span data-l="en">Playground: edit the HTML, see the result</span><span data-l="fr">Bac à sable : modifie le HTML, vois le résultat</span></h3>
+  </div>
+  <div class="play" data-play="p3"></div>
+  <script type="text/x-play" data-for="p3" data-part="html"><header class="site-header">
+  <a class="brand" href="#">
+    <img class="brand-logo" src="assets/ballon-dor-logo.png" alt="" width="60">
+    <span>Ballon d'Or <em>Catalogue</em></span>
+  </a>
+</header>
+
+<section class="hero">
+  <p class="eyebrow">Every winner since 1956</p>
+  <h1>The Golden Ball Hall of Fame</h1>
+  <p class="lede">Search seven decades of football's most famous individual award.</p>
+</section>
+
+<section class="toolbar">
+  <input id="search" type="search" placeholder="Player, club or country…">
+  <button type="button" aria-pressed="true">All</button>
+  <button type="button">Men</button>
+  <button type="button">Women</button>
+  <select id="decade">
+    <option>Any decade</option>
+    <option>2020s</option>
+    <option>2010s</option>
+  </select>
+</section>
+
+<div class="layout">
+  <aside>
+    <h2>Most wins</h2>
+    <ol>
+      <li>Lionel Messi — 8</li>
+      <li>Cristiano Ronaldo — 5</li>
+    </ol>
+  </aside>
+  <main>
+    <p>78 awards</p>
+  </main>
+</div></script>
+
+  <div class="callout check">
+    <span class="label">Checkpoint</span>
+    <p data-l="en">Live Server shows a plain white page: logo, big title, a search box, three buttons, a dropdown, the “Most wins” list and the footer. No colours yet.</p>
+    <p data-l="fr">Live Server affiche une page blanche et brute : logo, grand titre, champ de recherche, trois boutons, une liste déroulante, la liste « Most wins » et le pied de page. Pas encore de couleurs.</p>
+  </div>
+  <details class="challenge">
+    <summary><span data-l="en">Challenge: add a position filter</span><span data-l="fr">Défi : ajouter un filtre par poste</span></summary>
+    <div>
+      <p data-l="en">After the decade <code>&lt;select&gt;</code>, add a second one with <code>id="position"</code> and the options Any position, Forward, Midfielder, Defender, Goalkeeper. Also add a second panel “Top nations” with an empty <code>&lt;ul id="nations" class="bars"&gt;</code>.</p>
+      <p data-l="fr">Après le <code>&lt;select&gt;</code> des décennies, ajoute-en un second avec <code>id="position"</code> et les options Any position, Forward, Midfielder, Defender, Goalkeeper. Ajoute aussi un second panneau « Top nations » avec un <code>&lt;ul id="nations" class="bars"&gt;</code> vide.</p>
+      <script type="text/x-code" data-lang="html" data-file="solution"><select id="position" aria-label="Position">
+  <option value="all">Any position</option>
+  <option value="Forward">Forward</option>
+  <option value="Midfielder">Midfielder</option>
+  <option value="Defender">Defender</option>
+  <option value="Goalkeeper">Goalkeeper</option>
+</select>
+
+<!-- inside <aside>, after the first panel -->
+<section class="panel">
+  <h2>Top nations</h2>
+  <ul id="nations" class="bars"></ul>
+</section></script>
+    </div>
+  </details>
+  <script type="text/x-code" data-lang="bash" data-term>git add .
+git commit -m "Step 3: HTML skeleton"
+git push</script>
+  <footer class="pager" data-pager></footer>
+</section>
+
+<!-- ======================= STEP 4 ======================= -->
+<section class="view" id="step-4" data-view data-step="4" hidden>
+  <header class="lesson-head" data-head="4"></header>
+
+  <div class="callout goal">
+    <span class="label"><span data-l="en">Goal</span><span data-l="fr">Objectif</span></span>
+    <p data-l="en">Create <code>public/css/style.css</code> and give the catalogue its gala-night identity: dark background, gold title, two fonts, a clean header.</p>
+    <p data-l="fr">Créer <code>public/css/style.css</code> et donner au catalogue son ambiance de soirée de gala : fond sombre, titre doré, deux polices, un en-tête propre.</p>
+  </div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">How CSS works</span><span data-l="fr">Comment fonctionne le CSS</span></h2>
+    <p data-l="en">A CSS file is a list of <strong>rules</strong>. Each rule picks elements with a <strong>selector</strong>, then sets <strong>properties</strong>:</p>
+    <p data-l="fr">Un fichier CSS est une liste de <strong>règles</strong>. Chaque règle choisit des éléments avec un <strong>sélecteur</strong>, puis définit des <strong>propriétés</strong> :</p>
+  </div>
+  <script type="text/x-code" data-lang="css" data-file="anatomy">.card-year {            /* selector: every element with class="card-year" */
+  color: var(--gold);   /* property: value; */
+  font-size: 3rem;
+}</script>
+  <div class="table-wrap"><table>
+    <thead><tr><th><span data-l="en">Selector</span><span data-l="fr">Sélecteur</span></th><th><span data-l="en">Picks</span><span data-l="fr">Sélectionne</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>h1</code></td><td><span data-l="en">every &lt;h1&gt;</span><span data-l="fr">tous les &lt;h1&gt;</span></td></tr>
+      <tr><td><code>.card</code></td><td><span data-l="en">every element with <code>class="card"</code></span><span data-l="fr">tout élément avec <code>class="card"</code></span></td></tr>
+      <tr><td><code>#search</code></td><td><span data-l="en">the one element with <code>id="search"</code></span><span data-l="fr">l'unique élément avec <code>id="search"</code></span></td></tr>
+      <tr><td><code>.card img</code></td><td><span data-l="en">images <em>inside</em> a card</span><span data-l="fr">les images <em>dans</em> une carte</span></td></tr>
+      <tr><td><code>button[aria-pressed='true']</code></td><td><span data-l="en">buttons whose attribute has that value</span><span data-l="fr">les boutons dont l'attribut a cette valeur</span></td></tr>
+      <tr><td><code>.card:hover</code></td><td><span data-l="en">a card while the mouse is over it</span><span data-l="fr">une carte survolée par la souris</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="prose">
+    <p data-l="en">When two rules disagree, the more <strong>specific</strong> selector wins (<code>#id</code> beats <code>.class</code> beats <code>tag</code>), and if they're equal, the one written <strong>last</strong> wins. That's the “cascade” in Cascading Style Sheets.</p>
+    <p data-l="fr">Quand deux règles se contredisent, le sélecteur le plus <strong>spécifique</strong> gagne (<code>#id</code> bat <code>.classe</code> qui bat <code>balise</code>) ; à égalité, la règle écrite en <strong>dernier</strong> gagne. C'est la « cascade » de Cascading Style Sheets.</p>
+    <h3 class="sub"><span data-l="en">The box model</span><span data-l="fr">Le modèle de boîte</span></h3>
+    <p data-l="en">Every element is a box: content, then <strong>padding</strong> (inside space), <strong>border</strong>, then <strong>margin</strong> (outside space). Move the sliders:</p>
+    <p data-l="fr">Chaque élément est une boîte : le contenu, puis le <strong>padding</strong> (marge intérieure), la <strong>bordure</strong>, puis la <strong>margin</strong> (marge extérieure). Bouge les curseurs :</p>
+  </div>
+  <div class="widget" id="boxmodel">
+    <div class="controls">
+      <label>padding <input type="range" id="bm-pad" min="0" max="40" value="16"></label>
+      <label>border <input type="range" id="bm-border" min="0" max="16" value="3"></label>
+      <label>margin <input type="range" id="bm-margin" min="0" max="40" value="20"></label>
+    </div>
+    <div class="bm-stage"><div class="bm-margin" id="bm-m"><div class="bm-box" id="bm-b"><div class="bm-content">Lionel Messi<br><small>content</small></div></div></div></div>
+    <div class="css-out" id="bm-css"></div>
+  </div>
+
+  <div class="prose">
+    <h3 class="sub"><span data-l="en">Variables, units, fonts</span><span data-l="fr">Variables, unités, polices</span></h3>
+    <ul>
+      <li data-l="en"><strong>Custom properties</strong> such as <code>--gold: #e6b94d;</code> are CSS variables. Define the colours once, use <code>var(--gold)</code> everywhere, change the whole theme in one line.</li>
+      <li data-l="fr">Les <strong>propriétés personnalisées</strong> comme <code>--gold: #e6b94d;</code> sont des variables CSS. Définis les couleurs une fois, utilise <code>var(--gold)</code> partout, change tout le thème en une ligne.</li>
+      <li data-l="en"><strong>Units</strong>: <code>px</code> fixed, <code>rem</code> relative to the base font size (1rem ≈ 16px), <code>%</code> of the parent, <code>vw</code> % of the screen width. <code>clamp(3rem, 8vw, 6rem)</code> means “8% of the screen, but never below 3rem or above 6rem”.</li>
+      <li data-l="fr"><strong>Unités</strong> : <code>px</code> fixe, <code>rem</code> relatif à la taille de police de base (1rem ≈ 16px), <code>%</code> du parent, <code>vw</code> % de la largeur d'écran. <code>clamp(3rem, 8vw, 6rem)</code> veut dire « 8 % de l'écran, jamais moins de 3rem ni plus de 6rem ».</li>
+      <li data-l="en"><strong>Fonts</strong> come from Google Fonts: <em>Bebas Neue</em> (tall, sporty headings) and <em>Inter</em> (readable text).</li>
+      <li data-l="fr">Les <strong>polices</strong> viennent de Google Fonts : <em>Bebas Neue</em> (titres hauts et sportifs) et <em>Inter</em> (texte lisible).</li>
+    </ul>
+    <h2 class="sec"><span data-l="en">Build: the stylesheet, part 1</span><span data-l="fr">Construire : la feuille de style, partie 1</span></h2>
+    <p data-l="en">In <code>index.html</code>, add the fonts <em>above</em> your own stylesheet link:</p>
+    <p data-l="fr">Dans <code>index.html</code>, ajoute les polices <em>au-dessus</em> du lien vers ta feuille de style :</p>
+  </div>
+  <script type="text/x-code" data-lang="html" data-file="public/index.html" data-note="inside <head>"><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="css/style.css"></script>
+  <div class="prose">
+    <p data-l="en">Now create <code>public/css/style.css</code> with the first three sections. A few rules (<code>.lang-switch</code>, <code>.stats</code>) style elements you'll add in steps 11–12; keep them, they do no harm.</p>
+    <p data-l="fr">Crée maintenant <code>public/css/style.css</code> avec les trois premières sections. Quelques règles (<code>.lang-switch</code>, <code>.stats</code>) stylisent des éléments ajoutés aux étapes 11–12 ; garde-les, elles ne gênent pas.</p>
+  </div>
+  <script type="text/x-code" data-lang="css" data-file="public/css/style.css" data-note="sections 1–3">@@include public/css/style.css#HEAD@@
+@@include public/css/style.css#1. Design tokens@@
+@@include public/css/style.css#2. Base@@
+@@include public/css/style.css#3. Header + hero@@</script>
+
+  <div class="prose">
+    <h3 class="sub"><span data-l="en">Playground: change the theme in one line</span><span data-l="fr">Bac à sable : change le thème en une ligne</span></h3>
+    <p data-l="en">Open the CSS tab and set <code>--gold</code> to <code>#4da3ff</code>, or <code>--bg</code> to <code>#2b0a3d</code>.</p>
+    <p data-l="fr">Ouvre l'onglet CSS et mets <code>--gold</code> à <code>#4da3ff</code>, ou <code>--bg</code> à <code>#2b0a3d</code>.</p>
+  </div>
+  <div class="play" data-play="p4" data-tab="css"></div>
+  <script type="text/x-play" data-for="p4" data-part="html"><header class="site-header">
+  <a class="brand" href="#">
+    <img class="brand-logo" src="assets/ballon-dor-logo.png" alt="">
+    <span>Ballon d'Or <em>Catalogue</em></span>
+  </a>
+</header>
+<section class="hero">
+  <p class="eyebrow">Every winner since 1956</p>
+  <h1>The Golden Ball Hall of Fame</h1>
+  <p class="lede">Search seven decades of football's most famous individual award.</p>
+</section></script>
+  <script type="text/x-play" data-for="p4" data-part="css">:root {
+  --bg: #0c0e13;
+  --line: #2a3142;
+  --text: #f3efe6;
+  --muted: #a3a9b8;
+  --gold: #e6b94d;
+  --gold-deep: #b8862b;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+}
+.site-header {
+  display: flex;
+  align-items: center;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--line);
+}
+.brand {
+  display: flex; align-items: center; gap: 10px;
+  color: var(--text); text-decoration: none;
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: 1.6rem; letter-spacing: 0.04em;
+}
+.brand em { font-style: normal; color: var(--gold); }
+.brand-logo { width: 46px; }
+.hero { padding: 40px 24px; }
+.eyebrow {
+  margin: 0; color: var(--gold);
+  text-transform: uppercase; letter-spacing: 0.18em;
+  font-size: 0.8rem; font-weight: 600;
+}
+.hero h1 {
+  margin: 8px 0 12px;
+  font-family: 'Bebas Neue', Impact, sans-serif;
+  font-size: clamp(3rem, 8vw, 5rem);
+  line-height: 0.95;
+  background: linear-gradient(180deg, #fff3cf, var(--gold) 55%, var(--gold-deep));
+  -webkit-background-clip: text; background-clip: text;
+  color: transparent;
+}
+.lede { margin: 0; color: var(--muted); max-width: 52ch; }</script>
+
+  <div class="callout check">
+    <span class="label">Checkpoint</span>
+    <p data-l="en">The page is dark, the title is big and gold, the logo sits next to “Ballon d'Or Catalogue” in the header. The rest still looks raw; layout is next.</p>
+    <p data-l="fr">La page est sombre, le titre est grand et doré, le logo est à côté de « Ballon d'Or Catalogue » dans l'en-tête. Le reste est encore brut ; la mise en page arrive ensuite.</p>
+  </div>
+  <details class="challenge">
+    <summary><span data-l="en">Challenge: find it in DevTools</span><span data-l="fr">Défi : trouve-le dans les DevTools</span></summary>
+    <div>
+      <p data-l="en">Inspect the <code>&lt;h1&gt;</code>. In the <strong>Styles</strong> pane, untick <code>color: transparent</code> and see what happens. Then click the colour square next to <code>--gold</code> in <code>:root</code> and pick a colour live. DevTools changes are temporary; copy the ones you like into <code>style.css</code>.</p>
+      <p data-l="fr">Inspecte le <code>&lt;h1&gt;</code>. Dans le volet <strong>Styles</strong>, décoche <code>color: transparent</code> et observe. Puis clique sur le carré de couleur à côté de <code>--gold</code> dans <code>:root</code> et choisis une couleur en direct. Les changements dans les DevTools sont temporaires ; recopie ceux qui te plaisent dans <code>style.css</code>.</p>
+    </div>
+  </details>
+  <script type="text/x-code" data-lang="bash" data-term>git add .
+git commit -m "Step 4: colours, fonts and header"
+git push</script>
+  <footer class="pager" data-pager></footer>
+</section>

@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ballon d'Or Catalogue</title>
+  <link rel="icon" href="assets/ballon-dor-logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <!-- ========== HEADER ========== -->
+  <header class="site-header">
+    <a class="brand" href="/">
+      <img class="brand-logo" src="assets/ballon-dor-logo.png" alt="">
+      <span>Ballon d'Or <em>Catalogue</em></span>
+    </a>
+    <div class="lang-switch" role="group" aria-label="Language / Langue">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="fr" aria-pressed="false">FR</button>
+    </div>
+  </header>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero">
+    <p class="eyebrow" data-i18n="eyebrow">Every winner since 1956</p>
+    <h1 data-i18n="title">The Golden Ball Hall of Fame</h1>
+    <p class="lede" data-i18n="lede">Search seven decades of football's most famous individual award.</p>
+    <dl class="stats" id="stats"></dl>
+  </section>
+
+  <!-- ========== SEARCH + FILTERS ========== -->
+  <section class="toolbar" aria-label="Search and filters">
+    <label class="search">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+      <span class="visually-hidden" data-i18n="searchLabel">Search</span>
+      <input id="search" type="search" autocomplete="off"
+             data-i18n-placeholder="searchPlaceholder" placeholder="Player, club or country…">
+    </label>
+
+    <div class="segmented" id="category" role="group" aria-label="Category">
+      <button type="button" data-value="all" aria-pressed="true" data-i18n="all">All</button>
+      <button type="button" data-value="men" aria-pressed="false" data-i18n="men">Men</button>
+      <button type="button" data-value="women" aria-pressed="false" data-i18n="women">Women</button>
+    </div>
+
+    <select id="decade" aria-label="Decade"></select>
+    <select id="position" aria-label="Position"></select>
+    <select id="sort" aria-label="Sort"></select>
+  </section>
+
+  <!-- ========== PANELS: sidebar + main grid ========== -->
+  <div class="layout">
+    <aside class="sidebar">
+      <section class="panel">
+        <h2 data-i18n="mostWins">Most wins</h2>
+        <ol id="leaderboard" class="leaderboard"></ol>
+      </section>
+      <section class="panel">
+        <h2 data-i18n="topNations">Top nations</h2>
+        <ul id="nations" class="bars"></ul>
+      </section>
+    </aside>
+
+    <main>
+      <p id="status" class="status" role="status" aria-live="polite"></p>
+      <div id="grid" class="grid"></div>
+    </main>
+  </div>
+
+  <!-- ========== PLAYER DETAILS (opens on card click) ========== -->
+  <dialog id="player-dialog" class="player-dialog">
+    <button type="button" class="dialog-close" id="dialog-close" aria-label="Close">×</button>
+    <div id="dialog-content"></div>
+  </dialog>
+
+  <footer class="site-footer">
+    <p data-i18n="footer">Photos: Wikimedia Commons — author and licence are stored in the database (players.image_credit).</p>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

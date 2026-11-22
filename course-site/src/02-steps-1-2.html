@@ -1,0 +1,240 @@
+
+<!-- ======================= STEP 1 ======================= -->
+<section class="view" id="step-1" data-view data-step="1" hidden>
+  <header class="lesson-head" data-head="1"></header>
+
+  <div class="callout goal">
+    <span class="label"><span data-l="en">Goal</span><span data-l="fr">Objectif</span></span>
+    <p data-l="en">Install the three tools every web developer uses, learn the handful of terminal commands you need, and create the project folder.</p>
+    <p data-l="fr">Installer les trois outils de tout développeur web, apprendre les quelques commandes de terminal utiles et créer le dossier du projet.</p>
+  </div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">Your toolbox</span><span data-l="fr">Ta boîte à outils</span></h2>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th><span data-l="en">Tool</span><span data-l="fr">Outil</span></th><th><span data-l="en">What it does</span><span data-l="fr">À quoi il sert</span></th><th><span data-l="en">Get it</span><span data-l="fr">Téléchargement</span></th></tr></thead>
+    <tbody>
+      <tr><td><strong>VS Code</strong></td><td><span data-l="en">The code editor. You will write every file here.</span><span data-l="fr">L'éditeur de code. Tu y écriras tous tes fichiers.</span></td><td><a href="https://code.visualstudio.com" target="_blank" rel="noopener">code.visualstudio.com</a></td></tr>
+      <tr><td><strong>Node.js (LTS)</strong></td><td><span data-l="en">Runs JavaScript outside the browser (your server, step 10). Comes with <code>npm</code>, the package installer.</span><span data-l="fr">Exécute du JavaScript hors du navigateur (ton serveur, étape 10). Fourni avec <code>npm</code>, l'installeur de paquets.</span></td><td><a href="https://nodejs.org" target="_blank" rel="noopener">nodejs.org</a></td></tr>
+      <tr><td><strong>Git</strong></td><td><span data-l="en">Saves snapshots of your code and sends them to GitHub (step 2).</span><span data-l="fr">Enregistre des versions de ton code et les envoie sur GitHub (étape 2).</span></td><td><a href="https://git-scm.com/downloads" target="_blank" rel="noopener">git-scm.com</a></td></tr>
+      <tr><td><strong>Chrome / Firefox / Edge</strong></td><td><span data-l="en">Shows your site. Its DevTools (<kbd>F12</kbd>) let you inspect everything.</span><span data-l="fr">Affiche ton site. Ses DevTools (<kbd>F12</kbd>) permettent de tout inspecter.</span></td><td>—</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="prose">
+    <p data-l="en">After installing, open a terminal (macOS: <strong>Terminal</strong> app · Windows: <strong>PowerShell</strong> or <strong>Git Bash</strong>) and check that everything answers with a version number:</p>
+    <p data-l="fr">Après l'installation, ouvre un terminal (macOS : l'app <strong>Terminal</strong> · Windows : <strong>PowerShell</strong> ou <strong>Git Bash</strong>) et vérifie que tout répond avec un numéro de version :</p>
+  </div>
+  <script type="text/x-code" data-lang="bash" data-term>node -v        # v24.x (anything ≥ 22 works)
+npm -v
+git --version</script>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">The terminal in 6 commands</span><span data-l="fr">Le terminal en 6 commandes</span></h2>
+    <p data-l="en">The terminal is a text interface to your computer. You type a command, press <kbd>Enter</kbd>, it answers. These six cover 90% of this course:</p>
+    <p data-l="fr">Le terminal est une interface texte vers ton ordinateur. Tu tapes une commande, tu appuies sur <kbd>Entrée</kbd>, il répond. Ces six-là couvrent 90 % du cours :</p>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Command</th><th><span data-l="en">Meaning</span><span data-l="fr">Signification</span></th><th><span data-l="en">Example</span><span data-l="fr">Exemple</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>pwd</code></td><td><span data-l="en">Where am I? (print working directory)</span><span data-l="fr">Où suis-je ? (dossier courant)</span></td><td><code>pwd</code></td></tr>
+      <tr><td><code>ls</code></td><td><span data-l="en">List what's in this folder</span><span data-l="fr">Lister le contenu du dossier</span></td><td><code>ls</code></td></tr>
+      <tr><td><code>cd</code></td><td><span data-l="en">Go into a folder (<code>cd ..</code> goes back up)</span><span data-l="fr">Entrer dans un dossier (<code>cd ..</code> remonte)</span></td><td><code>cd Documents</code></td></tr>
+      <tr><td><code>mkdir</code></td><td><span data-l="en">Make a new folder</span><span data-l="fr">Créer un dossier</span></td><td><code>mkdir db</code></td></tr>
+      <tr><td><code>code .</code></td><td><span data-l="en">Open this folder in VS Code</span><span data-l="fr">Ouvrir ce dossier dans VS Code</span></td><td><code>code .</code></td></tr>
+      <tr><td><kbd>Ctrl</kbd> + <kbd>C</kbd></td><td><span data-l="en">Stop the running program (e.g. your server)</span><span data-l="fr">Arrêter le programme en cours (ex. ton serveur)</span></td><td>—</td></tr>
+    </tbody>
+  </table></div>
+  <div class="callout tip">
+    <span class="label">Tip</span>
+    <p data-l="en">Press <kbd>Tab</kbd> to auto-complete folder names and <kbd>↑</kbd> to repeat the last command. On macOS, if <code>code .</code> is unknown, open VS Code, press <kbd>⌘</kbd><kbd>⇧</kbd><kbd>P</kbd> and run “Shell Command: Install 'code' command in PATH”.</p>
+    <p data-l="fr">Appuie sur <kbd>Tab</kbd> pour compléter les noms de dossiers et sur <kbd>↑</kbd> pour répéter la dernière commande. Sur macOS, si <code>code .</code> est inconnu, ouvre VS Code, fais <kbd>⌘</kbd><kbd>⇧</kbd><kbd>P</kbd> puis « Shell Command: Install 'code' command in PATH ».</p>
+  </div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">Build: create the project</span><span data-l="fr">Construire : créer le projet</span></h2>
+    <p data-l="en">Go to where you keep your work (for example <code>cd Documents</code>), then create the folders. This structure is the one you'll keep until the end:</p>
+    <p data-l="fr">Va là où tu ranges ton travail (par exemple <code>cd Documents</code>), puis crée les dossiers. C'est la structure que tu garderas jusqu'à la fin :</p>
+  </div>
+  <script type="text/x-code" data-lang="bash" data-term>mkdir ballondor-catalogue
+cd ballondor-catalogue
+mkdir public db
+mkdir public/css public/js public/assets
+code .</script>
+  <script type="text/x-code" data-lang="text" data-file="ballondor-catalogue/" data-note="what you'll have at the end / ce que tu auras à la fin">ballondor-catalogue/
+├── server.js            ← step 10 (Node + Express)
+├── package.json         ← step 10
+├── db/
+│   ├── schema.sql       ← step 9 (tables)
+│   ├── seed.sql         ← step 9 (all the winners)
+│   └── ballondor.db     ← step 9–10 (the database file)
+└── public/              ← steps 3 → 8 (what the browser downloads)
+    ├── index.html
+    ├── css/style.css
+    ├── js/app.js
+    └── assets/          ← logo + placeholder picture</script>
+
+  <div class="prose">
+    <p data-l="en">Download the two images into <code>public/assets/</code> (open each link, then use the download button on GitHub):</p>
+    <p data-l="fr">Télécharge les deux images dans <code>public/assets/</code> (ouvre chaque lien, puis utilise le bouton de téléchargement de GitHub) :</p>
+    <ul>
+      <li><a href="https://github.com/diriho/web103_project/blob/main/ballondor/client/src/assets/ballor.jpg" target="_blank" rel="noopener">ballor.jpg</a> <span data-l="en">: placeholder used when a player has no photo</span><span data-l="fr">: image de remplacement quand un joueur n'a pas de photo</span></li>
+      <li><a href="https://github.com/diriho/web103_project/blob/main/ballondor/client/src/assets/ballon-dor-logo.png" target="_blank" rel="noopener">ballon-dor-logo.png</a> <span data-l="en">: the logo</span><span data-l="fr">: le logo</span></li>
+    </ul>
+    <h3 class="sub"><span data-l="en">Three VS Code extensions</span><span data-l="fr">Trois extensions VS Code</span></h3>
+    <p data-l="en">Open the Extensions panel (<kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Shift</kbd> + <kbd>X</kbd>) and install:</p>
+    <p data-l="fr">Ouvre le panneau Extensions (<kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Maj</kbd> + <kbd>X</kbd>) et installe :</p>
+    <ul>
+      <li><strong>Live Server</strong> <span data-l="en">(Ritwick Dey): reloads the page every time you save. Used in steps 3–8.</span><span data-l="fr">(Ritwick Dey) : recharge la page à chaque sauvegarde. Utilisé aux étapes 3 à 8.</span></li>
+      <li><strong>SQLite Viewer</strong> <span data-l="en">(Florian Klampfer): opens <code>.db</code> files as tables. Step 9.</span><span data-l="fr">(Florian Klampfer) : ouvre les fichiers <code>.db</code> sous forme de tableaux. Étape 9.</span></li>
+      <li><strong>Prettier</strong> <span data-l="en">: formats your code neatly on save.</span><span data-l="fr">: met ton code en forme à la sauvegarde.</span></li>
+    </ul>
+  </div>
+
+  <div class="callout check">
+    <span class="label">Checkpoint</span>
+    <ul>
+      <li data-l="en"><code>node -v</code>, <code>npm -v</code> and <code>git --version</code> print versions.</li>
+      <li data-l="fr"><code>node -v</code>, <code>npm -v</code> et <code>git --version</code> affichent une version.</li>
+      <li data-l="en">VS Code shows <code>ballondor-catalogue</code> with <code>public/</code> and <code>db/</code> in the Explorer.</li>
+      <li data-l="fr">VS Code affiche <code>ballondor-catalogue</code> avec <code>public/</code> et <code>db/</code> dans l'explorateur.</li>
+      <li data-l="en">The two images are in <code>public/assets/</code>.</li>
+      <li data-l="fr">Les deux images sont dans <code>public/assets/</code>.</li>
+    </ul>
+  </div>
+
+  <details class="challenge">
+    <summary><span data-l="en">Challenge: terminal only</span><span data-l="fr">Défi : uniquement au terminal</span></summary>
+    <div>
+      <p data-l="en">Without touching the mouse, create an empty <code>README.md</code> in the project and open it in VS Code. Hint: macOS/Git Bash use <code>touch</code>, PowerShell uses <code>ni</code> (New-Item).</p>
+      <p data-l="fr">Sans toucher la souris, crée un <code>README.md</code> vide dans le projet et ouvre-le dans VS Code. Indice : macOS/Git Bash utilisent <code>touch</code>, PowerShell utilise <code>ni</code> (New-Item).</p>
+      <script type="text/x-code" data-lang="bash" data-term>touch README.md      # PowerShell: ni README.md
+code README.md</script>
+    </div>
+  </details>
+  <footer class="pager" data-pager></footer>
+</section>
+
+<!-- ======================= STEP 2 ======================= -->
+<section class="view" id="step-2" data-view data-step="2" hidden>
+  <header class="lesson-head" data-head="2"></header>
+
+  <div class="callout goal">
+    <span class="label"><span data-l="en">Goal</span><span data-l="fr">Objectif</span></span>
+    <p data-l="en">Turn the folder into a Git repository, connect VS Code to your GitHub account and publish the project online. From now on, every step ends with a commit.</p>
+    <p data-l="fr">Transformer le dossier en dépôt Git, connecter VS Code à ton compte GitHub et publier le projet en ligne. Désormais, chaque étape se termine par un commit.</p>
+  </div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">Git vs GitHub</span><span data-l="fr">Git ou GitHub ?</span></h2>
+    <p data-l="en"><strong>Git</strong> is a program on your computer that records snapshots (called <em>commits</em>) of your project, so you can always go back. <strong>GitHub</strong> is a website that stores a copy of your repository online, so you can share it, work from another computer and show it to others.</p>
+    <p data-l="fr"><strong>Git</strong> est un programme sur ton ordinateur qui enregistre des instantanés (des <em>commits</em>) de ton projet pour pouvoir toujours revenir en arrière. <strong>GitHub</strong> est un site qui stocke une copie de ton dépôt en ligne pour le partager, travailler depuis un autre ordinateur et le montrer.</p>
+    <p data-l="en">A change travels through four places. Press the buttons below, in order, to watch a change go from your editor to GitHub:</p>
+    <p data-l="fr">Une modification passe par quatre endroits. Clique sur les boutons ci-dessous, dans l'ordre, pour suivre une modification de ton éditeur jusqu'à GitHub :</p>
+  </div>
+
+  <div class="widget" id="gitsim">
+    <div class="widget-title"><strong><span data-l="en">Git simulator</span><span data-l="fr">Simulateur Git</span></strong><span data-l="en">nothing here touches a real repository</span><span data-l="fr">rien ici ne touche un vrai dépôt</span></div>
+    <div class="controls">
+      <button type="button" class="btn small ghost" data-git="edit"><span data-l="en">Edit a file</span><span data-l="fr">Modifier un fichier</span></button>
+      <button type="button" class="btn small" data-git="add">git add .</button>
+      <button type="button" class="btn small" data-git="commit">git commit -m "…"</button>
+      <button type="button" class="btn small" data-git="push">git push</button>
+      <button type="button" class="btn small ghost" data-git="reset">Reset</button>
+    </div>
+    <div class="git-zones">
+      <div class="zone"><h4><span data-l="en">Working folder</span><span data-l="fr">Dossier de travail</span></h4><div data-zone="work"></div></div>
+      <div class="zone"><h4><span data-l="en">Staging area</span><span data-l="fr">Zone de préparation</span></h4><div data-zone="stage"></div></div>
+      <div class="zone"><h4><span data-l="en">Local repo</span><span data-l="fr">Dépôt local</span> <code>.git</code></h4><div data-zone="local"></div></div>
+      <div class="zone"><h4>GitHub <code>origin</code></h4><div data-zone="remote"></div></div>
+    </div>
+    <div class="git-log" id="git-log" aria-live="polite"></div>
+  </div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">One-time setup</span><span data-l="fr">Configuration (une seule fois)</span></h2>
+    <ol>
+      <li data-l="en">Create a free account on <a href="https://github.com/signup" target="_blank" rel="noopener">github.com</a>.</li>
+      <li data-l="fr">Crée un compte gratuit sur <a href="https://github.com/signup" target="_blank" rel="noopener">github.com</a>.</li>
+      <li data-l="en">Tell Git who you are (use the same email as on GitHub):</li>
+      <li data-l="fr">Dis à Git qui tu es (utilise le même e-mail que sur GitHub) :</li>
+    </ol>
+  </div>
+  <script type="text/x-code" data-lang="bash" data-term>git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+git config --global init.defaultBranch main</script>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">Pair VS Code with GitHub</span><span data-l="fr">Connecter VS Code à GitHub</span></h2>
+    <p data-l="en">This is the easiest path: VS Code creates the GitHub repository for you.</p>
+    <p data-l="fr">C'est le chemin le plus simple : VS Code crée le dépôt GitHub pour toi.</p>
+    <ol>
+      <li data-l="en">Create a <code>.gitignore</code> file at the root of the project containing the lines below. It lists what Git must never save (the huge <code>node_modules</code> folder you'll get in step 10).</li>
+      <li data-l="fr">Crée un fichier <code>.gitignore</code> à la racine du projet avec les lignes ci-dessous. Il liste ce que Git ne doit jamais enregistrer (l'énorme dossier <code>node_modules</code> de l'étape 10).</li>
+    </ol>
+  </div>
+  <script type="text/x-code" data-lang="text" data-file=".gitignore">node_modules/
+.DS_Store
+.env</script>
+  <div class="prose">
+    <ol start="2">
+      <li data-l="en">Click the <strong>Accounts</strong> icon (the person, bottom-left of VS Code) → <strong>Sign in with GitHub</strong>. Your browser opens; click <strong>Authorize Visual Studio Code</strong>, then return to VS Code.</li>
+      <li data-l="fr">Clique sur l'icône <strong>Comptes</strong> (le bonhomme, en bas à gauche de VS Code) → <strong>Se connecter avec GitHub</strong>. Ton navigateur s'ouvre ; clique sur <strong>Authorize Visual Studio Code</strong>, puis reviens dans VS Code.</li>
+      <li data-l="en">Open the <strong>Source Control</strong> panel (<kbd>Ctrl</kbd>/<kbd>⌃</kbd> + <kbd>Shift</kbd> + <kbd>G</kbd>) and click <strong>Initialize Repository</strong>.</li>
+      <li data-l="fr">Ouvre le panneau <strong>Contrôle de code source</strong> (<kbd>Ctrl</kbd>/<kbd>⌃</kbd> + <kbd>Maj</kbd> + <kbd>G</kbd>) et clique sur <strong>Initialiser le dépôt</strong>.</li>
+      <li data-l="en">Files appear with a <strong>U</strong> (untracked). Type the message <code>Step 1: project setup</code> and click <strong>Commit</strong>. If VS Code asks to stage all changes, answer <strong>Yes</strong>.</li>
+      <li data-l="fr">Les fichiers apparaissent avec un <strong>U</strong> (non suivis). Tape le message <code>Step 1: project setup</code> et clique sur <strong>Valider (Commit)</strong>. Si VS Code propose d'indexer toutes les modifications, réponds <strong>Oui</strong>.</li>
+      <li data-l="en">Click <strong>Publish Branch</strong> → <strong>Publish to GitHub public repository</strong>. Done: open <code>github.com/&lt;your-name&gt;/ballondor-catalogue</code>.</li>
+      <li data-l="fr">Clique sur <strong>Publish Branch</strong> → <strong>Publish to GitHub public repository</strong>. C'est fait : ouvre <code>github.com/&lt;ton-nom&gt;/ballondor-catalogue</code>.</li>
+    </ol>
+    <p data-l="en">In the Source Control panel, <strong>M</strong> means modified, <strong>U</strong> untracked (new), <strong>A</strong> added, <strong>D</strong> deleted. The circular-arrows button syncs (pull + push).</p>
+    <p data-l="fr">Dans le panneau, <strong>M</strong> = modifié, <strong>U</strong> = nouveau (non suivi), <strong>A</strong> = ajouté, <strong>D</strong> = supprimé. Le bouton aux flèches circulaires synchronise (pull + push).</p>
+
+    <h3 class="sub"><span data-l="en">The same thing with the command line</span><span data-l="fr">La même chose en ligne de commande</span></h3>
+    <p data-l="en">First create an <strong>empty</strong> repository on github.com (green <strong>New</strong> button, no README), then in the VS Code terminal (<kbd>Ctrl</kbd> + <kbd>`</kbd>):</p>
+    <p data-l="fr">Crée d'abord un dépôt <strong>vide</strong> sur github.com (bouton vert <strong>New</strong>, sans README), puis dans le terminal de VS Code (<kbd>Ctrl</kbd> + <kbd>`</kbd>) :</p>
+  </div>
+  <script type="text/x-code" data-lang="bash" data-term>git init                          # start tracking this folder
+git add .                         # stage every file
+git commit -m "Step 1: project setup"
+git branch -M main
+git remote add origin https://github.com/YOUR-NAME/ballondor-catalogue.git
+git push -u origin main           # first push: a browser window asks you to sign in</script>
+  <div class="callout warn">
+    <span class="label"><span data-l="en">Heads-up</span><span data-l="fr">Attention</span></span>
+    <p data-l="en">GitHub no longer accepts your account password in the terminal. When <code>git push</code> asks, let the browser sign-in window (Git Credential Manager) do it, or install the GitHub CLI and run <code>gh auth login</code>.</p>
+    <p data-l="fr">GitHub n'accepte plus le mot de passe du compte dans le terminal. Quand <code>git push</code> le demande, laisse la fenêtre de connexion du navigateur (Git Credential Manager) s'en charger, ou installe GitHub CLI et lance <code>gh auth login</code>.</p>
+  </div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">Your loop for every step</span><span data-l="fr">Ta routine à chaque étape</span></h2>
+  </div>
+  <script type="text/x-code" data-lang="bash" data-term>git status                        # what changed?
+git add .
+git commit -m "Step 3: HTML skeleton"
+git push
+git log --oneline                 # your history, one line per commit</script>
+  <div class="prose">
+    <p data-l="en">Working on another computer? <code>git clone https://github.com/YOUR-NAME/ballondor-catalogue.git</code> downloads everything, and <code>git pull</code> fetches new commits. In step 8 you'll also try a <strong>branch</strong>: a parallel line of work you merge back once it works.</p>
+    <p data-l="fr">Sur un autre ordinateur ? <code>git clone https://github.com/TON-NOM/ballondor-catalogue.git</code> télécharge tout, et <code>git pull</code> récupère les nouveaux commits. À l'étape 8 tu essaieras aussi une <strong>branche</strong> : une ligne de travail parallèle que tu fusionnes quand elle fonctionne.</p>
+  </div>
+
+  <div class="callout check">
+    <span class="label">Checkpoint</span>
+    <ul>
+      <li data-l="en">Your repository exists on github.com and shows <code>README.md</code> and <code>.gitignore</code>.</li>
+      <li data-l="fr">Ton dépôt existe sur github.com et affiche <code>README.md</code> et <code>.gitignore</code>.</li>
+      <li data-l="en"><code>git status</code> says “nothing to commit, working tree clean”.</li>
+      <li data-l="fr"><code>git status</code> indique « nothing to commit, working tree clean ».</li>
+    </ul>
+  </div>
+  <details class="challenge">
+    <summary><span data-l="en">Challenge: a round trip</span><span data-l="fr">Défi : un aller-retour</span></summary>
+    <div>
+      <p data-l="en">Write one sentence about the project in <code>README.md</code>, commit and push it <em>using only the VS Code buttons</em>. Then edit the README directly on github.com (pencil icon), commit there, and bring that change back with <code>git pull</code>.</p>
+      <p data-l="fr">Écris une phrase sur le projet dans <code>README.md</code>, puis commit et push <em>uniquement avec les boutons de VS Code</em>. Ensuite modifie le README directement sur github.com (icône crayon), valide, et récupère la modification avec <code>git pull</code>.</p>
+    </div>
+  </details>
+  <footer class="pager" data-pager></footer>
+</section>

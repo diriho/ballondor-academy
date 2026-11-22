@@ -1,0 +1,241 @@
+
+<!-- ======================= STEP 11 ======================= -->
+<section class="view" id="step-11" data-view data-step="11" hidden>
+  <header class="lesson-head" data-head="11"></header>
+
+  <div class="callout goal">
+    <span class="label"><span data-l="en">Goal</span><span data-l="fr">Objectif</span></span>
+    <p data-l="en">Connect the two halves. The page stops importing <code>data.js</code> and asks your server instead; searching and filtering now happen in SQL. Bonus: live stats, a “most wins” leaderboard and a details window for each player.</p>
+    <p data-l="fr">Relier les deux moitiés. La page n'importe plus <code>data.js</code> et interroge ton serveur ; la recherche et les filtres se font désormais en SQL. En prime : statistiques en direct, classement des sacres et une fenêtre de détails pour chaque joueur.</p>
+  </div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">fetch, Promises and async/await</span><span data-l="fr">fetch, les Promises et async/await</span></h2>
+    <p data-l="en"><code>fetch(url)</code> sends a request from the browser. The answer takes time, so instead of a value you get a <strong>Promise</strong>: a value that will arrive later. Inside an <code>async</code> function, <code>await</code> pauses until it arrives, without freezing the page. It reads like normal top-to-bottom code:</p>
+    <p data-l="fr"><code>fetch(url)</code> envoie une requête depuis le navigateur. La réponse prend du temps : au lieu d'une valeur, tu reçois une <strong>Promise</strong>, une valeur qui arrivera plus tard. Dans une fonction <code>async</code>, <code>await</code> attend son arrivée sans bloquer la page. Ça se lit comme du code normal, de haut en bas :</p>
+  </div>
+  <script type="text/x-code" data-lang="javascript" data-file="the idea / l'idée">async function demo() {
+  const response = await fetch('/api/winners?q=zidane');   // 1. ask the server
+  const winners = await response.json();                   // 2. read the JSON body
+  console.log(winners[0].player);                          // 3. "Zinedine Zidane"
+}</script>
+  <div class="prose">
+    <p data-l="en">Real code must also handle the cases where it goes wrong: the server is off (<code>fetch</code> throws → <code>try/catch</code>), or it answers 404/500 (<code>response.ok</code> is false). And when someone types fast, an old slow answer could arrive after a newer one and show stale results; the <code>latestRequest</code> ticket below ignores those.</p>
+    <p data-l="fr">Le vrai code doit aussi gérer les problèmes : le serveur est éteint (<code>fetch</code> lève une erreur → <code>try/catch</code>), ou il répond 404/500 (<code>response.ok</code> est faux). Et quand on tape vite, une ancienne réponse lente pourrait arriver après une plus récente et afficher de vieux résultats ; le ticket <code>latestRequest</code> ci-dessous les ignore.</p>
+  </div>
+  <script type="text/x-code" data-lang="javascript" data-file="public/js/app.js" data-note="section 3: talking to the API">@@include public/js/app.js#3. Talking to the API@@</script>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">Build: swap the data source</span><span data-l="fr">Construire : changer la source des données</span></h2>
+    <ol>
+      <li data-l="en">Delete the temporary data: <code>git rm public/js/data.js</code></li>
+      <li data-l="fr">Supprime les données temporaires : <code>git rm public/js/data.js</code></li>
+      <li data-l="en">Replace <code>public/index.html</code> with the final version. New: the stats list, the second panel, empty selects (JavaScript fills them so they can be translated), the <code>&lt;dialog&gt;</code> and the EN/FR switch for step 12.</li>
+      <li data-l="fr">Remplace <code>public/index.html</code> par la version finale. Nouveau : la liste des stats, le second panneau, des selects vides (JavaScript les remplit pour pouvoir les traduire), le <code>&lt;dialog&gt;</code> et le sélecteur EN/FR de l'étape 12.</li>
+    </ol>
+  </div>
+  <script type="text/x-code" data-lang="html" data-file="public/index.html" data-note="final version" data-collapse>@@include public/index.html@@</script>
+  <div class="prose"><ol start="3">
+    <li data-l="en">Replace <code>public/js/app.js</code> with the final version. Read it section by section: you already know sections 2, 4 and 5 from steps 7–8. Section 1 (translations) is explained in step 12.</li>
+    <li data-l="fr">Remplace <code>public/js/app.js</code> par la version finale. Lis-la section par section : tu connais déjà les sections 2, 4 et 5 grâce aux étapes 7–8. La section 1 (traductions) est expliquée à l'étape 12.</li>
+  </ol></div>
+  <script type="text/x-code" data-lang="javascript" data-file="public/js/app.js" data-note="final version" data-collapse>@@include public/js/app.js@@</script>
+  <div class="prose"><ol start="4">
+    <li data-l="en">Append the last two CSS sections (the details dialog and the complete responsive rules; replace your “8. Responsive (start)” block):</li>
+    <li data-l="fr">Ajoute les deux dernières sections CSS (la fenêtre de détails et les règles responsive complètes ; remplace ton bloc « 8. Responsive (start) ») :</li>
+  </ol></div>
+  <script type="text/x-code" data-lang="css" data-file="public/css/style.css" data-note="sections 7–8" data-collapse>@@include public/css/style.css#7. Player dialog@@
+@@include public/css/style.css#8. Responsive@@</script>
+
+  <div class="prose">
+    <h3 class="sub"><span data-l="en">Watch the conversation</span><span data-l="fr">Observe la conversation</span></h3>
+    <p data-l="en">With <code>npm run dev</code> running, open <a href="http://localhost:3000" target="_blank" rel="noopener">localhost:3000</a>, then DevTools → <strong>Network</strong> → filter <strong>Fetch/XHR</strong>. Type in the search bar: each pause sends one <code>winners?q=…</code> request. Click it to see the exact JSON your server returned.</p>
+    <p data-l="fr">Avec <code>npm run dev</code> lancé, ouvre <a href="http://localhost:3000" target="_blank" rel="noopener">localhost:3000</a>, puis DevTools → <strong>Réseau</strong> → filtre <strong>Fetch/XHR</strong>. Tape dans la recherche : chaque pause envoie une requête <code>winners?q=…</code>. Clique dessus pour voir le JSON exact renvoyé par ton serveur.</p>
+  </div>
+  <div class="callout check">
+    <span class="label">Checkpoint</span>
+    <ul>
+      <li data-l="en">The hero shows 78 awards · 52 winners · 23 nations · 1956–26, the sidebar shows Messi on top with 8.</li>
+      <li data-l="fr">Le hero affiche 78 trophées · 52 lauréats · 23 nations · 1956–26, la barre latérale montre Messi en tête avec 8.</li>
+      <li data-l="en">Clicking a card (or pressing Enter on it) opens the player's window with all their awards.</li>
+      <li data-l="fr">Cliquer sur une carte (ou Entrée dessus) ouvre la fenêtre du joueur avec tous ses trophées.</li>
+      <li data-l="en">Stop the server with <kbd>Ctrl</kbd>+<kbd>C</kbd> and search again: the page says it can't reach the server instead of breaking.</li>
+      <li data-l="fr">Arrête le serveur avec <kbd>Ctrl</kbd>+<kbd>C</kbd> et cherche à nouveau : la page indique qu'elle ne joint pas le serveur au lieu de planter.</li>
+    </ul>
+  </div>
+  <details class="challenge">
+    <summary><span data-l="en">Challenge: “Surprise me” button</span><span data-l="fr">Défi : bouton « Surprends-moi »</span></summary>
+    <div>
+      <p data-l="en">Add a button to the toolbar that opens the details of a random winner from the current results.</p>
+      <p data-l="fr">Ajoute à la barre d'outils un bouton qui ouvre les détails d'un lauréat au hasard parmi les résultats affichés.</p>
+      <script type="text/x-code" data-lang="javascript" data-file="solution">// index.html, inside .toolbar:  <button type="button" id="random">🎲</button>
+$('#random').addEventListener('click', () => {
+  const list = state.winners;
+  if (!list.length) return;
+  const pick = list[Math.floor(Math.random() * list.length)];
+  openPlayer(pick.player_id);
+});</script>
+    </div>
+  </details>
+  <script type="text/x-code" data-lang="bash" data-term>git add .
+git commit -m "Step 11: front end talks to the API"
+git push</script>
+  <footer class="pager" data-pager></footer>
+</section>
+
+<!-- ======================= STEP 12 ======================= -->
+<section class="view" id="step-12" data-view data-step="12" hidden>
+  <header class="lesson-head" data-head="12"></header>
+
+  <div class="callout goal">
+    <span class="label"><span data-l="en">Goal</span><span data-l="fr">Objectif</span></span>
+    <p data-l="en">Finish like a professional: the catalogue speaks English and French, works on phones and keyboards, has a README, and is online for anyone to visit.</p>
+    <p data-l="fr">Finir comme un pro : le catalogue parle anglais et français, fonctionne sur téléphone et au clavier, a un README, et est en ligne pour tout le monde.</p>
+  </div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">How the translation works</span><span data-l="fr">Comment fonctionne la traduction</span></h2>
+    <p data-l="en">There are two kinds of text. <strong>Interface text</strong> (buttons, labels) lives in a dictionary in <code>app.js</code>. <strong>Data text</strong> (descriptions, countries) lives in the database, in pairs of columns: <code>description_en</code>/<code>description_fr</code>, <code>nationality</code>/<code>nationality_fr</code>.</p>
+    <p data-l="fr">Il y a deux sortes de textes. Le <strong>texte d'interface</strong> (boutons, libellés) vit dans un dictionnaire dans <code>app.js</code>. Le <strong>texte des données</strong> (descriptions, pays) vit dans la base, en paires de colonnes : <code>description_en</code>/<code>description_fr</code>, <code>nationality</code>/<code>nationality_fr</code>.</p>
+    <ol>
+      <li data-l="en">In HTML, tag each translatable element with its key: <code>&lt;h2 data-i18n="mostWins"&gt;Most wins&lt;/h2&gt;</code>.</li>
+      <li data-l="fr">En HTML, marque chaque élément traduisible avec sa clé : <code>&lt;h2 data-i18n="mostWins"&gt;Most wins&lt;/h2&gt;</code>.</li>
+      <li data-l="en"><code>TEXT.en.mostWins</code> and <code>TEXT.fr.mostWins</code> hold the two versions; <code>t('mostWins')</code> returns the one for the current language. Some entries are functions, for plurals: <code>t('found', 3)</code>.</li>
+      <li data-l="fr"><code>TEXT.en.mostWins</code> et <code>TEXT.fr.mostWins</code> contiennent les deux versions ; <code>t('mostWins')</code> renvoie celle de la langue courante. Certaines entrées sont des fonctions, pour les pluriels : <code>t('found', 3)</code>.</li>
+      <li data-l="en"><code>applyLanguage()</code> walks over every <code>[data-i18n]</code> element, rebuilds the selects and re-renders the cards. The choice is remembered in <code>localStorage</code>.</li>
+      <li data-l="fr"><code>applyLanguage()</code> parcourt chaque élément <code>[data-i18n]</code>, reconstruit les selects et réaffiche les cartes. Le choix est mémorisé dans <code>localStorage</code>.</li>
+    </ol>
+  </div>
+  <script type="text/x-code" data-lang="javascript" data-file="public/js/app.js" data-note="excerpt">// the helper: look the key up in the current language
+const t = (key, ...args) => {
+  const value = TEXT[state.lang][key] ?? key;
+  return typeof value === 'function' ? value(...args) : value;
+};
+
+// pick the right database column for the current language
+const description = (row) => (state.lang === 'fr' ? row.description_fr : row.description_en);
+
+function applyLanguage() {
+  document.documentElement.lang = state.lang;
+  document.querySelectorAll('[data-i18n]').forEach((el) => { el.textContent = t(el.dataset.i18n); });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => { el.placeholder = t(el.dataset.i18nPlaceholder); });
+  // …then re-render controls, stats, panels and cards
+}</script>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">Polish checklist</span><span data-l="fr">Liste de finitions</span></h2>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th><span data-l="en">Check</span><span data-l="fr">Vérifier</span></th><th><span data-l="en">How</span><span data-l="fr">Comment</span></th></tr></thead>
+    <tbody>
+      <tr><td><span data-l="en">Phones</span><span data-l="fr">Téléphones</span></td><td><span data-l="en">DevTools → device toolbar (<kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>Shift</kbd>+<kbd>M</kbd>) → iPhone SE. No sideways scrolling, sidebar above the cards.</span><span data-l="fr">DevTools → barre des appareils (<kbd>Ctrl</kbd>/<kbd>⌘</kbd>+<kbd>Maj</kbd>+<kbd>M</kbd>) → iPhone SE. Pas de défilement horizontal, barre latérale au-dessus des cartes.</span></td></tr>
+      <tr><td><span data-l="en">Keyboard</span><span data-l="fr">Clavier</span></td><td><span data-l="en">Unplug the mouse: <kbd>Tab</kbd> reaches the search, filters and every card (gold outline), <kbd>Enter</kbd> opens a card, <kbd>Esc</kbd> closes it.</span><span data-l="fr">Débranche la souris : <kbd>Tab</kbd> atteint la recherche, les filtres et chaque carte (contour doré), <kbd>Entrée</kbd> ouvre une carte, <kbd>Échap</kbd> la ferme.</span></td></tr>
+      <tr><td><span data-l="en">Images</span><span data-l="fr">Images</span></td><td><span data-l="en">Every photo has <code>alt</code> text; broken links fall back to <code>ballor.jpg</code>.</span><span data-l="fr">Chaque photo a un texte <code>alt</code> ; les liens cassés basculent sur <code>ballor.jpg</code>.</span></td></tr>
+      <tr><td><span data-l="en">Motion</span><span data-l="fr">Animations</span></td><td><span data-l="en">The <code>prefers-reduced-motion</code> rule turns animations off for people who ask their system to.</span><span data-l="fr">La règle <code>prefers-reduced-motion</code> coupe les animations pour qui le demande à son système.</span></td></tr>
+      <tr><td>Lighthouse</td><td><span data-l="en">DevTools → Lighthouse → Analyze page load. Aim for 90+ in Accessibility and Best Practices.</span><span data-l="fr">DevTools → Lighthouse → Analyser. Vise 90+ en Accessibilité et Bonnes pratiques.</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">README: your project's front page</span><span data-l="fr">README : la vitrine du projet</span></h2>
+    <p data-l="en">GitHub shows <code>README.md</code> under your files. Write it for a stranger: what it is, how to run it, how it's built. Markdown syntax: <code>#</code> titles, <code>**bold**</code>, <code>```</code> code blocks, <code>|</code> tables.</p>
+    <p data-l="fr">GitHub affiche <code>README.md</code> sous tes fichiers. Écris-le pour un inconnu : ce que c'est, comment le lancer, comment c'est construit. Syntaxe Markdown : <code>#</code> titres, <code>**gras**</code>, <code>```</code> blocs de code, <code>|</code> tableaux.</p>
+  </div>
+  <script type="text/x-code" data-lang="markdown" data-file="README.md" data-collapse>@@include README.md@@</script>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">Ship it</span><span data-l="fr">Publie-le</span></h2>
+  </div>
+  <script type="text/x-code" data-lang="bash" data-term>git add .
+git commit -m "Step 12: bilingual UI, polish and README"
+git push
+git tag v1.0                # mark this commit as your first release
+git push --tags</script>
+  <div class="prose">
+    <p data-l="en">To put it online, use a host that runs Node.js. On <a href="https://render.com" target="_blank" rel="noopener">Render</a> (free tier):</p>
+    <p data-l="fr">Pour le mettre en ligne, il faut un hébergeur qui exécute Node.js. Sur <a href="https://render.com" target="_blank" rel="noopener">Render</a> (offre gratuite) :</p>
+    <ol>
+      <li data-l="en">Sign in with GitHub → <strong>New</strong> → <strong>Web Service</strong> → pick <code>ballondor-catalogue</code>.</li>
+      <li data-l="fr">Connecte-toi avec GitHub → <strong>New</strong> → <strong>Web Service</strong> → choisis <code>ballondor-catalogue</code>.</li>
+      <li data-l="en">Build command <code>npm install</code>, start command <code>npm start</code>, instance type <strong>Free</strong>.</li>
+      <li data-l="fr">Commande de build <code>npm install</code>, commande de démarrage <code>npm start</code>, type d'instance <strong>Free</strong>.</li>
+      <li data-l="en">Render sets <code>PORT</code> for you; your server already reads <code>process.env.PORT</code>. After a few minutes you get a public <code>…onrender.com</code> link. Free services sleep when idle, so the first visit can take ~30 seconds.</li>
+      <li data-l="fr">Render définit <code>PORT</code> pour toi ; ton serveur lit déjà <code>process.env.PORT</code>. Après quelques minutes tu obtiens un lien public <code>…onrender.com</code>. Les services gratuits s'endorment au repos : la première visite peut prendre ~30 secondes.</li>
+      <li data-l="en">Every <code>git push</code> to <code>main</code> redeploys automatically. Paste the link in your README.</li>
+      <li data-l="fr">Chaque <code>git push</code> sur <code>main</code> redéploie automatiquement. Colle le lien dans ton README.</li>
+    </ol>
+  </div>
+
+  <div class="callout check">
+    <span class="label">Checkpoint</span>
+    <p data-l="en">The EN/FR switch translates the interface <em>and</em> the descriptions, your README is on GitHub, and the catalogue opens from a public link. You built a full-stack web app. Bravo !</p>
+    <p data-l="fr">Le bouton EN/FR traduit l'interface <em>et</em> les descriptions, ton README est sur GitHub et le catalogue s'ouvre depuis un lien public. Tu as construit une application web complète. Bravo !</p>
+  </div>
+  <details class="challenge">
+    <summary><span data-l="en">Where to go next</span><span data-l="fr">Et ensuite ?</span></summary>
+    <div>
+      <ul>
+        <li data-l="en"><strong>More data</strong>: add a <code>nominees</code> table (top 3 each year) and show the podium in the player window.</li>
+        <li data-l="fr"><strong>Plus de données</strong> : ajoute une table <code>nominees</code> (podium de chaque année) et affiche-le dans la fenêtre du joueur.</li>
+        <li data-l="en"><strong>Write to the database</strong>: a <code>POST /api/favorites</code> route and a ★ button on each card.</li>
+        <li data-l="fr"><strong>Écrire dans la base</strong> : une route <code>POST /api/favorites</code> et un bouton ★ sur chaque carte.</li>
+        <li data-l="en"><strong>A third language</strong>: add <code>es</code> to <code>TEXT</code> and a <code>description_es</code> column.</li>
+        <li data-l="fr"><strong>Une troisième langue</strong> : ajoute <code>es</code> à <code>TEXT</code> et une colonne <code>description_es</code>.</li>
+        <li data-l="en"><strong>Tools of the trade</strong>: rebuild the front end with React, add TypeScript, write tests with <code>node --test</code>.</li>
+        <li data-l="fr"><strong>Les outils des pros</strong> : refais le front avec React, ajoute TypeScript, écris des tests avec <code>node --test</code>.</li>
+      </ul>
+    </div>
+  </details>
+  <footer class="pager" data-pager></footer>
+</section>
+
+<!-- ======================= REFERENCE ======================= -->
+<section class="view" id="reference" data-view hidden>
+  <header class="lesson-head">
+    <span class="big-number" aria-hidden="true">★</span>
+    <div class="lh">
+      <h1 class="display"><span data-l="en">Reference</span><span data-l="fr">Référence</span></h1>
+      <div class="lesson-meta"><span data-l="en">Git cheat sheet · glossary · photo credits</span><span data-l="fr">Aide-mémoire Git · glossaire · crédits photo</span></div>
+    </div>
+  </header>
+
+  <div class="prose"><h2 class="sec"><span data-l="en">Git cheat sheet</span><span data-l="fr">Aide-mémoire Git</span></h2></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Command</th><th><span data-l="en">What it does</span><span data-l="fr">Ce que ça fait</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>git init</code></td><td><span data-l="en">Start tracking the current folder</span><span data-l="fr">Commencer à suivre le dossier courant</span></td></tr>
+      <tr><td><code>git clone &lt;url&gt;</code></td><td><span data-l="en">Download a repository from GitHub</span><span data-l="fr">Télécharger un dépôt depuis GitHub</span></td></tr>
+      <tr><td><code>git status</code></td><td><span data-l="en">What changed since the last commit?</span><span data-l="fr">Qu'est-ce qui a changé depuis le dernier commit ?</span></td></tr>
+      <tr><td><code>git diff</code></td><td><span data-l="en">Show the exact lines that changed</span><span data-l="fr">Montrer les lignes exactes modifiées</span></td></tr>
+      <tr><td><code>git add .</code> · <code>git add file</code></td><td><span data-l="en">Stage changes for the next commit</span><span data-l="fr">Préparer des modifications pour le prochain commit</span></td></tr>
+      <tr><td><code>git commit -m "msg"</code></td><td><span data-l="en">Save a snapshot with a message</span><span data-l="fr">Enregistrer un instantané avec un message</span></td></tr>
+      <tr><td><code>git push</code> · <code>git pull</code></td><td><span data-l="en">Send commits to GitHub · fetch new ones</span><span data-l="fr">Envoyer les commits sur GitHub · récupérer les nouveaux</span></td></tr>
+      <tr><td><code>git log --oneline</code></td><td><span data-l="en">History, one line per commit</span><span data-l="fr">Historique, une ligne par commit</span></td></tr>
+      <tr><td><code>git switch -c name</code></td><td><span data-l="en">Create a branch and move onto it</span><span data-l="fr">Créer une branche et s'y placer</span></td></tr>
+      <tr><td><code>git switch main</code></td><td><span data-l="en">Go back to the main branch</span><span data-l="fr">Revenir sur la branche principale</span></td></tr>
+      <tr><td><code>git merge name</code></td><td><span data-l="en">Bring a branch's commits into the current one</span><span data-l="fr">Intégrer les commits d'une branche dans la branche courante</span></td></tr>
+      <tr><td><code>git restore file</code></td><td><span data-l="en">Throw away uncommitted changes to a file</span><span data-l="fr">Annuler les modifications non validées d'un fichier</span></td></tr>
+      <tr><td><code>git commit --amend</code></td><td><span data-l="en">Fix the last commit (before pushing)</span><span data-l="fr">Corriger le dernier commit (avant de pousser)</span></td></tr>
+      <tr><td><code>git remote -v</code></td><td><span data-l="en">Which GitHub repo is this folder linked to?</span><span data-l="fr">À quel dépôt GitHub ce dossier est-il lié ?</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="prose"><h2 class="sec"><span data-l="en">Glossary</span><span data-l="fr">Glossaire</span></h2></div>
+  <div class="table-wrap"><table>
+    <thead><tr><th>English</th><th>Français</th><th><span data-l="en">In one line</span><span data-l="fr">En une ligne</span></th></tr></thead>
+    <tbody id="glossary"></tbody>
+  </table></div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">About the data</span><span data-l="fr">À propos des données</span></h2>
+    <p data-l="en">78 awards: 70 men's (1956–2026; none in 2020, cancelled during COVID-19) and 8 women's (since 2018). The club is the one the winner played for in the season the award honours. Photos come from Wikimedia Commons under the licences below; Stanley Matthews has no free photo and uses the placeholder.</p>
+    <p data-l="fr">78 trophées : 70 masculins (1956–2026 ; aucun en 2020, annulé pendant la COVID-19) et 8 féminins (depuis 2018). Le club est celui du lauréat pendant la saison récompensée. Les photos viennent de Wikimedia Commons sous les licences ci-dessous ; Stanley Matthews n'a pas de photo libre et utilise l'image de remplacement.</p>
+  </div>
+  <div class="table-wrap"><table class="credits">
+    <thead><tr><th><span data-l="en">Player</span><span data-l="fr">Joueur</span></th><th><span data-l="en">Photo author · licence</span><span data-l="fr">Auteur · licence</span></th><th>Source</th></tr></thead>
+    <tbody id="credits"></tbody>
+  </table></div>
+</section>
+
+  </main>
+</div>

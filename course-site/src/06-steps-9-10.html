@@ -1,0 +1,245 @@
+
+<!-- ======================= STEP 9 ======================= -->
+<section class="view" id="step-9" data-view data-step="9" hidden>
+  <header class="lesson-head" data-head="9"></header>
+
+  <div class="callout goal">
+    <span class="label"><span data-l="en">Goal</span><span data-l="fr">Objectif</span></span>
+    <p data-l="en">Move the data out of <code>data.js</code> into a real database file, <code>db/ballondor.db</code>, organised in rows you can query with SQL.</p>
+    <p data-l="fr">Sortir les données de <code>data.js</code> pour les mettre dans une vraie base, <code>db/ballondor.db</code>, organisée en lignes que l'on interroge en SQL.</p>
+  </div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">Why a database?</span><span data-l="fr">Pourquoi une base de données ?</span></h2>
+    <p data-l="en">A JavaScript array lives inside one page: every visitor downloads all of it and you can only search it with code you write yourself. A database keeps the data in one place, on the server, and answers precise questions in one line of <strong>SQL</strong> (Structured Query Language): “who won the most?”, “which clubs?”, “how old was each winner?”.</p>
+    <p data-l="fr">Un tableau JavaScript vit dans une page : chaque visiteur le télécharge en entier et tu ne peux le fouiller qu'avec ton propre code. Une base de données garde les données à un seul endroit, sur le serveur, et répond à des questions précises en une ligne de <strong>SQL</strong> (Structured Query Language) : « qui a gagné le plus ? », « quels clubs ? », « quel âge avait chaque lauréat ? ».</p>
+    <p data-l="en"><strong>SQLite</strong> is a database that fits in a single file. No installation, no separate server: perfect for learning, and it powers every smartphone.</p>
+    <p data-l="fr"><strong>SQLite</strong> est une base de données qui tient dans un seul fichier. Pas d'installation, pas de serveur séparé : parfait pour apprendre, et elle tourne dans tous les smartphones.</p>
+    <h3 class="sub"><span data-l="en">Two tables, not one</span><span data-l="fr">Deux tables, pas une</span></h3>
+    <p data-l="en">Messi won 8 times. In a single big table, his name, country, birth year and photo would be copied 8 times, and a typo fixed in one row would stay wrong in the 7 others. So we split: <code>players</code> holds each person <strong>once</strong>; <code>awards</code> holds each trophy and points to its winner with <code>player_id</code>. That pointer is a <strong>foreign key</strong>; the unique <code>id</code> it points to is the <strong>primary key</strong>.</p>
+    <p data-l="fr">Messi a gagné 8 fois. Dans une seule grande table, son nom, son pays, son année de naissance et sa photo seraient copiés 8 fois, et une faute corrigée dans une ligne resterait fausse dans les 7 autres. On sépare donc : <code>players</code> contient chaque personne <strong>une seule fois</strong> ; <code>awards</code> contient chaque trophée et désigne son lauréat avec <code>player_id</code>. Ce pointeur est une <strong>clé étrangère</strong> ; l'<code>id</code> unique qu'il désigne est la <strong>clé primaire</strong>.</p>
+  </div>
+  <div class="diagram" role="img" aria-label="players table (one row per person) linked one-to-many to awards table (one row per trophy) through player_id">
+    <svg viewBox="0 0 760 250" xmlns="http://www.w3.org/2000/svg">
+      <rect class="box hl" x="20" y="20" width="260" height="210" rx="12"/>
+      <text x="36" y="46" font-weight="800" font-size="15" class="mono">players</text><text x="150" y="46" font-size="12" class="muted">52 rows</text>
+      <text x="36" y="76" class="mono" font-size="13"><tspan class="gold" font-weight="700">id</tspan>  INTEGER PK</text>
+      <text x="36" y="98" class="mono" font-size="13">name  TEXT</text>
+      <text x="36" y="120" class="mono" font-size="13">nationality, nationality_fr</text>
+      <text x="36" y="142" class="mono" font-size="13">position  TEXT</text>
+      <text x="36" y="164" class="mono" font-size="13">born  INTEGER</text>
+      <text x="36" y="186" class="mono" font-size="13">image_url, image_credit</text>
+      <text x="36" y="214" font-size="12" class="muted">43 · Lionel Messi · Argentina…</text>
+
+      <rect class="box hl" x="470" y="20" width="270" height="210" rx="12"/>
+      <text x="486" y="46" font-weight="800" font-size="15" class="mono">awards</text><text x="600" y="46" font-size="12" class="muted">78 rows</text>
+      <text x="486" y="76" class="mono" font-size="13"><tspan class="gold" font-weight="700">id</tspan>  INTEGER PK</text>
+      <text x="486" y="98" class="mono" font-size="13">year  INTEGER</text>
+      <text x="486" y="120" class="mono" font-size="13">category  'men' | 'women'</text>
+      <text x="486" y="142" class="mono" font-size="13"><tspan class="gold" font-weight="700">player_id</tspan>  FK → players.id</text>
+      <text x="486" y="164" class="mono" font-size="13">club  TEXT</text>
+      <text x="486" y="186" class="mono" font-size="13">description_en, _fr</text>
+      <text x="486" y="214" font-size="12" class="muted">2009, 2010 … 2023 → player 43</text>
+
+      <path class="arrow" d="M282 80 C380 80 380 140 466 140"/>
+      <text x="296" y="72" class="mono gold" font-size="14" font-weight="700">1</text>
+      <text x="446" y="132" class="mono gold" font-size="14" font-weight="700">∞</text>
+      <text x="300" y="186" font-size="12" class="muted" data-l="en">one player → many awards</text>
+      <text x="300" y="186" font-size="12" class="muted" data-l="fr">un joueur → plusieurs trophées</text>
+    </svg>
+  </div>
+
+  <div class="table-wrap"><table>
+    <thead><tr><th>SQL</th><th><span data-l="en">What it does</span><span data-l="fr">Ce que ça fait</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>CREATE TABLE players (…)</code></td><td><span data-l="en">Declare a table, its columns and their types</span><span data-l="fr">Déclarer une table, ses colonnes et leurs types</span></td></tr>
+      <tr><td><code>INSERT INTO awards (…) VALUES (…)</code></td><td><span data-l="en">Add a row</span><span data-l="fr">Ajouter une ligne</span></td></tr>
+      <tr><td><code>SELECT name, born FROM players</code></td><td><span data-l="en">Read columns</span><span data-l="fr">Lire des colonnes</span></td></tr>
+      <tr><td><code>WHERE nationality = 'France'</code></td><td><span data-l="en">Keep only matching rows</span><span data-l="fr">Garder les lignes qui correspondent</span></td></tr>
+      <tr><td><code>ORDER BY year DESC LIMIT 5</code></td><td><span data-l="en">Sort, then keep the first 5</span><span data-l="fr">Trier, puis garder les 5 premières</span></td></tr>
+      <tr><td><code>COUNT(*) … GROUP BY player_id</code></td><td><span data-l="en">Count rows per group</span><span data-l="fr">Compter les lignes par groupe</span></td></tr>
+      <tr><td><code>JOIN players p ON p.id = a.player_id</code></td><td><span data-l="en">Glue each award to its player</span><span data-l="fr">Coller chaque trophée à son joueur</span></td></tr>
+      <tr><td><code>WHERE club LIKE '%Madrid%'</code></td><td><span data-l="en">Pattern match (<code>%</code> = anything)</span><span data-l="fr">Motif (<code>%</code> = n'importe quoi)</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">Build: schema + seed</span><span data-l="fr">Construire : schéma + données</span></h2>
+    <p data-l="en">Create <code>db/schema.sql</code>. It describes the structure. The <code>winners</code> <strong>view</strong> at the end is a saved JOIN: you can query it like a table, and it returns rows shaped exactly like the objects in your <code>data.js</code>.</p>
+    <p data-l="fr">Crée <code>db/schema.sql</code>. Il décrit la structure. La <strong>vue</strong> <code>winners</code> à la fin est un JOIN enregistré : on l'interroge comme une table et elle renvoie des lignes exactement de la même forme que les objets de ton <code>data.js</code>.</p>
+  </div>
+  <script type="text/x-code" data-lang="sql" data-file="db/schema.sql">@@include db/schema.sql@@</script>
+  <div class="prose">
+    <p data-l="en">Now <code>db/seed.sql</code>: 52 <code>INSERT</code>s for players and 78 for awards, 1956 to 2026, with photo links from Wikimedia Commons (and the <code>ballor.jpg</code> placeholder where no free photo exists). It's long, so copy it with the button:</p>
+    <p data-l="fr">Maintenant <code>db/seed.sql</code> : 52 <code>INSERT</code> pour les joueurs et 78 pour les trophées, de 1956 à 2026, avec les liens des photos de Wikimedia Commons (et l'image <code>ballor.jpg</code> quand aucune photo libre n'existe). C'est long, alors copie-le avec le bouton :</p>
+    <p><button type="button" class="btn gold small" id="copy-seed"><span data-l="en">Copy seed.sql</span><span data-l="fr">Copier seed.sql</span></button> <span class="msg" id="copy-seed-msg"></span></p>
+  </div>
+  <script type="text/x-code" data-lang="sql" data-file="db/seed.sql" data-note="first lines" data-collapse>@@seedhead:22@@</script>
+  <div class="prose">
+    <p data-l="en">Turn the two files into <code>ballondor.db</code>. macOS and Linux already have the <code>sqlite3</code> tool. On Windows, install it with <code>winget install SQLite.SQLite</code>, or skip this and use <code>npm run db:build</code> in step 10, which does the same thing with Node.</p>
+    <p data-l="fr">Transforme les deux fichiers en <code>ballondor.db</code>. macOS et Linux ont déjà l'outil <code>sqlite3</code>. Sous Windows, installe-le avec <code>winget install SQLite.SQLite</code>, ou passe cette partie et utilise <code>npm run db:build</code> à l'étape 10, qui fait la même chose avec Node.</p>
+  </div>
+  <script type="text/x-code" data-lang="bash" data-term>cd db
+sqlite3 ballondor.db < schema.sql
+sqlite3 ballondor.db < seed.sql
+sqlite3 ballondor.db "SELECT COUNT(*) FROM awards;"     # → 78
+cd ..</script>
+  <div class="prose"><p data-l="en">Click <code>ballondor.db</code> in VS Code: SQLite Viewer shows the tables as a spreadsheet.</p><p data-l="fr">Clique sur <code>ballondor.db</code> dans VS Code : SQLite Viewer affiche les tables comme un tableur.</p>
+    <h2 class="sec"><span data-l="en">SQL lab: query the real database</span><span data-l="fr">Labo SQL : interroge la vraie base</span></h2>
+    <p data-l="en">This lab runs SQLite inside your browser, loaded with exactly the same <code>schema.sql</code> + <code>seed.sql</code>. Pick an example or write your own, then press <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Enter</kbd>.</p>
+    <p data-l="fr">Ce labo fait tourner SQLite dans ton navigateur, chargé avec exactement les mêmes <code>schema.sql</code> + <code>seed.sql</code>. Choisis un exemple ou écris ta requête, puis <kbd>Ctrl</kbd>/<kbd>⌘</kbd> + <kbd>Entrée</kbd>.</p>
+  </div>
+  <div class="widget" id="sqllab">
+    <div class="widget-title"><strong><span data-l="en">SQL lab</span><span data-l="fr">Labo SQL</span></strong><span id="sql-engine" class="msg"></span></div>
+    <div class="presets" id="sql-presets"></div>
+    <textarea class="sql-editor" id="sql-input" spellcheck="false" aria-label="SQL query">SELECT year, player, club FROM winners WHERE nationality = 'France' ORDER BY year;</textarea>
+    <div class="controls"><button type="button" class="btn small" id="sql-run"><span data-l="en">Run query</span><span data-l="fr">Exécuter</span></button><span class="msg" id="sql-msg"></span></div>
+    <div class="result" id="sql-result"></div>
+    <h3 class="sub"><span data-l="en">Challenges: write the query yourself</span><span data-l="fr">Défis : écris la requête toi-même</span></h3>
+    <ul class="challenges" id="sql-challenges"></ul>
+  </div>
+
+  <div class="callout check">
+    <span class="label">Checkpoint</span>
+    <p data-l="en"><code>db/</code> contains <code>schema.sql</code>, <code>seed.sql</code> and (if you used <code>sqlite3</code>) <code>ballondor.db</code>. You solved at least three challenges in the lab.</p>
+    <p data-l="fr"><code>db/</code> contient <code>schema.sql</code>, <code>seed.sql</code> et (si tu as utilisé <code>sqlite3</code>) <code>ballondor.db</code>. Tu as réussi au moins trois défis du labo.</p>
+  </div>
+  <script type="text/x-code" data-lang="bash" data-term>git add .
+git commit -m "Step 9: SQLite schema, seed data and database"
+git push</script>
+  <footer class="pager" data-pager></footer>
+</section>
+
+<!-- ======================= STEP 10 ======================= -->
+<section class="view" id="step-10" data-view data-step="10" hidden>
+  <header class="lesson-head" data-head="10"></header>
+
+  <div class="callout goal">
+    <span class="label"><span data-l="en">Goal</span><span data-l="fr">Objectif</span></span>
+    <p data-l="en">Write <code>server.js</code>: a Node.js program that serves your <code>public/</code> folder and answers questions like <code>/api/winners?q=zidane</code> with JSON read from <code>ballondor.db</code>.</p>
+    <p data-l="fr">Écrire <code>server.js</code> : un programme Node.js qui sert ton dossier <code>public/</code> et répond à des questions comme <code>/api/winners?q=zidane</code> avec du JSON lu dans <code>ballondor.db</code>.</p>
+  </div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">Requests and responses</span><span data-l="fr">Requêtes et réponses</span></h2>
+    <p data-l="en">The web is a conversation. The browser sends a <strong>request</strong> (a method like <code>GET</code>, a path, maybe a query string after <code>?</code>); the server sends back a <strong>response</strong> (a status code and a body). Our body will be <strong>JSON</strong>: the same notation as JavaScript objects, as text.</p>
+    <p data-l="fr">Le web est une conversation. Le navigateur envoie une <strong>requête</strong> (une méthode comme <code>GET</code>, un chemin, éventuellement des paramètres après <code>?</code>) ; le serveur renvoie une <strong>réponse</strong> (un code de statut et un corps). Notre corps sera du <strong>JSON</strong> : la même notation que les objets JavaScript, sous forme de texte.</p>
+  </div>
+  <script type="text/x-code" data-lang="text" data-file="one round trip / un aller-retour">GET /api/winners?q=zidane&category=men      ← request: method + path + query string
+
+HTTP/1.1 200 OK                              ← response: status
+Content-Type: application/json
+[{"year":1998,"player":"Zinedine Zidane","club":"Juventus", …}]</script>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Status</th><th><span data-l="en">Means</span><span data-l="fr">Signifie</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>200 OK</code></td><td><span data-l="en">Here is what you asked for</span><span data-l="fr">Voici ce que tu as demandé</span></td></tr>
+      <tr><td><code>404 Not Found</code></td><td><span data-l="en">No such page or player</span><span data-l="fr">Page ou joueur introuvable</span></td></tr>
+      <tr><td><code>500 Internal Server Error</code></td><td><span data-l="en">The server crashed: read your terminal</span><span data-l="fr">Le serveur a planté : lis ton terminal</span></td></tr>
+    </tbody>
+  </table></div>
+  <div class="prose">
+    <p data-l="en"><strong>Node.js</strong> runs JavaScript on your computer instead of in a browser. <strong>npm</strong> downloads libraries (“packages”) listed in <code>package.json</code> into <code>node_modules/</code>. We need two: <strong>Express</strong>, which maps each URL to a function, and <strong>better-sqlite3</strong>, which runs SQL on our file.</p>
+    <p data-l="fr"><strong>Node.js</strong> exécute du JavaScript sur ton ordinateur plutôt que dans un navigateur. <strong>npm</strong> télécharge des bibliothèques (« paquets ») listées dans <code>package.json</code> vers <code>node_modules/</code>. Il nous en faut deux : <strong>Express</strong>, qui associe chaque URL à une fonction, et <strong>better-sqlite3</strong>, qui exécute du SQL sur notre fichier.</p>
+    <h2 class="sec"><span data-l="en">Build 1: install</span><span data-l="fr">Construire 1 : installer</span></h2>
+  </div>
+  <script type="text/x-code" data-lang="bash" data-term>npm init -y                          # creates package.json
+npm install express better-sqlite3   # downloads both into node_modules/</script>
+  <div class="prose"><p data-l="en">Open <code>package.json</code> and make it look like this (your version numbers may be newer; that's fine). <code>"type": "module"</code> lets Node use <code>import</code>, like the browser.</p><p data-l="fr">Ouvre <code>package.json</code> et fais-le ressembler à ceci (tes numéros de version peuvent être plus récents, ce n'est pas grave). <code>"type": "module"</code> permet à Node d'utiliser <code>import</code>, comme le navigateur.</p></div>
+  <script type="text/x-code" data-lang="json" data-file="package.json">@@include package.json@@</script>
+  <div class="prose"><p data-l="en">Add <code>db/build.js</code>, a script that rebuilds the database from your two SQL files, then run it:</p><p data-l="fr">Ajoute <code>db/build.js</code>, un script qui reconstruit la base à partir de tes deux fichiers SQL, puis lance-le :</p></div>
+  <script type="text/x-code" data-lang="javascript" data-file="db/build.js">@@include db/build.js@@</script>
+  <script type="text/x-code" data-lang="bash" data-term>npm run db:build      # ✅ ballondor.db ready: 52 players, 78 awards</script>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">Build 2: the smallest possible server</span><span data-l="fr">Construire 2 : le plus petit serveur possible</span></h2>
+    <p data-l="en">Start tiny to see the whole idea in 12 lines. Create <code>server.js</code> at the root:</p>
+    <p data-l="fr">Commence tout petit pour voir l'idée entière en 12 lignes. Crée <code>server.js</code> à la racine :</p>
+  </div>
+  <script type="text/x-code" data-lang="javascript" data-file="server.js" data-note="first version">import express from 'express';
+import Database from 'better-sqlite3';
+
+const app = express();
+const db = new Database('db/ballondor.db', { readonly: true });
+
+app.use(express.static('public'));            // serve index.html, css, js…
+
+app.get('/api/winners', (req, res) => {       // when someone asks for this URL…
+  const rows = db.prepare('SELECT * FROM winners ORDER BY year DESC').all();
+  res.json(rows);                             // …answer with JSON
+});
+
+app.listen(3000, () => console.log('http://localhost:3000'));</script>
+  <script type="text/x-code" data-lang="bash" data-term>npm run dev           # node --watch: restarts on every save. Stop with Ctrl+C</script>
+  <div class="prose">
+    <p data-l="en">Open <a href="http://localhost:3000/api/winners" target="_blank" rel="noopener">http://localhost:3000/api/winners</a>: your browser shows 78 JSON objects. Open <a href="http://localhost:3000" target="_blank" rel="noopener">http://localhost:3000</a>: your catalogue, now served by your own server instead of Live Server.</p>
+    <p data-l="fr">Ouvre <a href="http://localhost:3000/api/winners" target="_blank" rel="noopener">http://localhost:3000/api/winners</a> : ton navigateur affiche 78 objets JSON. Ouvre <a href="http://localhost:3000" target="_blank" rel="noopener">http://localhost:3000</a> : ton catalogue, servi par ton propre serveur au lieu de Live Server.</p>
+    <h2 class="sec"><span data-l="en">Build 3: filters, players, stats</span><span data-l="fr">Construire 3 : filtres, joueurs, stats</span></h2>
+    <p data-l="en">Now the full version. Replace <code>server.js</code> with the file below; here is what changed:</p>
+    <p data-l="fr">Maintenant la version complète. Remplace <code>server.js</code> par le fichier ci-dessous ; voici ce qui change :</p>
+    <ul>
+      <li data-l="en"><code>path.join(here, …)</code> builds file paths from the server file's own folder, so <code>npm start</code> works from anywhere.</li>
+      <li data-l="fr"><code>path.join(here, …)</code> construit les chemins depuis le dossier de <code>server.js</code>, donc <code>npm start</code> marche de n'importe où.</li>
+      <li data-l="en"><code>db.function('fold', …)</code> teaches SQLite our accent-free comparison from step 8.</li>
+      <li data-l="fr"><code>db.function('fold', …)</code> apprend à SQLite notre comparaison sans accents de l'étape 8.</li>
+      <li data-l="en"><code>/api/winners</code> builds its <code>WHERE</code> clause from the query string (<code>req.query</code>), the server-side twin of <code>matches()</code>.</li>
+      <li data-l="fr"><code>/api/winners</code> construit sa clause <code>WHERE</code> à partir des paramètres (<code>req.query</code>), le jumeau côté serveur de <code>matches()</code>.</li>
+      <li data-l="en"><code>/api/players/:id</code>: <code>:id</code> is a route parameter (<code>req.params.id</code>). It returns 404 when the player doesn't exist.</li>
+      <li data-l="fr"><code>/api/players/:id</code> : <code>:id</code> est un paramètre de route (<code>req.params.id</code>). Renvoie 404 si le joueur n'existe pas.</li>
+      <li data-l="en"><code>/api/stats</code> runs three <code>GROUP BY</code> queries for the hero numbers and the two side panels.</li>
+      <li data-l="fr"><code>/api/stats</code> exécute trois requêtes <code>GROUP BY</code> pour les chiffres du hero et les deux panneaux latéraux.</li>
+    </ul>
+  </div>
+  <div class="callout warn">
+    <span class="label"><span data-l="en">Never glue user text into SQL</span><span data-l="fr">Ne colle jamais le texte de l'utilisateur dans du SQL</span></span>
+    <p data-l="en"><code>`… WHERE player = '${q}'`</code> looks harmless until someone searches for <code>' OR 1=1 --</code> and rewrites your query. That's <strong>SQL injection</strong>. Always write placeholders (<code>@q</code> or <code>?</code>) and pass the values separately to <code>.all(params)</code>: the database then treats them as data, never as code.</p>
+    <p data-l="fr"><code>`… WHERE player = '${q}'`</code> semble inoffensif jusqu'à ce que quelqu'un cherche <code>' OR 1=1 --</code> et réécrive ta requête. C'est l'<strong>injection SQL</strong>. Écris toujours des marqueurs (<code>@q</code> ou <code>?</code>) et passe les valeurs séparément à <code>.all(params)</code> : la base les traite alors comme des données, jamais comme du code.</p>
+  </div>
+  <script type="text/x-code" data-lang="javascript" data-file="server.js" data-note="final version" data-collapse>@@include server.js@@</script>
+
+  <div class="prose">
+    <h3 class="sub"><span data-l="en">API explorer: send requests to a copy of this server</span><span data-l="fr">Explorateur d'API : envoie des requêtes à une copie de ce serveur</span></h3>
+    <p data-l="en">This box runs the same routes and the same SQL against the in-browser database, so you can see exactly what your server will answer.</p>
+    <p data-l="fr">Cette boîte exécute les mêmes routes et le même SQL sur la base du navigateur : tu vois exactement ce que ton serveur répondra.</p>
+  </div>
+  <div class="widget" id="apiexp">
+    <div class="presets" id="api-presets"></div>
+    <div class="api-row">
+      <input id="api-url" value="/api/winners?q=zidane" aria-label="Request URL" spellcheck="false">
+      <button type="button" class="btn small" id="api-send">GET</button>
+    </div>
+    <div class="http-line" id="api-status"></div>
+    <pre class="json-out" id="api-out"></pre>
+  </div>
+
+  <div class="callout check">
+    <span class="label">Checkpoint</span>
+    <ul>
+      <li data-l="en"><code>/api/winners?q=zidane</code> returns a list with one object (1998, Juventus).</li>
+      <li data-l="fr"><code>/api/winners?q=zidane</code> renvoie une liste avec un objet (1998, Juventus).</li>
+      <li data-l="en"><code>/api/players/43</code> returns Lionel Messi with 8 awards; <code>/api/players/999</code> returns a 404.</li>
+      <li data-l="fr"><code>/api/players/43</code> renvoie Lionel Messi avec 8 trophées ; <code>/api/players/999</code> renvoie une 404.</li>
+      <li data-l="en"><code>git status</code> does <em>not</em> list <code>node_modules/</code> (thanks to <code>.gitignore</code>).</li>
+      <li data-l="fr"><code>git status</code> ne liste <em>pas</em> <code>node_modules/</code> (grâce au <code>.gitignore</code>).</li>
+    </ul>
+  </div>
+  <details class="challenge">
+    <summary><span data-l="en">Challenge: a /api/clubs route</span><span data-l="fr">Défi : une route /api/clubs</span></summary>
+    <div>
+      <p data-l="en">Add <code>GET /api/clubs</code> returning every club with its number of awards, most first.</p>
+      <p data-l="fr">Ajoute <code>GET /api/clubs</code> qui renvoie chaque club avec son nombre de trophées, du plus grand au plus petit.</p>
+      <script type="text/x-code" data-lang="javascript" data-file="solution">app.get('/api/clubs', (req, res) => {
+  const rows = db.prepare(`
+    SELECT club, COUNT(*) AS awards
+    FROM awards
+    GROUP BY club
+    ORDER BY awards DESC, club`).all();
+  res.json(rows);
+});</script>
+    </div>
+  </details>
+  <script type="text/x-code" data-lang="bash" data-term>git add .
+git commit -m "Step 10: Express API on top of SQLite"
+git push</script>
+  <footer class="pager" data-pager></footer>
+</section>

@@ -1,0 +1,360 @@
+{
+ "distefano": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/67/Alfredo_Di_Stefano_River_Plate.jpg/500px-Alfredo_Di_Stefano_River_Plate.jpg",
+  "file": "Alfredo_Di_Stefano_River_Plate.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Alfredo_Di_Stefano_River_Plate.jpg",
+  "license": "Public domain",
+  "artist": "Unknown authorUnknown author"
+ },
+ "simonsen": {
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/a/a4/Allan_Simonsen_%281976%29.jpg",
+  "file": "Allan_Simonsen_(1976).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Allan_Simonsen_(1976).jpg",
+  "license": "Public domain",
+  "artist": "Panini"
+ },
+ "shevchenko": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Andriy_Shevchenko_Volia_Space_03_%28cropped%29.png/500px-Andriy_Shevchenko_Volia_Space_03_%28cropped%29.png",
+  "file": "Andriy_Shevchenko_Volia_Space_03_(cropped).png",
+  "page": "https://commons.wikimedia.org/wiki/File:Andriy_Shevchenko_Volia_Space_03_(cropped).png",
+  "license": "CC BY 4.0",
+  "artist": "Міністерство молоді та спорту України"
+ },
+ "charlton": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/LondonHouseAmsterdam1966_Bobby_Charlton.jpg/500px-LondonHouseAmsterdam1966_Bobby_Charlton.jpg",
+  "file": "LondonHouseAmsterdam1966_Bobby_Charlton.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:LondonHouseAmsterdam1966_Bobby_Charlton.jpg",
+  "license": "CC0",
+  "artist": "ANEFO"
+ },
+ "law": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Denis_Law_%284x5_cropped%29.jpg/500px-Denis_Law_%284x5_cropped%29.jpg",
+  "file": "Denis_Law_(4x5_cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Denis_Law_(4x5_cropped).jpg",
+  "license": "CC BY 2.0",
+  "artist": "Danny Molyneux"
+ },
+ "eusebio": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Eusebio_en_1973.jpg/500px-Eusebio_en_1973.jpg",
+  "file": "Eusebio_en_1973.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Eusebio_en_1973.jpg",
+  "license": "Public domain",
+  "artist": "Panini"
+ },
+ "cannavaro": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Fabio_Cannavaro_2011.jpg/500px-Fabio_Cannavaro_2011.jpg",
+  "file": "Fabio_Cannavaro_2011.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Fabio_Cannavaro_2011.jpg",
+  "license": "CC BY 2.0",
+  "artist": "Doha Stadium Plus Qatar"
+ },
+ "albert": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7e/Fl%C3%B3ri%C3%A1n_Albert_cropped.jpg/500px-Fl%C3%B3ri%C3%A1n_Albert_cropped.jpg",
+  "file": "Flórián_Albert_cropped.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Fl%C3%B3ri%C3%A1n_Albert_cropped.jpg",
+  "license": "CC BY-SA 3.0 nl",
+  "artist": "Nationaal Archief, Den Haag, Rijksfotoarchief: Fotocollectie Algemeen Nederlands Fotopersbureau (ANEFO), 1945-1989 - neg"
+ },
+ "beckenbauer": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Franz_Beckenbauer_%281975%29.jpg/500px-Franz_Beckenbauer_%281975%29.jpg",
+  "file": "Franz_Beckenbauer_(1975).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Franz_Beckenbauer_(1975).jpg",
+  "license": "Public domain",
+  "artist": "Panini Group"
+ },
+ "best": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a5/George_best_1976.jpg/500px-George_best_1976.jpg",
+  "file": "George_best_1976.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:George_best_1976.jpg",
+  "license": "CC0",
+  "artist": "Bert Verhoeff for Anefo , NL-HaNA, ANEFO / neg. stroken, 1945-1989"
+ },
+ "weah": {
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/5/53/Clar_Weah%2C_George_Weah%2C_Joe_Biden%2C_Jill_Biden_%28cropped%29.jpg",
+  "file": "Clar_Weah,_George_Weah,_Joe_Biden,_Jill_Biden_(cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Clar_Weah,_George_Weah,_Joe_Biden,_Jill_Biden_(cropped).jpg",
+  "license": "Public domain",
+  "artist": "United States Department of State Africa U.S.-Africa Leaders Summit: Photos and Videos"
+ },
+ "muller": {
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/9/9a/Gerd_M%C3%BCller_c1973_%28cropped%29.jpg",
+  "file": "Gerd_Müller_c1973_(cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Gerd_M%C3%BCller_c1973_(cropped).jpg",
+  "license": "Public domain",
+  "artist": "Unknown authorUnknown author"
+ },
+ "rivera": {
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/7/7d/Rivera.jpg",
+  "file": "Rivera.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Rivera.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Italian House of Representatives"
+ },
+ "stoichkov": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/Stoichkov_in_2016.jpg/500px-Stoichkov_in_2016.jpg",
+  "file": "Stoichkov_in_2016.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Stoichkov_in_2016.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Biser Todorov"
+ },
+ "belanov": {
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/8/80/Ihor_Belanov.jpeg",
+  "file": "Ihor_Belanov.jpeg",
+  "page": "https://commons.wikimedia.org/wiki/File:Ihor_Belanov.jpeg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Илья Хохлов"
+ },
+ "papin": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a6/PapinJP1997_%28cropped%29.jpg/500px-PapinJP1997_%28cropped%29.jpg",
+  "file": "PapinJP1997_(cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:PapinJP1997_(cropped).jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Leo Medvedev/Лев Леонидович Медведев"
+ },
+ "cruyff": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cb/Johan_Cruijff_%281974%29.jpg/500px-Johan_Cruijff_%281974%29.jpg",
+  "file": "Johan_Cruijff_(1974).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Johan_Cruijff_(1974).jpg",
+  "license": "CC0",
+  "artist": "Rob Mieremet / Anefo"
+ },
+ "masopust": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4e/Josef_Masopust_official_photo.jpg/500px-Josef_Masopust_official_photo.jpg",
+  "file": "Josef_Masopust_official_photo.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Josef_Masopust_official_photo.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Study1919"
+ },
+ "rummenigge": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fc/2015-02-06_Rummenigge_0370_%28cropped%29.JPG/500px-2015-02-06_Rummenigge_0370_%28cropped%29.JPG",
+  "file": "2015-02-06_Rummenigge_0370_(cropped).JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:2015-02-06_Rummenigge_0370_(cropped).JPG",
+  "license": "CC BY-SA 3.0 de",
+  "artist": "Michael Lucan"
+ },
+ "keegan": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/37/Kevin_keegan_panini_card_%28cropped%29.jpg/500px-Kevin_keegan_panini_card_%28cropped%29.jpg",
+  "file": "Kevin_keegan_panini_card_(cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Kevin_keegan_panini_card_(cropped).jpg",
+  "license": "Public domain",
+  "artist": "Unknown authorUnknown author"
+ },
+ "yashin": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/LevYashin.JPG/500px-LevYashin.JPG",
+  "file": "LevYashin.JPG",
+  "page": "https://commons.wikimedia.org/wiki/File:LevYashin.JPG",
+  "license": "CC BY-SA 3.0 nl",
+  "artist": "Kroon, Ron for Anefo"
+ },
+ "matthaus": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/84/2019_Lothar_Matth%C3%A4us.jpg/500px-2019_Lothar_Matth%C3%A4us.jpg",
+  "file": "2019_Lothar_Matthäus.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2019_Lothar_Matth%C3%A4us.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Steffen Prößdorf"
+ },
+ "figo": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/Luis_Figo_2023.jpg/500px-Luis_Figo_2023.jpg",
+  "file": "Luis_Figo_2023.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Luis_Figo_2023.jpg",
+  "license": "Public domain",
+  "artist": "Žan Kolman"
+ },
+ "vanbasten": {
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/7/7e/Marco_van_Basten_%282%29_%28cropped%29.jpg",
+  "file": "Marco_van_Basten_(2)_(cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Marco_van_Basten_(2)_(cropped).jpg",
+  "license": "CC BY 2.5",
+  "artist": "Paul Blank"
+ },
+ "sammer": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d9/Matthias_Sammer_2722.jpg/500px-Matthias_Sammer_2722.jpg",
+  "file": "Matthias_Sammer_2722.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Matthias_Sammer_2722.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Harald Bischoff"
+ },
+ "owen": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/24/Michael_Owen.jpg/500px-Michael_Owen.jpg",
+  "file": "Michael_Owen.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Michael_Owen.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "David Seow"
+ },
+ "platini": {
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/6/66/Michel_Platini_2010_%28cropped%29.jpg",
+  "file": "Michel_Platini_2010_(cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Michel_Platini_2010_(cropped).jpg",
+  "license": "GFDL 1.2",
+  "artist": "Chancellery of the President of the Republic of Poland"
+ },
+ "blokhin": {
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/7/74/Oleg_Blokhin2013.jpg",
+  "file": "Oleg_Blokhin2013.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Oleg_Blokhin2013.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Илья Хохлов"
+ },
+ "sivori": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/87/Omar_Sivori.jpg/500px-Omar_Sivori.jpg",
+  "file": "Omar_Sivori.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Omar_Sivori.jpg",
+  "license": "Public domain",
+  "artist": "Unknown authorUnknown author"
+ },
+ "rossi": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Paolo_Rossi_Vicenza.jpg/500px-Paolo_Rossi_Vicenza.jpg",
+  "file": "Paolo_Rossi_Vicenza.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Paolo_Rossi_Vicenza.jpg",
+  "license": "Public domain",
+  "artist": "The original uploader was Snake90 at Italian Wikipedia."
+ },
+ "nedved": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Pavel_Nedv%C4%9Bd.jpg/500px-Pavel_Nedv%C4%9Bd.jpg",
+  "file": "Pavel_Nedvěd.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Pavel_Nedv%C4%9Bd.jpg",
+  "license": "CC BY-SA 2.0",
+  "artist": "Pavel Lebeda"
+ },
+ "kopa": {
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/6/68/Raymond_Kopa%2C_Estadio%2C_1962-03-01.jpg",
+  "file": "Raymond_Kopa,_Estadio,_1962-03-01.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Raymond_Kopa,_Estadio,_1962-03-01.jpg",
+  "license": "Public domain",
+  "artist": "Unknown authorUnknown author"
+ },
+ "rivaldo": {
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/8/8e/Rivaldo.jpg",
+  "file": "Rivaldo.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Rivaldo.jpg",
+  "license": "CC BY 3.0 br",
+  "artist": "Laura Cortizo/Portal da Copa"
+ },
+ "baggio": {
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/4/4e/%D8%B1%D9%88%D8%A8%D8%B1%D8%AA%D9%88_%D8%A8%D8%A7%D8%AC%D9%88_%28cropped%29.jpg",
+  "file": "روبرتو_باجو_(cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:%D8%B1%D9%88%D8%A8%D8%B1%D8%AA%D9%88_%D8%A8%D8%A7%D8%AC%D9%88_(cropped).jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "AbolfaZl0990"
+ },
+ "ronaldinho": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/77/2019_-_Press_conferences_-_Day_1_ENX_6950_%2849019873887%29_%28cropped%29.jpg/500px-2019_-_Press_conferences_-_Day_1_ENX_6950_%2849019873887%29_%28cropped%29.jpg",
+  "file": "2019_-_Press_conferences_-_Day_1_ENX_6950_(49019873887)_(cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:2019_-_Press_conferences_-_Day_1_ENX_6950_(49019873887)_(cropped).jpg",
+  "license": "CC BY 2.0",
+  "artist": "Web Summit"
+ },
+ "ronaldo": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/36/12.12.2025_%E2%80%93_Cerim%C3%B4nia_de_lan%C3%A7amento_do_SBT_News_-_54980664160_%28cropped2%29.jpg/500px-12.12.2025_%E2%80%93_Cerim%C3%B4nia_de_lan%C3%A7amento_do_SBT_News_-_54980664160_%28cropped2%29.jpg",
+  "file": "12.12.2025_–_Cerimônia_de_lançamento_do_SBT_News_-_54980664160_(cropped2).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:12.12.2025_%E2%80%93_Cerim%C3%B4nia_de_lan%C3%A7amento_do_SBT_News_-_54980664160_(cropped2).jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Lula Oficial"
+ },
+ "gullit": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/67/25th_Laureus_World_Sports_Awards_-_Ruud_Gullit_-_240422_131911_%28cropped%29.jpg/500px-25th_Laureus_World_Sports_Awards_-_Ruud_Gullit_-_240422_131911_%28cropped%29.jpg",
+  "file": "25th_Laureus_World_Sports_Awards_-_Ruud_Gullit_-_240422_131911_(cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:25th_Laureus_World_Sports_Awards_-_Ruud_Gullit_-_240422_131911_(cropped).jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Barcex"
+ },
+ "matthews": null,
+ "zidane": {
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/f/f3/Zinedine_Zidane_by_Tasnim_03.jpg",
+  "file": "Zinedine_Zidane_by_Tasnim_03.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Zinedine_Zidane_by_Tasnim_03.jpg",
+  "license": "CC BY 4.0",
+  "artist": "Hadi Abyar"
+ },
+ "suarez": {
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/0/0b/Luis_Su%C3%A1rez_Miramontes_1962.jpg",
+  "file": "Luis_Suárez_Miramontes_1962.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Luis_Su%C3%A1rez_Miramontes_1962.jpg",
+  "license": "CC0",
+  "artist": "Unknown authorUnknown author"
+ },
+ "hegerberg": {
+  "thumb": "https://upload.wikimedia.org/wikipedia/commons/e/e2/AHegerberg.jpg",
+  "file": "AHegerberg.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:AHegerberg.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "crop by User:Benj90"
+ },
+ "bonmati": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/25th_Laureus_World_Sports_Awards_-_240422_214032.jpg/500px-25th_Laureus_World_Sports_Awards_-_240422_214032.jpg",
+  "file": "25th_Laureus_World_Sports_Awards_-_240422_214032.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:25th_Laureus_World_Sports_Awards_-_240422_214032.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Barcex"
+ },
+ "putellas": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Premios_Goya_2026_-_Alexia_Putellas_%28cropped%29.jpg/500px-Premios_Goya_2026_-_Alexia_Putellas_%28cropped%29.jpg",
+  "file": "Premios_Goya_2026_-_Alexia_Putellas_(cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Premios_Goya_2026_-_Alexia_Putellas_(cropped).jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Pedro J Pacheco"
+ },
+ "cr7": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/26/Cristiano_Ronaldo_Croatia_v_Portugal_2_July_2026-075_%28cropped%29.jpg/500px-Cristiano_Ronaldo_Croatia_v_Portugal_2_July_2026-075_%28cropped%29.jpg",
+  "file": "Cristiano_Ronaldo_Croatia_v_Portugal_2_July_2026-075_(cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Cristiano_Ronaldo_Croatia_v_Portugal_2_July_2026-075_(cropped).jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Bryan Berlin"
+ },
+ "kane": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2f/Harry_Kane_England_v_Ghana_23_June_2026-024_%28cropped%29.jpg/500px-Harry_Kane_England_v_Ghana_23_June_2026-024_%28cropped%29.jpg",
+  "file": "Harry_Kane_England_v_Ghana_23_June_2026-024_(cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Harry_Kane_England_v_Ghana_23_June_2026-024_(cropped).jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Bryan Berlin"
+ },
+ "kaka": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Kak%C3%A1_visited_Stadium_St._Petersburg.jpg/500px-Kak%C3%A1_visited_Stadium_St._Petersburg.jpg",
+  "file": "Kaká_visited_Stadium_St._Petersburg.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Kak%C3%A1_visited_Stadium_St._Petersburg.jpg",
+  "license": "CC BY-SA 3.0",
+  "artist": "Евгений Асмолов"
+ },
+ "benzema": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Karim_Benzema_vs._FC_Schalke_04_%2816647992937%29.jpg/500px-Karim_Benzema_vs._FC_Schalke_04_%2816647992937%29.jpg",
+  "file": "Karim_Benzema_vs._FC_Schalke_04_(16647992937).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Karim_Benzema_vs._FC_Schalke_04_(16647992937).jpg",
+  "license": "CC BY 2.0",
+  "artist": "Chris Deahr"
+ },
+ "messi": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg/500px-Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg",
+  "file": "Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Leo_Messi_Argentina_v_Egypt_7_July_2026-1.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Bryan Berlin"
+ },
+ "modric": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/Luka_Modric_Croatia_v_Portugal_2_July_2026-055.jpg/500px-Luka_Modric_Croatia_v_Portugal_2_July_2026-055.jpg",
+  "file": "Luka_Modric_Croatia_v_Portugal_2_July_2026-055.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Luka_Modric_Croatia_v_Portugal_2_July_2026-055.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Bryan Berlin"
+ },
+ "rapinoe": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b7/Megan_Rapinoe_%2848675274817%29_%28cropped%29.jpg/500px-Megan_Rapinoe_%2848675274817%29_%28cropped%29.jpg",
+  "file": "Megan_Rapinoe_(48675274817)_(cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Megan_Rapinoe_(48675274817)_(cropped).jpg",
+  "license": "CC BY-SA 2.0",
+  "artist": "Lorie Shaull from St Paul, United States"
+ },
+ "dembele": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/Ousmane_Dembele_France_v_Senegal_16_June_2026-341_%28cropped%29_2.jpg/500px-Ousmane_Dembele_France_v_Senegal_16_June_2026-341_%28cropped%29_2.jpg",
+  "file": "Ousmane_Dembele_France_v_Senegal_16_June_2026-341_(cropped)_2.jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Ousmane_Dembele_France_v_Senegal_16_June_2026-341_(cropped)_2.jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Bryan Berlin"
+ },
+ "rodri": {
+  "thumb": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/Rodri_Argentina_v_Spain_19_July_2026-187_%28cropped%29.jpg/500px-Rodri_Argentina_v_Spain_19_July_2026-187_%28cropped%29.jpg",
+  "file": "Rodri_Argentina_v_Spain_19_July_2026-187_(cropped).jpg",
+  "page": "https://commons.wikimedia.org/wiki/File:Rodri_Argentina_v_Spain_19_July_2026-187_(cropped).jpg",
+  "license": "CC BY-SA 4.0",
+  "artist": "Bryan Berlin"
+ }
+}

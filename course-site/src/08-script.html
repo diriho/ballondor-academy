@@ -1,0 +1,513 @@
+
+<script type="application/json" id="dataset">@@DATASET@@</script>
+<script type="text/plain" id="schema-sql">@@RAW db/schema.sql@@</script>
+<script type="text/plain" id="seed-sql">@@RAW db/seed.sql@@</script>
+<script type="text/plain" id="datajs-full">@@DATAJS_FULL@@</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-json.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markdown.min.js"></script>
+
+<script>
+(function () {
+  'use strict';
+  var SQLJS_URL = 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.12.0/sql-asm.js';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var store = {
+    get: function (k, d) { try { var v = localStorage.getItem(k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+    set: function (k, v) { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} }
+  };
+  var lang = function () { return document.documentElement.lang === 'fr' ? 'fr' : 'en'; };
+  var L = function (en, fr) { return '<span data-l="en">' + en + '</span><span data-l="fr">' + fr + '</span>'; };
+  var esc = function (t) { return String(t == null ? '' : t).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var fold = function (t) { return String(t == null ? '' : t).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase(); };
+  var END = '<' + '/script';
+  var unesc = function (t) { return t.replace(/<\\\/script/g, END); };
+  var rawText = function (id) { return unesc($('#' + id).textContent); };
+
+  var DATA = JSON.parse($('#dataset').textContent);
+  var WINNERS = DATA.winners;
+
+  var STEPS = [
+    { n: 1, en: 'Kick-off: tools and terminal', fr: 'Coup d’envoi : outils et terminal', min: 30, tags: ['VS Code', 'Node.js', 'Git', 'Terminal'] },
+    { n: 2, en: 'Git, GitHub and VS Code', fr: 'Git, GitHub et VS Code', min: 45, tags: ['commit', 'push', 'GitHub', 'VS Code'] },
+    { n: 3, en: 'HTML: the skeleton', fr: 'HTML : le squelette', min: 45, tags: ['tags', 'attributes', 'forms', 'DOM'] },
+    { n: 4, en: 'CSS: colours and type', fr: 'CSS : couleurs et typo', min: 60, tags: ['selectors', 'box model', 'variables', 'fonts'] },
+    { n: 5, en: 'Layout: divs and panels', fr: 'Mise en page : divs et panneaux', min: 60, tags: ['div', 'flexbox', 'grid', 'media queries'] },
+    { n: 6, en: 'The player card', fr: 'La carte joueur', min: 45, tags: ['components', 'position', 'hover'] },
+    { n: 7, en: 'JavaScript: data to cards', fr: 'JavaScript : des données aux cartes', min: 90, tags: ['arrays', 'functions', 'DOM', 'modules'] },
+    { n: 8, en: 'Search bar and filters', fr: 'Recherche et filtres', min: 60, tags: ['events', 'state', 'filter()', 'branches'] },
+    { n: 9, en: 'SQL and SQLite', fr: 'SQL et SQLite', min: 90, tags: ['tables', 'keys', 'SELECT', 'JOIN'] },
+    { n: 10, en: 'Node.js and Express API', fr: 'API Node.js et Express', min: 90, tags: ['npm', 'HTTP', 'routes', 'JSON'] },
+    { n: 11, en: 'Front end meets back end', fr: 'Le front rencontre le back', min: 60, tags: ['fetch', 'async/await', 'dialog'] },
+    { n: 12, en: 'Translate, polish, ship', fr: 'Traduire, peaufiner, publier', min: 60, tags: ['i18n', 'accessibility', 'README', 'deploy'] }
+  ];
+
+  /* ---------------- language ---------------- */
+  function setLang(l) {
+    document.documentElement.lang = l;
+    try { localStorage.setItem('bda-lang', l); } catch (e) {}
+    $$('[data-set-lang]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.dataset.setLang === l)); });
+    var ds = $('#demo-search');
+    if (ds) ds.placeholder = l === 'fr' ? 'Cherche : messi, brésil, 1998…' : 'Search: messi, brazil, 1998…';
+    renderDemo();
+  }
+  $$('[data-set-lang]').forEach(function (b) { b.addEventListener('click', function () { setLang(b.dataset.setLang); }); });
+
+  /* ---------------- progress ---------------- */
+  var done = new Set(store.get('bda-done', []));
+  function saveDone() { store.set('bda-done', Array.from(done)); renderProgress(); }
+  function renderProgress() {
+    $('#progress-text').textContent = done.size + '/12';
+    $('#progress-bar').style.width = (done.size / 12 * 100) + '%';
+    $$('[data-jersey]').forEach(function (j) { j.classList.toggle('done', done.has(Number(j.dataset.jersey))); });
+    $$('[data-done-box]').forEach(function (c) { c.checked = done.has(Number(c.dataset.doneBox)); });
+  }
+
+  /* ---------------- rail, roadmap, heads, pagers ---------------- */
+  function stepLink(s, cls) {
+    return '<a href="#step-' + s.n + '" data-nav="step-' + s.n + '"' + (cls ? ' class="' + cls + '"' : '') + '>' +
+      '<span class="jersey" data-jersey="' + s.n + '">' + s.n + '</span>' +
+      '<span class="t">' + L(s.en, s.fr) + '<small>~' + s.min + ' min</small></span></a>';
+  }
+  $('#rail').innerHTML =
+    '<h2>' + L('Start', 'Départ') + '</h2><ol><li><a href="#welcome" data-nav="welcome"><span class="jersey ref"><span class="ball"></span></span><span class="t">' + L('Welcome and final product', 'Accueil et produit final') + '</span></a></li></ol>' +
+    '<h2>' + L('The 12 steps', 'Les 12 étapes') + '</h2><ol>' + STEPS.map(function (s) { return '<li>' + stepLink(s) + '</li>'; }).join('') + '</ol>' +
+    '<h2>' + L('Keep handy', 'À garder sous la main') + '</h2><ol><li><a href="#reference" data-nav="reference"><span class="jersey">★</span><span class="t">' + L('Git cheat sheet, glossary, credits', 'Aide-mémoire Git, glossaire, crédits') + '</span></a></li></ol>';
+  $('#roadmap').innerHTML = STEPS.map(function (s) { return '<li>' + stepLink(s) + '</li>'; }).join('');
+  $$('[data-jersey]', $('#roadmap')).forEach(function (j) { j.removeAttribute('data-jersey'); });
+
+  $$('[data-head]').forEach(function (h) {
+    var s = STEPS[Number(h.dataset.head) - 1];
+    h.innerHTML = '<span class="big-number" aria-hidden="true">' + String(s.n).padStart(2, '0') + '</span>' +
+      '<div class="lh"><p class="eyebrow">' + L('Step ' + s.n + ' of 12', 'Étape ' + s.n + ' sur 12') + ' · ~' + s.min + ' min</p>' +
+      '<h1 class="display">' + L(s.en, s.fr) + '</h1>' +
+      '<div class="chips">' + s.tags.map(function (t) { return '<span class="chip">' + esc(t) + '</span>'; }).join('') + '</div></div>';
+  });
+  $$('[data-pager]').forEach(function (p) {
+    var n = Number(p.closest('[data-step]').dataset.step);
+    var prev = n > 1 ? STEPS[n - 2] : null, next = n < 12 ? STEPS[n] : null;
+    p.innerHTML =
+      (prev ? '<a class="btn ghost small" href="#step-' + prev.n + '">← ' + L(prev.en, prev.fr) + '</a>' : '<a class="btn ghost small" href="#welcome">← ' + L('Welcome', 'Accueil') + '</a>') +
+      '<label class="done-toggle"><input type="checkbox" data-done-box="' + n + '" id="done-' + n + '">' + L('Step done', 'Étape terminée') + '</label>' +
+      (next ? '<a class="btn small" href="#step-' + next.n + '">' + L(next.en, next.fr) + ' →</a>' : '<a class="btn small" href="#reference">' + L('Reference', 'Référence') + ' →</a>');
+  });
+  document.addEventListener('change', function (e) {
+    var box = e.target.closest && e.target.closest('[data-done-box]');
+    if (!box) return;
+    var n = Number(box.dataset.doneBox);
+    if (box.checked) done.add(n); else done.delete(n);
+    saveDone();
+  });
+
+  /* ---------------- code blocks ---------------- */
+  var PRISM_LANG = { html: 'markup', css: 'css', javascript: 'javascript', sql: 'sql', bash: 'bash', json: 'json', markdown: 'markdown' };
+  function copyText(text, btn, msgEl) {
+    var ok = function () { flash(btn, msgEl, lang() === 'fr' ? 'Copié ✓' : 'Copied ✓'); };
+    var fail = function () { flash(btn, msgEl, lang() === 'fr' ? 'Sélectionne puis Ctrl+C' : 'Select it, then Ctrl+C'); };
+    try { navigator.clipboard.writeText(text).then(ok, fail); } catch (e) { fail(); }
+  }
+  function flash(btn, msgEl, text) {
+    if (msgEl) { msgEl.textContent = text; setTimeout(function () { msgEl.textContent = ''; }, 2200); return; }
+    var old = btn.innerHTML; btn.textContent = text; setTimeout(function () { btn.innerHTML = old; }, 1600);
+  }
+  $$('script[type="text/x-code"]').forEach(function (s) {
+    var code = s.textContent.replace(/^\n/, '').replace(/\s+$/, '');
+    code = unesc(code);
+    var box = document.createElement('div');
+    box.className = 'code' + (s.hasAttribute('data-term') ? ' term' : '');
+    var bar = document.createElement('div');
+    bar.className = 'code-bar';
+    bar.innerHTML = (s.dataset.file ? '<span class="file">' + esc(s.dataset.file) + '</span>' : (s.hasAttribute('data-term') ? '<span>terminal</span>' : '')) +
+      '<span class="note">' + (s.dataset.note ? esc(s.dataset.note) : '') + '</span>' +
+      '<button type="button" class="copy">' + L('Copy', 'Copier') + '</button>';
+    var pre = document.createElement('pre');
+    var c = document.createElement('code');
+    var pl = PRISM_LANG[s.dataset.lang];
+    c.className = 'language-' + (pl || 'none');
+    c.textContent = code;
+    pre.appendChild(c);
+    box.appendChild(bar); box.appendChild(pre);
+    var lines = code.split('\n').length;
+    if (s.hasAttribute('data-collapse') && lines > 14) {
+      box.classList.add('collapsed');
+      var more = document.createElement('button');
+      more.type = 'button'; more.className = 'expand';
+      more.innerHTML = L('Show all ' + lines + ' lines', 'Afficher les ' + lines + ' lignes');
+      more.addEventListener('click', function () {
+        var open = box.classList.toggle('collapsed');
+        more.innerHTML = open ? L('Show all ' + lines + ' lines', 'Afficher les ' + lines + ' lignes') : L('Collapse', 'Replier');
+      });
+      box.appendChild(more);
+    }
+    $('.copy', bar).addEventListener('click', function (e) { copyText(code, e.currentTarget); });
+    s.replaceWith(box);
+    if (pl && window.Prism && Prism.languages[pl]) { try { Prism.highlightElement(c); } catch (e) {} }
+  });
+
+  $('#copy-seed').addEventListener('click', function (e) { copyText(rawText('seed-sql'), e.currentTarget, $('#copy-seed-msg')); });
+  $('#copy-datajs').addEventListener('click', function (e) { copyText(rawText('datajs-full'), e.currentTarget, $('#copy-datajs-msg')); });
+
+  /* ---------------- playgrounds ---------------- */
+  var FONTS = '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&display=swap">';
+  var playWinners = WINNERS.map(function (w) {
+    return { year: w.year, category: w.category, player: w.player, club: w.club, nationality: w.nationality, nationality_fr: w.nationality_fr, position: w.position, img: w.img };
+  });
+  var plays = {};
+  function playDoc(p) {
+    var base = document.baseURI.split('#')[0];
+    var errTrap = '<script>window.onerror=function(m,s,l){var d=document.createElement("pre");d.style.cssText="position:fixed;left:0;right:0;bottom:0;margin:0;padding:8px 12px;background:#a93b2a;color:#fff;font:12px monospace;white-space:pre-wrap;z-index:99";d.textContent="Error (line "+l+"): "+m;document.body.appendChild(d);};<\/script>';
+    var data = p.winners ? '<script>window.winners=' + JSON.stringify(playWinners).replace(/</g, '\\u003c') + ';<\/script>' : '';
+    return '<!doctype html><html><head><meta charset="utf-8"><base href="' + esc(base) + '">' + FONTS +
+      '<style>' + (p.code.css || '') + '</style>' + errTrap + data + '</head><body>' + (p.code.html || '') +
+      (p.code.js ? '<script>' + p.code.js.replace(/<\/script/gi, '<\\/script') + '<\/script>' : '') + '</body></html>';
+  }
+  $$('.play[data-play]').forEach(function (el) {
+    var id = el.dataset.play;
+    var parts = {};
+    $$('script[type="text/x-play"][data-for="' + id + '"]').forEach(function (s) {
+      parts[s.dataset.part] = unesc(s.textContent.replace(/^\n/, '').replace(/\s+$/, ''));
+      s.remove();
+    });
+    var order = ['html', 'css', 'js'].filter(function (k) { return parts[k] != null; });
+    var p = { el: el, initial: Object.assign({}, parts), code: Object.assign({}, parts), tab: el.dataset.tab && parts[el.dataset.tab] != null ? el.dataset.tab : order[0], winners: el.hasAttribute('data-winners'), ready: false };
+    plays[id] = p;
+    el.innerHTML = '<div class="play-head"><strong>' + L('Playground', 'Bac à sable') + '</strong>' +
+      '<div class="tabs" role="tablist">' + order.map(function (k) { return '<button type="button" role="tab" data-tab="' + k + '" aria-selected="' + (k === p.tab) + '">' + k.toUpperCase() + '</button>'; }).join('') + '</div>' +
+      '<button type="button" class="btn ghost small" data-reset>' + L('Reset', 'Réinitialiser') + '</button></div>' +
+      '<div class="play-body"><textarea spellcheck="false" id="play-' + id + '" aria-label="Code editor"></textarea>' +
+      '<iframe title="Preview" sandbox="allow-scripts allow-same-origin"></iframe></div>';
+    var ta = $('textarea', el), frame = $('iframe', el), timer;
+    ta.value = p.code[p.tab];
+    function run() { frame.srcdoc = playDoc(p); }
+    p.run = run;
+    ta.addEventListener('input', function () { p.code[p.tab] = ta.value; clearTimeout(timer); timer = setTimeout(run, 350); });
+    ta.addEventListener('keydown', function (e) {
+      if (e.key === 'Tab' && !e.shiftKey) { e.preventDefault(); var a = ta.selectionStart; ta.setRangeText('  ', a, ta.selectionEnd, 'end'); ta.dispatchEvent(new Event('input')); }
+    });
+    $$('[data-tab]', el).forEach(function (b) {
+      b.addEventListener('click', function () {
+        p.tab = b.dataset.tab; ta.value = p.code[p.tab];
+        $$('[data-tab]', el).forEach(function (x) { x.setAttribute('aria-selected', String(x === b)); });
+      });
+    });
+    $('[data-reset]', el).addEventListener('click', function () { p.code = Object.assign({}, p.initial); ta.value = p.code[p.tab]; run(); });
+  });
+
+  /* ---------------- hero demo ---------------- */
+  var demo = { q: '', cat: 'all' };
+  function renderDemo() {
+    var grid = $('#demo-grid'); if (!grid) return;
+    var q = fold(demo.q.trim());
+    var list = WINNERS.filter(function (w) {
+      if (demo.cat !== 'all' && w.category !== demo.cat) return false;
+      if (!q) return true;
+      return [w.player, w.club, w.nationality, w.nationality_fr, w.year].some(function (v) { return fold(v).indexOf(q) !== -1; });
+    }).sort(function (a, b) { return b.year - a.year || (a.category > b.category ? 1 : -1); });
+    var fr = lang() === 'fr';
+    $('#demo-status').textContent = list.length ? (fr ? list.length + ' trophée' + (list.length > 1 ? 's' : '') + ' trouvé' + (list.length > 1 ? 's' : '') : list.length + ' award' + (list.length === 1 ? '' : 's') + ' found') : (fr ? 'Aucun lauréat ne correspond.' : 'No winner matches your search.');
+    grid.innerHTML = list.map(function (w) {
+      return '<article class="dcard"><div class="m"><img src="' + esc(w.img) + '" alt="' + esc(w.player) + '" loading="lazy"><span class="y">' + w.year + '</span></div>' +
+        '<div class="b"><strong>' + esc(w.player) + '</strong><span>' + esc(w.club) + '</span></div></article>';
+    }).join('');
+  }
+  $('#demo-search').addEventListener('input', function (e) { demo.q = e.target.value; renderDemo(); });
+  $('#demo-cat').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    demo.cat = b.dataset.v;
+    $$('button', $('#demo-cat')).forEach(function (x) { x.setAttribute('aria-pressed', String(x === b)); });
+    renderDemo();
+  });
+
+  /* ---------------- git simulator ---------------- */
+  var git = { work: [], stage: [], local: [], remote: [], i: 0 };
+  var FILES = ['index.html', 'style.css', 'app.js', 'README.md'];
+  var gitLog = function (lines) { var el = $('#git-log'); el.textContent += (el.textContent ? '\n' : '') + lines; el.scrollTop = el.scrollHeight; };
+  function hash() { return Math.random().toString(16).slice(2, 9); }
+  function renderGit() {
+    var pill = function (t, cls) { return '<div class="pill ' + cls + '">' + esc(t) + '</div>'; };
+    $('[data-zone="work"]').innerHTML = git.work.map(function (f) { return pill('M ' + f, 'mod'); }).join('');
+    $('[data-zone="stage"]').innerHTML = git.stage.map(function (f) { return pill('+ ' + f, 'mod'); }).join('');
+    $('[data-zone="local"]').innerHTML = git.local.slice().reverse().map(function (c) { return pill(c.h + ' ' + c.m, 'commit'); }).join('');
+    $('[data-zone="remote"]').innerHTML = git.remote.slice().reverse().map(function (c) { return pill(c.h + ' ' + c.m, 'commit'); }).join('');
+  }
+  $('#gitsim').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-git]'); if (!b) return;
+    var a = b.dataset.git;
+    if (a === 'edit') {
+      var f = FILES[git.i++ % FILES.length];
+      if (git.work.indexOf(f) === -1) git.work.push(f);
+      gitLog('# (you save ' + f + ' in VS Code)');
+    } else if (a === 'add') {
+      gitLog('$ git add .');
+      if (!git.work.length) gitLog('(nothing new to stage)');
+      git.work.forEach(function (f) { if (git.stage.indexOf(f) === -1) git.stage.push(f); });
+      git.work = [];
+    } else if (a === 'commit') {
+      var msg = 'Update ' + git.stage.join(', ');
+      gitLog('$ git commit -m "' + (git.stage.length ? msg : '…') + '"');
+      if (!git.stage.length) { gitLog('nothing to commit, working tree clean'); }
+      else { var c = { h: hash(), m: msg }; git.local.push(c); gitLog('[main ' + c.h + '] ' + msg + '\n ' + git.stage.length + ' file' + (git.stage.length > 1 ? 's' : '') + ' changed'); git.stage = []; }
+    } else if (a === 'push') {
+      gitLog('$ git push');
+      var news = git.local.slice(git.remote.length);
+      if (!news.length) gitLog('Everything up-to-date');
+      else { var from = git.remote.length ? git.remote[git.remote.length - 1].h : '0000000'; git.remote = git.local.slice(); gitLog('To github.com/you/ballondor-catalogue.git\n   ' + from + '..' + news[news.length - 1].h + '  main -> main'); }
+    } else if (a === 'reset') {
+      git = { work: [], stage: [], local: [], remote: [], i: 0 }; $('#git-log').textContent = '';
+    }
+    renderGit();
+  });
+  gitLog('# Click "Edit a file", then git add, git commit, git push.');
+
+  /* ---------------- box model + flex lab ---------------- */
+  function renderBox() {
+    var p = $('#bm-pad').value, b = $('#bm-border').value, m = $('#bm-margin').value;
+    $('#bm-m').style.padding = m + 'px';
+    $('#bm-b').style.padding = p + 'px';
+    $('#bm-b').style.borderWidth = b + 'px';
+    $('#bm-css').textContent = '.card {\n  padding: ' + p + 'px;\n  border: ' + b + 'px solid;\n  margin: ' + m + 'px;\n}';
+  }
+  ['bm-pad', 'bm-border', 'bm-margin'].forEach(function (id) { $('#' + id).addEventListener('input', renderBox); });
+  function renderFlex() {
+    var st = $('#fx-stage');
+    var d = $('#fx-dir').value, jc = $('#fx-jc').value, ai = $('#fx-ai').value, g = $('#fx-gap').value;
+    st.style.flexDirection = d; st.style.justifyContent = jc; st.style.alignItems = ai; st.style.gap = g + 'px';
+    $('#fx-css').textContent = '.toolbar {\n  display: flex;\n  flex-direction: ' + d + ';\n  justify-content: ' + jc + ';\n  align-items: ' + ai + ';\n  gap: ' + g + 'px;\n}';
+  }
+  ['fx-dir', 'fx-jc', 'fx-ai', 'fx-gap'].forEach(function (id) { $('#' + id).addEventListener('input', renderFlex); });
+
+  /* ---------------- SQL engine (sql.js, loaded on demand) ---------------- */
+  var dbPromise = null;
+  function getDB() {
+    if (dbPromise) return dbPromise;
+    setEngine(lang() === 'fr' ? 'Chargement de SQLite (1,3 Mo)…' : 'Loading SQLite (1.3 MB)…', '');
+    dbPromise = new Promise(function (resolve, reject) {
+      var s = document.createElement('script');
+      s.src = SQLJS_URL; s.async = true;
+      s.onload = function () {
+        window.initSqlJs().then(function (SQL) {
+          var db = new SQL.Database();
+          db.create_function('fold', fold);
+          db.exec(rawText('schema-sql'));
+          db.exec(rawText('seed-sql'));
+          setEngine(lang() === 'fr' ? 'SQLite prêt : 52 joueurs, 78 trophées' : 'SQLite ready: 52 players, 78 awards', 'ok');
+          resolve(db);
+        }).catch(reject);
+      };
+      s.onerror = function () { reject(new Error('load')); };
+      document.head.appendChild(s);
+    });
+    dbPromise.catch(function () {
+      setEngine(lang() === 'fr' ? 'Impossible de charger le moteur SQL (hors ligne ?). Recharge la page pour réessayer.' : 'Could not load the SQL engine (offline?). Reload the page to try again.', 'err');
+    });
+    return dbPromise;
+  }
+  function setEngine(t, cls) { var e = $('#sql-engine'); e.textContent = t; e.className = 'msg ' + (cls || ''); }
+
+  function tableHTML(res, max) {
+    if (!res) return '<p class="msg" style="padding:12px">' + L('Query ran. No rows returned.', 'Requête exécutée. Aucune ligne renvoyée.') + '</p>';
+    var rows = res.values.slice(0, max || 200);
+    return '<table><thead><tr>' + res.columns.map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+      rows.map(function (r) { return '<tr>' + r.map(function (v) { return '<td>' + (v === null ? '<i>NULL</i>' : esc(String(v).length > 70 ? String(v).slice(0, 67) + '…' : v)) + '</td>'; }).join('') + '</tr>'; }).join('') + '</tbody></table>';
+  }
+  function runSQL() {
+    var sql = $('#sql-input').value;
+    getDB().then(function (db) {
+      var t0 = performance.now();
+      try {
+        var out = db.exec(sql);
+        var res = out[out.length - 1];
+        var n = res ? res.values.length : 0;
+        $('#sql-result').innerHTML = tableHTML(res);
+        var m = $('#sql-msg'); m.className = 'msg';
+        m.textContent = n + (lang() === 'fr' ? ' ligne' + (n > 1 ? 's' : '') : ' row' + (n === 1 ? '' : 's')) + ' · ' + Math.max(1, Math.round(performance.now() - t0)) + ' ms' + (n > 200 ? ' (200 shown)' : '');
+        lastResult = res || null;
+      } catch (err) {
+        var m2 = $('#sql-msg'); m2.className = 'msg err'; m2.textContent = String(err.message || err);
+        $('#sql-result').innerHTML = '';
+        lastResult = undefined;
+      }
+    }, function () {});
+  }
+  var lastResult;
+  $('#sql-run').addEventListener('click', runSQL);
+  $('#sql-input').addEventListener('keydown', function (e) { if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); runSQL(); } });
+
+  var PRESETS = [
+    { en: 'French winners', fr: 'Lauréats français', sql: "SELECT year, player, club\nFROM winners\nWHERE nationality = 'France'\nORDER BY year;" },
+    { en: 'Most wins', fr: 'Plus de sacres', sql: 'SELECT player, COUNT(*) AS wins\nFROM winners\nGROUP BY player_id\nORDER BY wins DESC\nLIMIT 10;' },
+    { en: 'Awards per decade', fr: 'Trophées par décennie', sql: 'SELECT (year / 10) * 10 AS decade, COUNT(*) AS awards\nFROM awards\nGROUP BY decade\nORDER BY decade;' },
+    { en: 'A JOIN by hand', fr: 'Un JOIN à la main', sql: 'SELECT a.year, p.name, p.born, a.year - p.born AS age\nFROM awards AS a\nJOIN players AS p ON p.id = a.player_id\nORDER BY age\nLIMIT 10;' },
+    { en: 'LIKE search', fr: 'Recherche LIKE', sql: "SELECT year, player, club\nFROM winners\nWHERE club LIKE '%Madrid%';" },
+    { en: 'Columns of a table', fr: 'Colonnes d’une table', sql: "SELECT name, type, pk\nFROM pragma_table_info('players');" },
+    { en: 'Women’s award', fr: 'Trophée féminin', sql: "SELECT year, player, club, description_en\nFROM winners\nWHERE category = 'women'\nORDER BY year;" }
+  ];
+  $('#sql-presets').innerHTML = PRESETS.map(function (p, i) { return '<button type="button" data-preset="' + i + '">' + L(p.en, p.fr) + '</button>'; }).join('');
+  $('#sql-presets').addEventListener('click', function (e) {
+    var b = e.target.closest('[data-preset]'); if (!b) return;
+    $('#sql-input').value = PRESETS[Number(b.dataset.preset)].sql; runSQL();
+  });
+
+  var CHALLENGES = [
+    { en: 'List every Dutch winner: year and player.', fr: 'Liste tous les lauréats néerlandais : année et joueur.', hint: "WHERE nationality = 'Netherlands'", sol: "SELECT year, player FROM winners WHERE nationality = 'Netherlands'" },
+    { en: 'How many awards went to Real Madrid players? (one number)', fr: 'Combien de trophées pour des joueurs du Real Madrid ? (un nombre)', hint: "SELECT COUNT(*) … WHERE club = 'Real Madrid'", sol: "SELECT COUNT(*) FROM winners WHERE club = 'Real Madrid'" },
+    { en: 'Which players won 3 times or more? Show player and wins.', fr: 'Quels joueurs ont gagné 3 fois ou plus ? Affiche joueur et sacres.', hint: 'GROUP BY player_id … HAVING COUNT(*) >= 3', sol: 'SELECT player, COUNT(*) AS wins FROM winners GROUP BY player_id HAVING COUNT(*) >= 3' },
+    { en: 'Who was the youngest winner? Show name and age (year − born).', fr: 'Qui est le plus jeune lauréat ? Affiche nom et âge (year − born).', hint: 'JOIN players … ORDER BY age LIMIT 1', sol: 'SELECT p.name, a.year - p.born AS age FROM awards a JOIN players p ON p.id = a.player_id ORDER BY age LIMIT 1' },
+    { en: 'Count the awards in each category (men / women).', fr: 'Compte les trophées de chaque catégorie (hommes / femmes).', hint: 'GROUP BY category', sol: 'SELECT category, COUNT(*) FROM awards GROUP BY category' },
+    { en: 'Which club has winners in both the men’s and women’s award?', fr: 'Quel club a des lauréats chez les hommes et chez les femmes ?', hint: 'GROUP BY club HAVING COUNT(DISTINCT category) = 2', sol: 'SELECT club FROM awards GROUP BY club HAVING COUNT(DISTINCT category) = 2' }
+  ];
+  var solved = new Set(store.get('bda-sql', []));
+  function renderChallenges() {
+    $('#sql-challenges').innerHTML = CHALLENGES.map(function (c, i) {
+      return '<li class="' + (solved.has(i) ? 'solved' : '') + '"><span class="st">' + (solved.has(i) ? '✓' : i + 1) + '</span>' +
+        '<span>' + L(esc(c.en), esc(c.fr)) + '<br><small class="msg" id="hint-' + i + '"></small></span>' +
+        '<span class="controls"><button type="button" class="btn small" data-check="' + i + '">' + L('Check', 'Vérifier') + '</button>' +
+        '<button type="button" class="btn ghost small" data-hint="' + i + '">' + L('Hint', 'Indice') + '</button></span></li>';
+    }).join('');
+  }
+  function rowsKey(res) { return res ? res.values.map(function (r) { return JSON.stringify(r); }).sort().join('|') : ''; }
+  $('#sql-challenges').addEventListener('click', function (e) {
+    var h = e.target.closest('[data-hint]'), c = e.target.closest('[data-check]');
+    if (h) {
+      var i = Number(h.dataset.hint), el = $('#hint-' + i);
+      if (!el.textContent) el.textContent = (lang() === 'fr' ? 'Indice : ' : 'Hint: ') + CHALLENGES[i].hint;
+      else { $('#sql-input').value = CHALLENGES[i].sol + ';'; el.textContent = lang() === 'fr' ? 'Réponse placée dans l’éditeur. Exécute-la, puis vérifie.' : 'Answer placed in the editor. Run it, then check.'; }
+      return;
+    }
+    if (!c) return;
+    var k = Number(c.dataset.check);
+    getDB().then(function (db) {
+      var mine;
+      try { var out = db.exec($('#sql-input').value); mine = out[out.length - 1]; } catch (err) { mine = null; }
+      var want = db.exec(CHALLENGES[k].sol)[0];
+      var el = $('#hint-' + k);
+      if (mine && rowsKey(mine) === rowsKey(want)) {
+        solved.add(k); store.set('bda-sql', Array.from(solved)); renderChallenges();
+        $('#hint-' + k).textContent = lang() === 'fr' ? 'Bravo, c’est juste !' : 'Correct, well done!';
+        runSQL();
+      } else {
+        el.textContent = lang() === 'fr' ? 'Pas encore : ta requête renvoie ' + (mine ? mine.values.length : 0) + ' ligne(s), il en faut ' + want.values.length + '. Vérifie aussi les colonnes choisies.' : 'Not yet: your query returns ' + (mine ? mine.values.length : 0) + ' row(s), ' + want.values.length + ' expected. Check which columns you select, too.';
+      }
+    }, function () {});
+  });
+  renderChallenges();
+
+  /* ---------------- API explorer (same routes as server.js) ---------------- */
+  var API_PRESETS = ['/api/winners', '/api/winners?q=zidane', '/api/winners?category=women&sort=oldest', '/api/winners?decade=1980&position=Midfielder', '/api/players/43', '/api/players/999', '/api/stats', '/api/nope'];
+  $('#api-presets').innerHTML = API_PRESETS.map(function (u) { return '<button type="button" data-api="' + esc(u) + '"><code>' + esc(u.replace('/api', '')) + '</code></button>'; }).join('');
+  function all(db, sql, params) {
+    var st = db.prepare(sql); if (params) st.bind(params);
+    var rows = []; while (st.step()) rows.push(st.getAsObject()); st.free(); return rows;
+  }
+  function simulate(db, raw) {
+    var u; try { u = new URL(raw, 'http://localhost:3000'); } catch (e) { return [400, { error: 'Bad URL' }]; }
+    var path = u.pathname, q = u.searchParams;
+    if (path.indexOf('/api') !== 0) return [200, lang() === 'fr' ? '(Express servirait public/index.html. Cet explorateur ne simule que les routes /api.)' : '(Express would serve public/index.html. This explorer only simulates the /api routes.)'];
+    if (path === '/api/winners') {
+      var where = [], p = {};
+      var text = (q.get('q') || '').trim(), cat = q.get('category') || 'all', dec = q.get('decade') || 'all', pos = q.get('position') || 'all', sort = q.get('sort') || 'newest';
+      if (text) { where.push('(fold(player) LIKE @q OR fold(club) LIKE @q OR fold(nationality) LIKE @q OR fold(nationality_fr) LIKE @q)'); p['@q'] = '%' + fold(text) + '%'; }
+      if (cat === 'men' || cat === 'women') { where.push('category = @category'); p['@category'] = cat; }
+      if (/^\d{4}$/.test(dec)) { where.push('year BETWEEN @from AND @to'); p['@from'] = Number(dec); p['@to'] = Number(dec) + 9; }
+      if (['Goalkeeper', 'Defender', 'Midfielder', 'Forward'].indexOf(pos) !== -1) { where.push('position = @position'); p['@position'] = pos; }
+      var SORTS = { newest: 'year DESC, category', oldest: 'year ASC, category', name: 'player COLLATE NOCASE, year' };
+      return [200, all(db, 'SELECT * FROM winners ' + (where.length ? 'WHERE ' + where.join(' AND ') : '') + ' ORDER BY ' + (SORTS[sort] || SORTS.newest), p)];
+    }
+    var m = path.match(/^\/api\/players\/([^/]+)$/);
+    if (m) {
+      var pl = all(db, 'SELECT * FROM players WHERE id = ?', [m[1]])[0];
+      if (!pl) return [404, { error: 'Player not found' }];
+      pl.awards = all(db, 'SELECT year, category, club, description_en, description_fr FROM awards WHERE player_id = ? ORDER BY year', [pl.id]);
+      return [200, pl];
+    }
+    if (path === '/api/stats') {
+      return [200, {
+        totals: all(db, 'SELECT COUNT(*) AS awards, COUNT(DISTINCT player_id) AS players, COUNT(DISTINCT nationality) AS nations, MIN(year) AS first_year, MAX(year) AS last_year FROM winners')[0],
+        topPlayers: all(db, 'SELECT player_id, player, nationality, nationality_fr, image_url, COUNT(*) AS wins FROM winners GROUP BY player_id ORDER BY wins DESC, MIN(year) LIMIT 8'),
+        topNations: all(db, 'SELECT nationality, nationality_fr, COUNT(*) AS wins FROM winners GROUP BY nationality ORDER BY wins DESC, nationality LIMIT 8')
+      }];
+    }
+    return [404, { error: 'Unknown API route' }];
+  }
+  function pretty(body) {
+    if (typeof body === 'string') return body;
+    if (Array.isArray(body) && body.length > 3) {
+      var shown = JSON.stringify(body.slice(0, 3), null, 2);
+      return shown.slice(0, -2) + ',\n  … ' + (body.length - 3) + (lang() === 'fr' ? ' autres objets' : ' more objects') + '\n]';
+    }
+    return JSON.stringify(body, null, 2);
+  }
+  function sendAPI() {
+    var raw = $('#api-url').value.trim();
+    $('#api-status').innerHTML = '<span class="msg">…</span>';
+    getDB().then(function (db) {
+      var r = simulate(db, raw);
+      var label = { 200: 'OK', 400: 'Bad Request', 404: 'Not Found' }[r[0]];
+      var n = Array.isArray(r[1]) ? r[1].length : -1;
+      var count = n < 0 ? '' : ' · ' + n + (lang() === 'fr' ? ' élément' + (n > 1 ? 's' : '') : ' item' + (n === 1 ? '' : 's'));
+      $('#api-status').innerHTML = 'GET ' + esc(raw) + ' → <b class="' + (r[0] === 200 ? '' : 'bad') + '">HTTP ' + r[0] + ' ' + label + '</b> · application/json' + count;
+      $('#api-out').textContent = pretty(r[1]);
+    }, function () { $('#api-status').textContent = ''; });
+  }
+  $('#api-send').addEventListener('click', sendAPI);
+  $('#api-url').addEventListener('keydown', function (e) { if (e.key === 'Enter') sendAPI(); });
+  $('#api-presets').addEventListener('click', function (e) { var b = e.target.closest('[data-api]'); if (!b) return; $('#api-url').value = b.dataset.api; sendAPI(); });
+
+  /* ---------------- reference: glossary + credits ---------------- */
+  var GLOSSARY = [
+    ['front end', 'front-end / interface', 'What runs in the browser: HTML, CSS, JS.', 'Ce qui tourne dans le navigateur : HTML, CSS, JS.'],
+    ['back end', 'back-end / serveur', 'What runs on the server: Node.js, the database.', 'Ce qui tourne sur le serveur : Node.js, la base.'],
+    ['element / tag', 'élément / balise', 'A piece of HTML such as <button>.', 'Un morceau de HTML comme <button>.'],
+    ['attribute', 'attribut', 'Extra information on a tag: id, class, src.', 'Information en plus sur une balise : id, class, src.'],
+    ['selector', 'sélecteur', 'The part of a CSS rule that picks elements.', 'La partie d’une règle CSS qui choisit les éléments.'],
+    ['DOM', 'DOM', 'The page as a tree of objects JavaScript can change.', 'La page sous forme d’arbre d’objets modifiable en JavaScript.'],
+    ['event listener', 'écouteur d’événement', 'A function run when something happens (click, input).', 'Fonction lancée quand quelque chose arrive (clic, saisie).'],
+    ['array / object', 'tableau / objet', 'JS list [ ] / JS dictionary { }.', 'Liste JS [ ] / dictionnaire JS { }.'],
+    ['repository (repo)', 'dépôt', 'A project tracked by Git.', 'Un projet suivi par Git.'],
+    ['commit', 'commit / validation', 'A saved snapshot with a message.', 'Un instantané enregistré avec un message.'],
+    ['branch', 'branche', 'A parallel line of commits.', 'Une ligne de commits parallèle.'],
+    ['pull request', 'demande de fusion (PR)', 'Asking to merge a branch on GitHub.', 'Demander de fusionner une branche sur GitHub.'],
+    ['table / row / column', 'table / ligne / colonne', 'How a database stores data.', 'Comment une base stocke les données.'],
+    ['primary key', 'clé primaire', 'Unique id of a row.', 'Identifiant unique d’une ligne.'],
+    ['foreign key', 'clé étrangère', 'A column pointing to another table’s primary key.', 'Colonne qui pointe vers la clé primaire d’une autre table.'],
+    ['query', 'requête', 'A question written in SQL.', 'Une question écrite en SQL.'],
+    ['package', 'paquet', 'A library installed with npm.', 'Une bibliothèque installée avec npm.'],
+    ['route / endpoint', 'route / point d’accès', 'A URL the server knows how to answer.', 'Une URL à laquelle le serveur sait répondre.'],
+    ['request / response', 'requête / réponse', 'The two halves of an HTTP exchange.', 'Les deux moitiés d’un échange HTTP.'],
+    ['status code', 'code de statut', '200 OK, 404 Not Found, 500 error…', '200 OK, 404 introuvable, 500 erreur…'],
+    ['deploy', 'déployer', 'Put the app on a server anyone can reach.', 'Mettre l’app sur un serveur accessible à tous.']
+  ];
+  $('#glossary').innerHTML = GLOSSARY.map(function (g) { return '<tr><td><strong>' + esc(g[0]) + '</strong></td><td>' + esc(g[1]) + '</td><td>' + L(esc(g[2]), esc(g[3])) + '</td></tr>'; }).join('');
+  $('#credits').innerHTML = DATA.players.map(function (p) {
+    return '<tr><td>' + esc(p.name) + '</td><td>' + esc(p.credit) + '</td><td>' + (p.source ? '<a href="' + esc(p.source) + '" target="_blank" rel="noopener">Commons</a>' : '—') + '</td></tr>';
+  }).join('');
+
+  /* ---------------- router ---------------- */
+  var VIEWS = $$('[data-view]').map(function (v) { return v.id; });
+  function route() {
+    var id = (location.hash || '').slice(1);
+    if (VIEWS.indexOf(id) === -1) id = 'welcome';
+    $$('[data-view]').forEach(function (v) { v.hidden = v.id !== id; });
+    $$('[data-nav]').forEach(function (a) { if (a.dataset.nav === id) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+    var cur = $('.rail [aria-current="page"]'); if (cur && cur.scrollIntoView) { try { cur.scrollIntoView({ block: 'nearest', inline: 'nearest' }); } catch (e) {} }
+    var view = document.getElementById(id);
+    $$('.play[data-play]', view).forEach(function (el) { var p = plays[el.dataset.play]; if (p && !p.ready) { p.ready = true; p.run(); } });
+    if (id === 'step-9' && !$('#sql-result').innerHTML) { getDB().then(function () { runSQL(); }, function () {}); }
+    if (id === 'step-10' && !$('#api-out').textContent) { getDB().then(function () { sendAPI(); }, function () {}); }
+    store.set('bda-last', id);
+  }
+  window.addEventListener('hashchange', function () { route(); window.scrollTo(0, 0); });
+
+  /* ---------------- start ---------------- */
+  setLang(lang());
+  renderProgress();
+  renderGit();
+  renderBox();
+  renderFlex();
+  route();
+})();
+</script>

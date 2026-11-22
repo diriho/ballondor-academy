@@ -1,0 +1,347 @@
+
+<!-- ======================= STEP 7 ======================= -->
+<section class="view" id="step-7" data-view data-step="7" hidden>
+  <header class="lesson-head" data-head="7"></header>
+
+  <div class="callout goal">
+    <span class="label"><span data-l="en">Goal</span><span data-l="fr">Objectif</span></span>
+    <p data-l="en">Stop writing cards by hand. Store the winners in a JavaScript array and let a function turn each one into a card.</p>
+    <p data-l="fr">Arrêter d'écrire les cartes à la main. Stocker les lauréats dans un tableau JavaScript et laisser une fonction transformer chacun en carte.</p>
+  </div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">JavaScript for people who already code</span><span data-l="fr">JavaScript pour ceux qui codent déjà</span></h2>
+    <p data-l="en">JavaScript is the only language browsers run. If you know Python or Java, most of it will feel familiar; here is the translation table:</p>
+    <p data-l="fr">JavaScript est le seul langage exécuté par les navigateurs. Si tu connais Python ou Java, l'essentiel te semblera familier ; voici la table de traduction :</p>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th></th><th>Python</th><th>Java</th><th>JavaScript</th></tr></thead>
+    <tbody>
+      <tr><td><span data-l="en">Variable</span><span data-l="fr">Variable</span></td><td><code>wins = 8</code></td><td><code>int wins = 8;</code></td><td><code>let wins = 8;</code> · <code>const year = 2023;</code></td></tr>
+      <tr><td><span data-l="en">Function</span><span data-l="fr">Fonction</span></td><td><code>def add(a, b):</code></td><td><code>int add(int a, int b)</code></td><td><code>function add(a, b) {}</code> · <code>const add = (a, b) =&gt; a + b;</code></td></tr>
+      <tr><td><span data-l="en">List</span><span data-l="fr">Liste</span></td><td><code>[1, 2, 3]</code></td><td><code>List.of(1, 2, 3)</code></td><td><code>[1, 2, 3]</code></td></tr>
+      <tr><td><span data-l="en">Dictionary</span><span data-l="fr">Dictionnaire</span></td><td><code>{"name": "Messi"}</code></td><td><code>Map / class</code></td><td><code>{ name: 'Messi' }</code> → <code>w.name</code></td></tr>
+      <tr><td><span data-l="en">Loop</span><span data-l="fr">Boucle</span></td><td><code>for w in winners:</code></td><td><code>for (var w : winners)</code></td><td><code>for (const w of winners) {}</code></td></tr>
+      <tr><td><span data-l="en">Format a string</span><span data-l="fr">Formater</span></td><td><code>f"{name} won"</code></td><td><code>String.format(…)</code></td><td><code>`${name} won`</code> <span data-l="en">(backticks)</span><span data-l="fr">(accents graves)</span></td></tr>
+      <tr><td><span data-l="en">Transform a list</span><span data-l="fr">Transformer</span></td><td><code>[f(w) for w in ws if c(w)]</code></td><td><code>stream().filter().map()</code></td><td><code>ws.filter(c).map(f)</code></td></tr>
+      <tr><td><span data-l="en">Equality</span><span data-l="fr">Égalité</span></td><td><code>==</code></td><td><code>.equals()</code></td><td><code>===</code> <span data-l="en">(never <code>==</code>)</span><span data-l="fr">(jamais <code>==</code>)</span></td></tr>
+      <tr><td><span data-l="en">Nothing</span><span data-l="fr">Rien</span></td><td><code>None</code></td><td><code>null</code></td><td><code>null</code> · <code>undefined</code></td></tr>
+      <tr><td><span data-l="en">Print</span><span data-l="fr">Afficher</span></td><td><code>print()</code></td><td><code>System.out.println()</code></td><td><code>console.log()</code></td></tr>
+    </tbody>
+  </table></div>
+  <div class="prose">
+    <h3 class="sub"><span data-l="en">The DOM: JavaScript's handle on the page</span><span data-l="fr">Le DOM : la poignée de JavaScript sur la page</span></h3>
+    <p data-l="en">The browser exposes the HTML tree as objects. Three calls do most of the work:</p>
+    <p data-l="fr">Le navigateur expose l'arbre HTML sous forme d'objets. Trois appels font l'essentiel du travail :</p>
+  </div>
+  <script type="text/x-code" data-lang="javascript" data-file="DOM basics">const grid = document.querySelector('#grid');   // find an element (CSS selector!)
+grid.innerHTML = '<p>Hello</p>';                 // replace what's inside with HTML
+grid.addEventListener('click', (event) => {      // run code when something happens
+  console.log('clicked', event.target);
+});</script>
+  <div class="callout warn">
+    <span class="label"><span data-l="en">Safety: escape text</span><span data-l="fr">Sécurité : échapper le texte</span></span>
+    <p data-l="en">When you build HTML from data, a name containing <code>&lt;</code> or <code>"</code> could break the page or inject code. The little <code>esc()</code> helper below replaces those characters with safe codes. Use it on every piece of text you insert.</p>
+    <p data-l="fr">Quand tu construis du HTML à partir de données, un nom contenant <code>&lt;</code> ou <code>"</code> pourrait casser la page ou injecter du code. La petite fonction <code>esc()</code> ci-dessous remplace ces caractères par des codes sûrs. Utilise-la sur chaque texte inséré.</p>
+  </div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">Build: data → cards</span><span data-l="fr">Construire : données → cartes</span></h2>
+    <p data-l="en">Create <code>public/js/data.js</code>. Each winner is an object; the field names are exactly the column names your database will use in step 9, so nothing will need renaming later.</p>
+    <p data-l="fr">Crée <code>public/js/data.js</code>. Chaque lauréat est un objet ; les noms des champs sont exactement ceux des colonnes de la base de l'étape 9, donc rien ne devra être renommé.</p>
+  </div>
+  <script type="text/x-code" data-lang="javascript" data-file="public/js/data.js" data-note="temporary, replaced in step 11">@@datajs:4@@</script>
+  <div class="prose"><p data-l="en">Create <code>public/js/app.js</code>:</p><p data-l="fr">Crée <code>public/js/app.js</code> :</p></div>
+  <script type="text/x-code" data-lang="javascript" data-file="public/js/app.js" data-note="step 7 version">import { winners } from './data.js';
+
+const $ = (selector) => document.querySelector(selector);
+
+// Escape text before putting it inside HTML
+const esc = (text) =>
+  String(text ?? '').replace(/[&<>"']/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+
+// One winner object → the HTML of one card
+function cardHTML(w) {
+  return `
+    <article class="card" data-player-id="${w.player_id}">
+      <div class="card-media">
+        <img src="${esc(w.image_url)}" alt="${esc(w.player)}" loading="lazy">
+        <span class="card-year">${w.year}</span>
+        <span class="card-tag ${w.category}">${w.category}</span>
+      </div>
+      <div class="card-body">
+        <h3 class="card-name">${esc(w.player)}</h3>
+        <p class="card-club">${esc(w.club)}</p>
+        <p class="card-meta">${esc(w.nationality)} · ${w.position}</p>
+        <p class="card-desc">${esc(w.description_en)}</p>
+      </div>
+    </article>`;
+}
+
+// A list of winners → the whole grid
+function renderGrid(list) {
+  $('#grid').innerHTML = list.map(cardHTML).join('');
+  $('#status').textContent = `${list.length} awards found`;
+}
+
+renderGrid(winners);</script>
+  <div class="prose">
+    <p data-l="en">Finally, in <code>index.html</code>: delete the hand-made card(s) inside <code>#grid</code> (leave the div empty) and load the script just before <code>&lt;/body&gt;</code>. <code>type="module"</code> is what allows <code>import</code>.</p>
+    <p data-l="fr">Enfin, dans <code>index.html</code> : supprime la ou les cartes faites à la main dans <code>#grid</code> (laisse la div vide) et charge le script juste avant <code>&lt;/body&gt;</code>. C'est <code>type="module"</code> qui autorise <code>import</code>.</p>
+  </div>
+  <script type="text/x-code" data-lang="html" data-file="public/index.html" data-note="just before </body>"><script type="module" src="js/app.js"><\/script></script>
+  <div class="prose"><h3 class="sub"><span data-l="en">Playground: the same idea, live</span><span data-l="fr">Bac à sable : la même idée, en direct</span></h3>
+  <p data-l="en">Add a winner to the array, or sort it with <code>winners.sort((a, b) =&gt; a.year - b.year)</code> before rendering.</p><p data-l="fr">Ajoute un lauréat au tableau, ou trie-le avec <code>winners.sort((a, b) =&gt; a.year - b.year)</code> avant l'affichage.</p></div>
+  <div class="play" data-play="p7" data-tab="js"></div>
+  <script type="text/x-play" data-for="p7" data-part="html"><p id="status"></p>
+<div id="grid" class="grid"></div></script>
+  <script type="text/x-play" data-for="p7" data-part="css">body { margin: 0; padding: 16px; background: #0c0e13; color: #f3efe6; font-family: Inter, system-ui, sans-serif; }
+#status { color: #a3a9b8; margin: 0 0 12px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 14px; }
+.card { background: #151922; border: 1px solid #2a3142; border-radius: 12px; overflow: hidden; }
+.card img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: top; display: block; }
+.card-body { padding: 8px 10px 12px; }
+.card-body b { display: block; color: #e6b94d; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 1.6rem; line-height: 1; }
+.card-body span { font-size: 0.85rem; }</script>
+  <script type="text/x-play" data-for="p7" data-part="js">const winners = [
+  { year: 2026, player: 'Harry Kane', club: 'Bayern Munich', img: 'assets/players/kane.jpg' },
+  { year: 2025, player: 'Ousmane Dembélé', club: 'Paris Saint-Germain', img: 'assets/players/dembele.jpg' },
+  { year: 2024, player: 'Rodri', club: 'Manchester City', img: 'assets/players/rodri.jpg' },
+  { year: 1998, player: 'Zinedine Zidane', club: 'Juventus', img: 'assets/players/zidane.jpg' },
+  { year: 1963, player: 'Lev Yashin', club: 'Dynamo Moscow', img: 'assets/players/yashin.jpg' },
+];
+
+function cardHTML(w) {
+  return `
+    <article class="card">
+      <img src="${w.img}" alt="${w.player}">
+      <div class="card-body"><b>${w.year}</b><span>${w.player} · ${w.club}</span></div>
+    </article>`;
+}
+
+document.querySelector('#grid').innerHTML = winners.map(cardHTML).join('');
+document.querySelector('#status').textContent = `${winners.length} awards found`;
+console.log('Rendered', winners.length, 'cards');</script>
+
+  <div class="callout check">
+    <span class="label">Checkpoint</span>
+    <p data-l="en">The page shows 4 cards generated from <code>data.js</code> and “4 awards found”. Open DevTools → <strong>Console</strong>: no red errors. Type <code>document.querySelectorAll('.card').length</code> and press Enter: it answers 4.</p>
+    <p data-l="fr">La page affiche 4 cartes générées depuis <code>data.js</code> et « 4 awards found ». Ouvre DevTools → <strong>Console</strong> : aucune erreur rouge. Tape <code>document.querySelectorAll('.card').length</code> puis Entrée : la réponse est 4.</p>
+  </div>
+  <div class="callout tip">
+    <span class="label"><span data-l="en">If nothing shows</span><span data-l="fr">Si rien ne s'affiche</span></span>
+    <p data-l="en">Read the Console. “Failed to load module… CORS” means you opened the file directly (<code>file://</code>): use Live Server. “Unexpected token” points to a typo, with the file and line number.</p>
+    <p data-l="fr">Lis la Console. « Failed to load module… CORS » signifie que tu as ouvert le fichier directement (<code>file://</code>) : utilise Live Server. « Unexpected token » indique une faute de frappe, avec le fichier et la ligne.</p>
+  </div>
+  <details class="challenge">
+    <summary><span data-l="en">Challenge: newest first, women only</span><span data-l="fr">Défi : les plus récents d'abord, femmes seulement</span></summary>
+    <div>
+      <p data-l="en">Call <code>renderGrid</code> with the winners sorted from newest to oldest. Then try showing only the women's awards. Use a copy (<code>[...winners]</code>) so the original array stays intact.</p>
+      <p data-l="fr">Appelle <code>renderGrid</code> avec les lauréats triés du plus récent au plus ancien. Puis essaie de n'afficher que les trophées féminins. Utilise une copie (<code>[...winners]</code>) pour garder le tableau d'origine intact.</p>
+      <script type="text/x-code" data-lang="javascript" data-file="solution">renderGrid([...winners].sort((a, b) => b.year - a.year));
+renderGrid(winners.filter((w) => w.category === 'women'));</script>
+    </div>
+  </details>
+  <script type="text/x-code" data-lang="bash" data-term>git add .
+git commit -m "Step 7: render cards from data with JavaScript"
+git push</script>
+  <footer class="pager" data-pager></footer>
+</section>
+
+<!-- ======================= STEP 8 ======================= -->
+<section class="view" id="step-8" data-view data-step="8" hidden>
+  <header class="lesson-head" data-head="8"></header>
+
+  <div class="callout goal">
+    <span class="label"><span data-l="en">Goal</span><span data-l="fr">Objectif</span></span>
+    <p data-l="en">Make the search bar and the filters work: results update as you type, accents don't matter (“dembele” finds Dembélé), and you can combine search + category + decade.</p>
+    <p data-l="fr">Faire fonctionner la recherche et les filtres : les résultats se mettent à jour pendant la frappe, les accents ne comptent pas (« dembele » trouve Dembélé), et on peut combiner recherche + catégorie + décennie.</p>
+  </div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">Events and state</span><span data-l="fr">Événements et état</span></h2>
+    <p data-l="en">Interactive pages follow one loop. Keep the user's choices in a single <code>state</code> object; every event updates the state, then one function recomputes what to show:</p>
+    <p data-l="fr">Les pages interactives suivent une seule boucle. Garde les choix de l'utilisateur dans un objet <code>state</code> ; chaque événement met à jour l'état, puis une seule fonction recalcule ce qu'il faut afficher :</p>
+  </div>
+  <div class="diagram" role="img" aria-label="Event loop: user acts, event fires, state updates, filter runs, grid re-renders">
+    <svg viewBox="0 0 820 120" xmlns="http://www.w3.org/2000/svg">
+      <defs><marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 10 5 0 10z" fill="var(--muted)"/></marker></defs>
+      <rect class="box" x="10" y="30" width="140" height="56" rx="10"/><text x="80" y="54" text-anchor="middle" font-size="13" font-weight="700" data-l="en">user types</text><text x="80" y="54" text-anchor="middle" font-size="13" font-weight="700" data-l="fr">l'utilisateur tape</text><text x="80" y="74" text-anchor="middle" class="mono muted" font-size="12">"zid"</text>
+      <rect class="box" x="180" y="30" width="140" height="56" rx="10"/><text x="250" y="54" text-anchor="middle" font-size="13" font-weight="700">event</text><text x="250" y="74" text-anchor="middle" class="mono muted" font-size="12">'input'</text>
+      <rect class="box hl" x="350" y="30" width="140" height="56" rx="10"/><text x="420" y="54" text-anchor="middle" font-size="13" font-weight="700">state</text><text x="420" y="74" text-anchor="middle" class="mono muted" font-size="12">q = "zid"</text>
+      <rect class="box" x="520" y="30" width="140" height="56" rx="10"/><text x="590" y="54" text-anchor="middle" font-size="13" font-weight="700">filter()</text><text x="590" y="74" text-anchor="middle" class="mono muted" font-size="12">78 → 1</text>
+      <rect class="box" x="690" y="30" width="120" height="56" rx="10"/><text x="750" y="54" text-anchor="middle" font-size="13" font-weight="700">renderGrid</text><text x="750" y="74" text-anchor="middle" class="mono muted" font-size="12">Zidane 1998</text>
+      <path class="arrow" d="M150 58h26" marker-end="url(#ah2)"/><path class="arrow" d="M320 58h26" marker-end="url(#ah2)"/><path class="arrow" d="M490 58h26" marker-end="url(#ah2)"/><path class="arrow" d="M660 58h26" marker-end="url(#ah2)"/>
+    </svg>
+  </div>
+  <div class="table-wrap"><table>
+    <thead><tr><th><span data-l="en">Event</span><span data-l="fr">Événement</span></th><th><span data-l="en">Fires when…</span><span data-l="fr">Se déclenche quand…</span></th><th><span data-l="en">We use it on</span><span data-l="fr">Utilisé sur</span></th></tr></thead>
+    <tbody>
+      <tr><td><code>input</code></td><td><span data-l="en">every keystroke in a text field</span><span data-l="fr">chaque frappe dans un champ</span></td><td><code>#search</code></td></tr>
+      <tr><td><code>click</code></td><td><span data-l="en">a click (or Enter/Space on a button)</span><span data-l="fr">un clic (ou Entrée/Espace sur un bouton)</span></td><td><code>#category</code> <span data-l="en">buttons</span><span data-l="fr">boutons</span></td></tr>
+      <tr><td><code>change</code></td><td><span data-l="en">a new option is picked</span><span data-l="fr">une nouvelle option est choisie</span></td><td><code>#decade</code></td></tr>
+    </tbody>
+  </table></div>
+  <div class="prose">
+    <p data-l="en">Two more ideas: <strong>event delegation</strong> (one listener on the parent <code>#category</code> handles all three buttons via <code>event.target.closest('button')</code>) and <strong>debounce</strong> (wait 150 ms after the last keystroke before filtering, so we don't redo the work on every letter).</p>
+    <p data-l="fr">Deux idées de plus : la <strong>délégation d'événements</strong> (un seul écouteur sur le parent <code>#category</code> gère les trois boutons grâce à <code>event.target.closest('button')</code>) et le <strong>debounce</strong> (attendre 150 ms après la dernière frappe avant de filtrer, pour ne pas tout recalculer à chaque lettre).</p>
+    <h2 class="sec"><span data-l="en">Build: try it on a branch</span><span data-l="fr">Construire : essaie sur une branche</span></h2>
+    <p data-l="en">This is a real feature, so build it on its own branch, like professionals do:</p>
+    <p data-l="fr">C'est une vraie fonctionnalité, alors développe-la sur sa propre branche, comme les pros :</p>
+  </div>
+  <script type="text/x-code" data-lang="bash" data-term>git switch -c search-bar      # create the branch and move onto it</script>
+  <div class="prose">
+    <p data-l="en">You need every winner now. This button copies a complete <code>data.js</code> (78 awards, same format) to your clipboard; paste it over your file:</p>
+    <p data-l="fr">Il te faut maintenant tous les lauréats. Ce bouton copie un <code>data.js</code> complet (78 trophées, même format) dans ton presse-papiers ; colle-le à la place de ton fichier :</p>
+    <p><button type="button" class="btn gold small" id="copy-datajs"><span data-l="en">Copy full data.js</span><span data-l="fr">Copier data.js complet</span></button> <span class="msg" id="copy-datajs-msg"></span></p>
+    <p data-l="en">Then replace <code>renderGrid(winners);</code> at the bottom of <code>app.js</code> with:</p>
+    <p data-l="fr">Puis remplace <code>renderGrid(winners);</code> à la fin de <code>app.js</code> par :</p>
+  </div>
+  <script type="text/x-code" data-lang="javascript" data-file="public/js/app.js" data-note="step 8 additions">// ---- what the user has chosen ----
+const state = { q: '', category: 'all', decade: 'all' };
+
+// "Dembélé" → "dembele": compare without accents or capitals
+const fold = (text) =>
+  String(text ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+// Does one winner pass every active filter?
+function matches(w) {
+  const q = fold(state.q.trim());
+  const fields = [w.player, w.club, w.nationality, w.nationality_fr, w.year];
+  if (q && !fields.some((value) => fold(value).includes(q))) return false;
+  if (state.category !== 'all' && w.category !== state.category) return false;
+  if (state.decade !== 'all' && Math.floor(w.year / 10) * 10 !== Number(state.decade)) return false;
+  return true;
+}
+
+function applyFilters() {
+  const list = winners.filter(matches).sort((a, b) => b.year - a.year);
+  renderGrid(list);
+  if (!list.length) $('#status').textContent = 'No winner matches your search.';
+}
+
+// Run fn only once the user has stopped typing for `ms` milliseconds
+function debounce(fn, ms) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(...args), ms);
+  };
+}
+
+// ---- events ----
+$('#search').addEventListener('input', debounce((event) => {
+  state.q = event.target.value;
+  applyFilters();
+}, 150));
+
+$('#category').addEventListener('click', (event) => {
+  const button = event.target.closest('button');
+  if (!button) return;                       // clicked between two buttons
+  state.category = button.dataset.value;     // data-value="men" → "men"
+  $('#category').querySelectorAll('button')
+    .forEach((b) => b.setAttribute('aria-pressed', b === button));
+  applyFilters();
+});
+
+$('#decade').addEventListener('change', (event) => {
+  state.decade = event.target.value;
+  applyFilters();
+});
+
+applyFilters();</script>
+
+  <div class="prose"><h3 class="sub"><span data-l="en">Playground: all 78 awards, live search</span><span data-l="fr">Bac à sable : 78 trophées, recherche en direct</span></h3>
+  <p data-l="en">The <code>winners</code> array is preloaded here. Try adding a filter that only keeps goalkeepers, or searching inside the description too.</p><p data-l="fr">Le tableau <code>winners</code> est préchargé ici. Essaie d'ajouter un filtre qui ne garde que les gardiens, ou de chercher aussi dans la description.</p></div>
+  <div class="play" data-play="p8" data-tab="js" data-winners></div>
+  <script type="text/x-play" data-for="p8" data-part="html"><input id="search" type="search" placeholder="Search: messi, brésil, juventus, 1998…">
+<div id="category">
+  <button data-value="all" aria-pressed="true">All</button>
+  <button data-value="men">Men</button>
+  <button data-value="women">Women</button>
+</div>
+<p id="status"></p>
+<div id="grid"></div></script>
+  <script type="text/x-play" data-for="p8" data-part="css">body { margin: 0; padding: 14px; background: #0c0e13; color: #f3efe6; font-family: Inter, system-ui, sans-serif; }
+#search { width: 100%; box-sizing: border-box; padding: 9px 14px; border-radius: 99px; border: 1px solid #2a3142; background: #151922; color: inherit; font: inherit; }
+#category { display: flex; gap: 6px; margin: 10px 0; }
+#category button { border: 1px solid #2a3142; background: #151922; color: #a3a9b8; border-radius: 99px; padding: 5px 12px; cursor: pointer; }
+#category button[aria-pressed='true'] { color: #e6b94d; border-color: #e6b94d; }
+#status { color: #a3a9b8; font-size: 0.85rem; }
+#grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; }
+.card { background: #151922; border: 1px solid #2a3142; border-radius: 10px; overflow: hidden; font-size: 0.78rem; }
+.card img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; object-position: top; display: block; }
+.card div { padding: 6px 8px 8px; }
+.card b { color: #e6b94d; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 1.4rem; display: block; line-height: 1; }</script>
+  <script type="text/x-play" data-for="p8" data-part="js">// `winners` (all 78 awards) is already loaded on this page.
+const $ = (s) => document.querySelector(s);
+const state = { q: '', category: 'all' };
+const fold = (t) => String(t ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+
+function matches(w) {
+  const q = fold(state.q.trim());
+  const fields = [w.player, w.club, w.nationality, w.nationality_fr, w.year];
+  if (q && !fields.some((v) => fold(v).includes(q))) return false;
+  if (state.category !== 'all' && w.category !== state.category) return false;
+  return true;
+}
+
+function render() {
+  const list = winners.filter(matches).sort((a, b) => b.year - a.year);
+  $('#status').textContent = `${list.length} awards found`;
+  $('#grid').innerHTML = list.map((w) => `
+    <article class="card">
+      <img src="${w.img}" alt="" loading="lazy">
+      <div><b>${w.year}</b>${w.player}</div>
+    </article>`).join('');
+}
+
+$('#search').addEventListener('input', (e) => { state.q = e.target.value; render(); });
+$('#category').addEventListener('click', (e) => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  state.category = b.dataset.value;
+  $('#category').querySelectorAll('button').forEach((x) => x.setAttribute('aria-pressed', x === b));
+  render();
+});
+render();</script>
+
+  <div class="callout check">
+    <span class="label">Checkpoint</span>
+    <p data-l="en">Typing <code>zidane</code> leaves one card; <code>brésil</code> or <code>brazil</code> leaves Ronaldo, Rivaldo, Ronaldinho and Kaká; Women + 2020s shows the six women's awards since 2021. Then merge your branch:</p>
+    <p data-l="fr">Taper <code>zidane</code> laisse une carte ; <code>brésil</code> ou <code>brazil</code> laisse Ronaldo, Rivaldo, Ronaldinho et Kaká ; Women + 2020s affiche les six trophées féminins depuis 2021. Ensuite, fusionne ta branche :</p>
+  </div>
+  <script type="text/x-code" data-lang="bash" data-term>git add .
+git commit -m "Step 8: live search and filters"
+git push -u origin search-bar   # then on github.com: "Compare & pull request" → Merge
+git switch main
+git pull                        # bring the merged work back to main</script>
+  <details class="challenge">
+    <summary><span data-l="en">Challenge: position + sort</span><span data-l="fr">Défi : poste + tri</span></summary>
+    <div>
+      <p data-l="en">Wire up the <code>#position</code> select from the step 3 challenge, then add a <code>#sort</code> select (newest, oldest, name A→Z).</p>
+      <p data-l="fr">Branche le <code>&lt;select id="position"&gt;</code> du défi de l'étape 3, puis ajoute un <code>&lt;select id="sort"&gt;</code> (plus récents, plus anciens, nom A→Z).</p>
+      <script type="text/x-code" data-lang="javascript" data-file="solution">// state gets two more keys: { ..., position: 'all', sort: 'newest' }
+// in matches(w):
+if (state.position !== 'all' && w.position !== state.position) return false;
+
+// in applyFilters():
+const sorters = {
+  newest: (a, b) => b.year - a.year,
+  oldest: (a, b) => a.year - b.year,
+  name: (a, b) => a.player.localeCompare(b.player),
+};
+const list = winners.filter(matches).sort(sorters[state.sort]);
+
+// and two listeners, exactly like #decade
+for (const id of ['position', 'sort']) {
+  $(`#${id}`).addEventListener('change', (event) => {
+    state[id] = event.target.value;
+    applyFilters();
+  });
+}</script>
+    </div>
+  </details>
+  <footer class="pager" data-pager></footer>
+</section>

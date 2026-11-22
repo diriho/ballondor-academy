@@ -1,0 +1,298 @@
+
+<!-- ======================= STEP 5 ======================= -->
+<section class="view" id="step-5" data-view data-step="5" hidden>
+  <header class="lesson-head" data-head="5"></header>
+
+  <div class="callout goal">
+    <span class="label"><span data-l="en">Goal</span><span data-l="fr">Objectif</span></span>
+    <p data-l="en">Organise the page into panels: a sticky toolbar where the search bar and filters sit in one row, then two columns (a sidebar on the left, the card grid on the right) that stack on phones.</p>
+    <p data-l="fr">Organiser la page en panneaux : une barre d'outils collante où recherche et filtres sont alignés, puis deux colonnes (barre latérale à gauche, grille de cartes à droite) qui s'empilent sur téléphone.</p>
+  </div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">Boxes inside boxes</span><span data-l="fr">Des boîtes dans des boîtes</span></h2>
+    <p data-l="en">By default, <strong>block</strong> elements (<code>div</code>, <code>section</code>, <code>p</code>, <code>h1</code>) stack vertically and take the full width; <strong>inline</strong> elements (<code>span</code>, <code>a</code>, <code>img</code>) flow inside text. A <code>&lt;div&gt;</code> is the generic box with no meaning: use it when no semantic tag fits, purely to group things for layout. Our page is a tree of these panels:</p>
+    <p data-l="fr">Par défaut, les éléments <strong>bloc</strong> (<code>div</code>, <code>section</code>, <code>p</code>, <code>h1</code>) s'empilent verticalement sur toute la largeur ; les éléments <strong>en ligne</strong> (<code>span</code>, <code>a</code>, <code>img</code>) coulent dans le texte. Un <code>&lt;div&gt;</code> est la boîte générique sans signification : on l'utilise quand aucune balise sémantique ne convient, juste pour regrouper. Notre page est un arbre de panneaux :</p>
+  </div>
+  <div class="diagram" role="img" aria-label="Page layout: header, hero, toolbar, then a two-column layout with sidebar panels and the card grid">
+    <svg viewBox="0 0 760 330" xmlns="http://www.w3.org/2000/svg">
+      <rect class="box" x="10" y="10" width="740" height="36" rx="8"/><text x="24" y="33" font-size="13" class="mono">header.site-header</text><text x="560" y="33" font-size="12" class="muted">display: flex</text>
+      <rect class="box" x="10" y="54" width="740" height="56" rx="8"/><text x="24" y="86" font-size="13" class="mono">section.hero</text>
+      <rect class="box hl" x="10" y="118" width="740" height="40" rx="8"/><text x="24" y="143" font-size="13" class="mono">section.toolbar</text><text x="520" y="143" font-size="12" class="muted">display: flex · sticky</text>
+      <rect class="box hl" x="10" y="166" width="740" height="154" rx="8" fill="none"/><text x="560" y="184" font-size="12" class="muted">div.layout · display: grid</text>
+      <rect class="box" x="22" y="192" width="190" height="56" rx="6"/><text x="34" y="224" font-size="12" class="mono">aside › .panel</text>
+      <rect class="box" x="22" y="254" width="190" height="56" rx="6"/><text x="34" y="286" font-size="12" class="mono">aside › .panel</text>
+      <rect class="box" x="226" y="192" width="512" height="118" rx="6"/><text x="240" y="212" font-size="12" class="mono">main › div.grid</text>
+      <rect class="box" x="240" y="222" width="114" height="78" rx="6"/><rect class="box" x="364" y="222" width="114" height="78" rx="6"/><rect class="box" x="488" y="222" width="114" height="78" rx="6"/><rect class="box" x="612" y="222" width="114" height="78" rx="6"/>
+      <text x="270" y="266" font-size="12" class="muted">.card</text><text x="394" y="266" font-size="12" class="muted">.card</text><text x="518" y="266" font-size="12" class="muted">.card</text><text x="642" y="266" font-size="12" class="muted">.card</text>
+      <text x="22" y="186" font-size="11" class="gold" font-weight="700">270px</text><text x="226" y="186" font-size="11" class="gold" font-weight="700">1fr</text>
+    </svg>
+  </div>
+
+  <div class="prose">
+    <h3 class="sub">Flexbox</h3>
+    <p data-l="en"><strong>Flexbox</strong> lines items up in <em>one</em> direction (a row or a column) and shares the free space. Perfect for the toolbar. Play with it:</p>
+    <p data-l="fr"><strong>Flexbox</strong> aligne des éléments dans <em>une</em> direction (ligne ou colonne) et répartit l'espace libre. Parfait pour la barre d'outils. Joue avec :</p>
+  </div>
+  <div class="widget" id="flexlab">
+    <div class="controls">
+      <label>flex-direction<select id="fx-dir"><option>row</option><option>column</option></select></label>
+      <label>justify-content<select id="fx-jc"><option>flex-start</option><option>center</option><option>space-between</option><option>space-around</option><option>flex-end</option></select></label>
+      <label>align-items<select id="fx-ai"><option>stretch</option><option>flex-start</option><option>center</option><option>flex-end</option></select></label>
+      <label>gap <input type="range" id="fx-gap" min="0" max="40" value="10"></label>
+    </div>
+    <div class="flex-stage" id="fx-stage"><div>search</div><div>All · Men · Women</div><div>decade</div></div>
+    <div class="css-out" id="fx-css"></div>
+  </div>
+  <div class="prose">
+    <h3 class="sub">Grid</h3>
+    <p data-l="en"><strong>Grid</strong> works in <em>two</em> dimensions: you declare columns (and rows) and children drop into them. <code>grid-template-columns: 270px 1fr</code> means “a 270px sidebar, then all the remaining space” (<code>fr</code> = fraction of free space). For the cards, <code>repeat(auto-fill, minmax(220px, 1fr))</code> means “as many 220px+ columns as fit”: responsive without any media query.</p>
+    <p data-l="fr"><strong>Grid</strong> travaille en <em>deux</em> dimensions : tu déclares des colonnes (et des lignes) et les enfants s'y placent. <code>grid-template-columns: 270px 1fr</code> signifie « une barre latérale de 270px, puis tout l'espace restant » (<code>fr</code> = fraction de l'espace libre). Pour les cartes, <code>repeat(auto-fill, minmax(220px, 1fr))</code> veut dire « autant de colonnes de 220px minimum que possible » : du responsive sans media query.</p>
+    <p data-l="en">Rule of thumb: <strong>flex for a row of things, grid for a page structure or a gallery</strong>. And always space siblings with <code>gap</code> rather than margins.</p>
+    <p data-l="fr">Règle simple : <strong>flex pour une rangée d'éléments, grid pour une structure de page ou une galerie</strong>. Et espace toujours les éléments voisins avec <code>gap</code> plutôt qu'avec des marges.</p>
+
+    <h2 class="sec"><span data-l="en">Build: toolbar and panels</span><span data-l="fr">Construire : barre d'outils et panneaux</span></h2>
+    <p data-l="en">First, add a magnifier icon at the start of the search label in <code>index.html</code> (an inline SVG drawing: one circle, one line):</p>
+    <p data-l="fr">D'abord, ajoute une loupe au début du label de recherche dans <code>index.html</code> (un dessin SVG : un cercle, un trait) :</p>
+  </div>
+  <script type="text/x-code" data-lang="html" data-file="public/index.html" data-note="inside .toolbar"><label class="search">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+  <span class="visually-hidden">Search</span>
+  <input id="search" type="search" autocomplete="off" placeholder="Player, club or country…">
+</label></script>
+  <div class="prose"><p data-l="en">Then append sections 4 and 5 to <code>style.css</code>, plus the start of section 8 (responsive):</p><p data-l="fr">Puis ajoute les sections 4 et 5 à <code>style.css</code>, ainsi que le début de la section 8 (responsive) :</p></div>
+  <script type="text/x-code" data-lang="css" data-file="public/css/style.css" data-note="sections 4–5" data-collapse>@@include public/css/style.css#4. Toolbar@@
+@@include public/css/style.css#5. Layout + panels@@
+/* ---------- 8. Responsive (start) ---------- */
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; }        /* stack the panels */
+  .sidebar { position: static; display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+}</script>
+  <div class="callout tip">
+    <span class="label"><span data-l="en">Debug trick</span><span data-l="fr">Astuce de débogage</span></span>
+    <p data-l="en">Lost in your layout? Temporarily add <code>* { outline: 1px solid red; }</code> at the end of the file: every box gets a red outline. In DevTools, the <strong>grid</strong> and <strong>flex</strong> badges next to an element draw its lines on the page.</p>
+    <p data-l="fr">Perdu dans ta mise en page ? Ajoute temporairement <code>* { outline: 1px solid red; }</code> à la fin du fichier : chaque boîte reçoit un contour rouge. Dans les DevTools, les badges <strong>grid</strong> et <strong>flex</strong> à côté d'un élément dessinent ses lignes sur la page.</p>
+  </div>
+  <div class="prose"><h3 class="sub"><span data-l="en">Playground: rearrange the panels</span><span data-l="fr">Bac à sable : réorganise les panneaux</span></h3>
+  <p data-l="en">Try <code>grid-template-columns: 1fr 270px;</code> then make the window narrow to trigger the media query.</p><p data-l="fr">Essaie <code>grid-template-columns: 1fr 270px;</code> puis rétrécis la fenêtre pour déclencher la media query.</p></div>
+  <div class="play" data-play="p5" data-tab="css"></div>
+  <script type="text/x-play" data-for="p5" data-part="html"><section class="toolbar">
+  <label class="search"><input placeholder="Player, club or country…"></label>
+  <div class="segmented">
+    <button aria-pressed="true">All</button><button>Men</button><button>Women</button>
+  </div>
+  <select><option>Any decade</option></select>
+</section>
+<div class="layout">
+  <aside class="sidebar">
+    <section class="panel"><h2>Most wins</h2><p>Messi 8 · Ronaldo 5</p></section>
+    <section class="panel"><h2>Top nations</h2><p>France · Netherlands</p></section>
+  </aside>
+  <main>
+    <div class="grid">
+      <div class="cell">card</div><div class="cell">card</div><div class="cell">card</div>
+      <div class="cell">card</div><div class="cell">card</div><div class="cell">card</div>
+    </div>
+  </main>
+</div></script>
+  <script type="text/x-play" data-for="p5" data-part="css">body { margin: 0; background: #0c0e13; color: #f3efe6; font-family: Inter, system-ui, sans-serif; }
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  padding: 14px 20px;
+}
+.search { flex: 1 1 220px; }
+.search input, select, .segmented {
+  width: 100%; background: #151922; color: inherit;
+  border: 1px solid #2a3142; border-radius: 999px; padding: 9px 14px; font: inherit;
+}
+select { width: auto; }
+.segmented { display: flex; width: auto; padding: 3px; }
+.segmented button { border: 0; background: none; color: #a3a9b8; padding: 6px 12px; border-radius: 999px; font: inherit; }
+.segmented button[aria-pressed='true'] { background: #1d2330; color: #e6b94d; }
+
+.layout {
+  display: grid;
+  grid-template-columns: 270px 1fr;
+  gap: 24px;
+  padding: 12px 20px;
+}
+.sidebar { display: flex; flex-direction: column; gap: 16px; }
+.panel { background: #151922; border: 1px solid #2a3142; border-radius: 14px; padding: 16px; }
+.panel h2 { margin: 0 0 8px; color: #e6b94d; font-size: 1.1rem; }
+.panel p { margin: 0; color: #a3a9b8; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 16px;
+}
+.cell { aspect-ratio: 4 / 5; border: 1px dashed #e6b94d; border-radius: 12px; display: grid; place-items: center; color: #a3a9b8; }
+
+@media (max-width: 600px) {
+  .layout { grid-template-columns: 1fr; }
+}</script>
+  <div class="callout check">
+    <span class="label">Checkpoint</span>
+    <p data-l="en">Search bar, category pills and decade filter sit on one line and stay at the top when you scroll. Below them, the “Most wins” panel is on the left and the (empty) grid area on the right. Narrow the window under 860px: the sidebar moves above the grid.</p>
+    <p data-l="fr">Recherche, boutons de catégorie et filtre de décennie sont sur une ligne et restent en haut au défilement. En dessous, le panneau « Most wins » est à gauche et la grille (vide) à droite. Sous 860px de large, la barre latérale passe au-dessus de la grille.</p>
+  </div>
+  <details class="challenge">
+    <summary><span data-l="en">Challenge: sidebar on the right</span><span data-l="fr">Défi : barre latérale à droite</span></summary>
+    <div>
+      <p data-l="en">Put the sidebar on the right without moving any HTML. Hint: two properties, one on <code>.layout</code>, one on <code>.sidebar</code>.</p>
+      <p data-l="fr">Place la barre latérale à droite sans déplacer le HTML. Indice : deux propriétés, une sur <code>.layout</code>, une sur <code>.sidebar</code>.</p>
+      <script type="text/x-code" data-lang="css" data-file="solution">.layout  { grid-template-columns: 1fr 270px; }
+.sidebar { order: 2; }   /* grid items can be re-ordered visually */</script>
+    </div>
+  </details>
+  <script type="text/x-code" data-lang="bash" data-term>git add .
+git commit -m "Step 5: toolbar and panel layout"
+git push</script>
+  <footer class="pager" data-pager></footer>
+</section>
+
+<!-- ======================= STEP 6 ======================= -->
+<section class="view" id="step-6" data-view data-step="6" hidden>
+  <header class="lesson-head" data-head="6"></header>
+
+  <div class="callout goal">
+    <span class="label"><span data-l="en">Goal</span><span data-l="fr">Objectif</span></span>
+    <p data-l="en">Design the player card: photo, big gold year, category tag, name, club, country and a one-line story. It lifts and glows when you hover it.</p>
+    <p data-l="fr">Concevoir la carte joueur : photo, grande année dorée, étiquette de catégorie, nom, club, pays et une phrase d'histoire. Elle se soulève et brille au survol.</p>
+  </div>
+
+  <div class="prose">
+    <h2 class="sec"><span data-l="en">A card is a component</span><span data-l="fr">Une carte est un composant</span></h2>
+    <p data-l="en">A <strong>component</strong> is a piece of HTML + CSS you repeat with different data. Design one card perfectly; the next step will stamp out 78 of them with JavaScript. Four CSS ideas make this card work:</p>
+    <p data-l="fr">Un <strong>composant</strong> est un morceau de HTML + CSS que l'on répète avec des données différentes. Conçois une carte parfaite ; l'étape suivante en fabriquera 78 avec JavaScript. Quatre idées CSS font fonctionner cette carte :</p>
+    <ul>
+      <li data-l="en"><code>position: relative</code> on the photo box + <code>position: absolute</code> on the year: the year is placed relative to the photo's corners (<code>left: 14px; bottom: 6px</code>).</li>
+      <li data-l="fr"><code>position: relative</code> sur la boîte photo + <code>position: absolute</code> sur l'année : l'année se place par rapport aux coins de la photo (<code>left: 14px; bottom: 6px</code>).</li>
+      <li data-l="en"><code>aspect-ratio: 4 / 5</code> + <code>object-fit: cover</code>: every photo gets the same shape, cropped neatly, whatever its original size.</li>
+      <li data-l="fr"><code>aspect-ratio: 4 / 5</code> + <code>object-fit: cover</code> : toutes les photos ont la même forme, recadrées proprement, quelle que soit leur taille d'origine.</li>
+      <li data-l="en"><code>::after</code> creates a fake element used for the dark gradient that keeps the year readable on bright photos.</li>
+      <li data-l="fr"><code>::after</code> crée un faux élément, utilisé pour le dégradé sombre qui garde l'année lisible sur les photos claires.</li>
+      <li data-l="en"><code>transition</code> + <code>:hover</code> + <code>transform: translateY(-6px)</code>: smooth lift on hover.</li>
+      <li data-l="fr"><code>transition</code> + <code>:hover</code> + <code>transform: translateY(-6px)</code> : la carte se soulève en douceur au survol.</li>
+    </ul>
+    <h2 class="sec"><span data-l="en">Build: one card by hand</span><span data-l="fr">Construire : une carte à la main</span></h2>
+    <p data-l="en">Replace the comment inside <code>&lt;div id="grid"&gt;</code> with this card. The photo link comes from Wikimedia Commons; it's the same link that is stored in the database you'll build in step 9.</p>
+    <p data-l="fr">Remplace le commentaire dans <code>&lt;div id="grid"&gt;</code> par cette carte. Le lien de la photo vient de Wikimedia Commons ; c'est le même lien que celui stocké dans la base de l'étape 9.</p>
+  </div>
+  <script type="text/x-code" data-lang="html" data-file="public/index.html" data-note="inside #grid"><article class="card">
+  <div class="card-media">
+    <img src="@@img:messi@@" alt="Lionel Messi">
+    <span class="card-year">2023</span>
+    <span class="card-tag men">Men</span>
+  </div>
+  <div class="card-body">
+    <h3 class="card-name">Lionel Messi</h3>
+    <p class="card-club">Inter Miami</p>
+    <p class="card-meta">Argentina · Forward</p>
+    <p class="card-desc">An eighth award after winning the 2022 World Cup with Argentina.</p>
+  </div>
+</article></script>
+  <div class="prose"><p data-l="en">Add section 6 to <code>style.css</code>:</p><p data-l="fr">Ajoute la section 6 à <code>style.css</code> :</p></div>
+  <script type="text/x-code" data-lang="css" data-file="public/css/style.css" data-note="section 6" data-collapse>@@include public/css/style.css#6. Cards@@</script>
+
+  <div class="prose"><h3 class="sub"><span data-l="en">Playground: three cards</span><span data-l="fr">Bac à sable : trois cartes</span></h3>
+  <p data-l="en">Change the hover lift to <code>translateY(-12px) rotate(-1deg)</code>, or the aspect ratio to <code>1 / 1</code>.</p><p data-l="fr">Change le soulèvement à <code>translateY(-12px) rotate(-1deg)</code>, ou le ratio à <code>1 / 1</code>.</p></div>
+  <div class="play" data-play="p6" data-tab="css"></div>
+  <script type="text/x-play" data-for="p6" data-part="html"><div class="grid">
+  <article class="card">
+    <div class="card-media">
+      <img src="assets/players/messi.jpg" alt="Lionel Messi">
+      <span class="card-year">2023</span>
+      <span class="card-tag">Men</span>
+    </div>
+    <div class="card-body">
+      <h3 class="card-name">Lionel Messi</h3>
+      <p class="card-club">Inter Miami</p>
+      <p class="card-meta">Argentina · Forward</p>
+    </div>
+  </article>
+  <article class="card">
+    <div class="card-media">
+      <img src="assets/players/bonmati.jpg" alt="Aitana Bonmatí">
+      <span class="card-year">2025</span>
+      <span class="card-tag women">Women</span>
+    </div>
+    <div class="card-body">
+      <h3 class="card-name">Aitana Bonmatí</h3>
+      <p class="card-club">Barcelona</p>
+      <p class="card-meta">Spain · Midfielder</p>
+    </div>
+  </article>
+  <article class="card">
+    <div class="card-media">
+      <img src="assets/players/yashin.jpg" alt="Lev Yashin">
+      <span class="card-year">1963</span>
+      <span class="card-tag">Men</span>
+    </div>
+    <div class="card-body">
+      <h3 class="card-name">Lev Yashin</h3>
+      <p class="card-club">Dynamo Moscow</p>
+      <p class="card-meta">Soviet Union · Goalkeeper</p>
+    </div>
+  </article>
+</div></script>
+  <script type="text/x-play" data-for="p6" data-part="css">body { margin: 0; padding: 20px; background: #0c0e13; color: #f3efe6; font-family: Inter, system-ui, sans-serif; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 18px;
+}
+.card {
+  background: #151922;
+  border: 1px solid #2a3142;
+  border-radius: 14px;
+  overflow: hidden;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+.card:hover {
+  transform: translateY(-6px);
+  border-color: #e6b94d;
+}
+.card-media { position: relative; aspect-ratio: 4 / 5; }
+.card-media img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+.card-media::after {
+  content: ''; position: absolute; inset: 50% 0 0;
+  background: linear-gradient(transparent, rgb(12 14 19 / 0.9));
+}
+.card-year {
+  position: absolute; left: 12px; bottom: 4px; z-index: 1;
+  font-family: 'Bebas Neue', Impact, sans-serif; font-size: 2.6rem; color: #e6b94d;
+}
+.card-tag {
+  position: absolute; top: 10px; right: 10px; z-index: 1;
+  padding: 2px 9px; border-radius: 999px; border: 1px solid currentColor;
+  font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+  background: rgb(12 14 19 / 0.75); color: #e6b94d;
+}
+.card-tag.women { color: #e87aa4; }
+.card-body { padding: 12px 14px 16px; }
+.card-name { margin: 0; font-size: 1.05rem; }
+.card-club { margin: 2px 0 0; color: #e6b94d; font-size: 0.9rem; }
+.card-meta { margin: 2px 0 0; color: #a3a9b8; font-size: 0.82rem; }</script>
+  <div class="callout check">
+    <span class="label">Checkpoint</span>
+    <p data-l="en">One Messi card sits in the grid with his photo, “2023” in big gold letters, a MEN tag top-right, and it lifts with a gold border when you hover it.</p>
+    <p data-l="fr">Une carte Messi est dans la grille avec sa photo, « 2023 » en grandes lettres dorées, l'étiquette MEN en haut à droite, et elle se soulève avec un bord doré au survol.</p>
+  </div>
+  <details class="challenge">
+    <summary><span data-l="en">Challenge: feel the pain</span><span data-l="fr">Défi : ressens la douleur</span></summary>
+    <div>
+      <p data-l="en">Copy the card and make a second one for Aitana Bonmatí (2025, Barcelona, Spain, Midfielder, tag <code>card-tag women</code>). Now imagine doing that 78 times, and fixing a typo in all of them. That's exactly the problem JavaScript solves next.</p>
+      <p data-l="fr">Copie la carte et fais-en une deuxième pour Aitana Bonmatí (2025, Barcelona, Espagne, milieu, étiquette <code>card-tag women</code>). Maintenant imagine le faire 78 fois, et corriger une faute dans toutes. C'est exactement le problème que JavaScript va résoudre.</p>
+    </div>
+  </details>
+  <script type="text/x-code" data-lang="bash" data-term>git add .
+git commit -m "Step 6: player card component"
+git push</script>
+  <footer class="pager" data-pager></footer>
+</section>
